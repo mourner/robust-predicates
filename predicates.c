@@ -1,10 +1,9 @@
 // Original code from https://www.cs.cmu.edu/~quake/robust.html for reference,
-// with all te code not directly used in geometric predicates removed
+// with all the code not directly used in geometric predicates removed
 
 /*****************************************************************************/
 /*                                                                           */
-/*  Routines for Arbitrary Precision Floating-point Arithmetic               */
-/*  and Fast Robust Geometric Predicates                                     */
+/*  Routines for Fast Robust Geometric Predicates                            */
 /*  (predicates.c)                                                           */
 /*                                                                           */
 /*  May 18, 1996                                                             */
@@ -17,8 +16,7 @@
 /*  Pittsburgh, Pennsylvania  15213-3891                                     */
 /*  jrs@cs.cmu.edu                                                           */
 /*                                                                           */
-/*  This file contains C implementation of algorithms for exact addition     */
-/*    and multiplication of floating-point numbers, and predicates for       */
+/*  This file contains C implementation of predicates for                    */
 /*    robustly performing the orientation and incircle tests used in         */
 /*    computational geometry.  The algorithms and underlying theory are      */
 /*    described in Jonathan Richard Shewchuk.  "Adaptive Precision Floating- */
@@ -451,9 +449,7 @@ REAL *e;
 /*****************************************************************************/
 /*                                                                           */
 /*  orient2dfast()   Approximate 2D orientation test.  Nonrobust.            */
-/*  orient2dexact()   Exact 2D orientation test.  Robust.                    */
-/*  orient2dslow()   Another exact 2D orientation test.  Robust.             */
-/*  orient2d()   Adaptive exact 2D orientation test.  Robust.                */
+/*  orient2d()       Adaptive exact 2D orientation test.  Robust.            */
 /*                                                                           */
 /*               Return a positive value if the points pa, pb, and pc occur  */
 /*               in counterclockwise order; a negative value if they occur   */
@@ -461,10 +457,7 @@ REAL *e;
 /*               result is also a rough approximation of twice the signed    */
 /*               area of the triangle defined by the three points.           */
 /*                                                                           */
-/*  Only the first and last routine should be used; the middle two are for   */
-/*  timings.                                                                 */
-/*                                                                           */
-/*  The last three use exact arithmetic to ensure a correct answer.  The     */
+/*  The second one uses exact arithmetic to ensure a correct answer. The     */
 /*  result returned is the determinant of a matrix.  In orient2d() only,     */
 /*  this determinant is computed adaptively, in the sense that exact         */
 /*  arithmetic is used only to the degree it is needed to ensure that the    */
@@ -611,9 +604,7 @@ REAL *pc;
 /*****************************************************************************/
 /*                                                                           */
 /*  orient3dfast()   Approximate 3D orientation test.  Nonrobust.            */
-/*  orient3dexact()   Exact 3D orientation test.  Robust.                    */
-/*  orient3dslow()   Another exact 3D orientation test.  Robust.             */
-/*  orient3d()   Adaptive exact 3D orientation test.  Robust.                */
+/*  orient3d()       Adaptive exact 3D orientation test.  Robust.            */
 /*                                                                           */
 /*               Return a positive value if the point pd lies below the      */
 /*               plane passing through pa, pb, and pc; "below" is defined so */
@@ -624,10 +615,7 @@ REAL *pc;
 /*               times the signed volume of the tetrahedron defined by the   */
 /*               four points.                                                */
 /*                                                                           */
-/*  Only the first and last routine should be used; the middle two are for   */
-/*  timings.                                                                 */
-/*                                                                           */
-/*  The last three use exact arithmetic to ensure a correct answer.  The     */
+/*  The second one uses exact arithmetic to ensure a correct answer. The     */
 /*  result returned is the determinant of a matrix.  In orient3d() only,     */
 /*  this determinant is computed adaptively, in the sense that exact         */
 /*  arithmetic is used only to the degree it is needed to ensure that the    */
@@ -1788,9 +1776,7 @@ REAL *pd;
 /*****************************************************************************/
 /*                                                                           */
 /*  inspherefast()   Approximate 3D insphere test.  Nonrobust.               */
-/*  insphereexact()   Exact 3D insphere test.  Robust.                       */
-/*  insphereslow()   Another exact 3D insphere test.  Robust.                */
-/*  insphere()   Adaptive exact 3D insphere test.  Robust.                   */
+/*  insphere()       Adaptive exact 3D insphere test.  Robust.               */
 /*                                                                           */
 /*               Return a positive value if the point pe lies inside the     */
 /*               sphere passing through pa, pb, pc, and pd; a negative value */
@@ -1799,10 +1785,7 @@ REAL *pd;
 /*               so that they have a positive orientation (as defined by     */
 /*               orient3d()), or the sign of the result will be reversed.    */
 /*                                                                           */
-/*  Only the first and last routine should be used; the middle two are for   */
-/*  timings.                                                                 */
-/*                                                                           */
-/*  The last three use exact arithmetic to ensure a correct answer.  The     */
+/*  The second one uses exact arithmetic to ensure a correct answer. The     */
 /*  result returned is the determinant of a matrix.  In insphere() only,     */
 /*  this determinant is computed adaptively, in the sense that exact         */
 /*  arithmetic is used only to the degree it is needed to ensure that the    */
