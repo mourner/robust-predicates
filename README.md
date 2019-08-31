@@ -1,6 +1,6 @@
 # robust-predicates
 
-Fast robust predicates for computational geometry in JavaScript. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), which has been an industry standard since 1996. Uses code generation to produce highly efficient JavaScript code. A work in progress:
+Fast robust predicates for computational geometry in JavaScript. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), which has been an industry standard since 1996. Uses code generation to produce highly efficient JavaScript code. _A work in progress:_
 
 - [x] `orient2d`
 - [ ] `orient3d`
@@ -10,6 +10,9 @@ Fast robust predicates for computational geometry in JavaScript. A modern port o
 - [ ] tests
 - [ ] API docs & demo
 - [ ] minified UMD builds
+
+[![Build Status](https://travis-ci.com/mourner/robust-predicates.svg?branch=master)](https://travis-ci.com/mourner/robust-predicates)
+[![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 
 ## License
 
