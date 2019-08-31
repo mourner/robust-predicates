@@ -1,0 +1,34 @@
+{
+  "name": "robust-predicates",
+  "version": "1.0.0",
+  "description": "Fast robust predicates for computational geometry",
+  "keywords": [
+    "computational geometry",
+    "robust arithmetic"
+  ],
+  "author": "Vladimir Agafonkin",
+  "license": "ISC",
+  "module": "predicates.js",
+  "scripts": {
+    "build-esm": "node index.js | prettier --parser babel > predicates.js",
+    "pretest": "npm run build-esm",
+    "test": "eslint index.js predicates.js"
+  },
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-mourner": "^3.0.0",
+    "prettier": "^1.18.2",
+    "terser": "^4.2.1"
+  },
+  "eslintConfig": {
+    "extends": "mourner",
+    "rules": {
+      "camelcase": 0,
+      "new-cap": 0,
+      "prefer-const": 0
+    }
+  },
+  "prettier": {
+    "tabWidth": 4
+  }
+}
