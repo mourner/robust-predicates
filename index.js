@@ -33,9 +33,31 @@ const Two_Product = (a, b, x, y) => `
     ${y} = alo * blo - (${x} - ahi * bhi - alo * bhi - ahi * blo);
 `.trim();
 
+const Two_Product_Presplit = (a, b, bhi, blo, x, y) => `
+    ${x} = ${a} * ${b};
+    ${Split(a, 'ahi', 'alo')}
+    ${y} = alo * ${blo} - (${x} - ahi * ${bhi} - alo * ${bhi} - ahi * ${blo});
+`.trim();
+
+const Square = (a, x, y) => `
+    ${x} = ${a} * ${a};
+    ${Split(a, 'ahi', 'alo')}
+    ${y} = alo * alo - (${x} - ahi * ahi - (ahi + ahi) * alo);
+`.trim();
+
+const Two_One_Sum = (a1, a0, b, x2, x1, x0) => `
+    ${Two_Sum(a0, b, '_i', x0)}
+    ${Two_Sum(a1, '_i', x2, x1)}
+`.trim();
+
 const Two_One_Diff = (a1, a0, b, x2, x1, x0) => `
     ${Two_Diff(a0, b, '_i', x0)}
     ${Two_Sum(a1, '_i', x2, x1)}
+`.trim();
+
+const Two_Two_Sum = (a1, a0, b1, b0, x3, x2, x1, x0) => `
+    ${Two_One_Sum(a1, a0, b0, '_j', '_0', x0)}
+    ${Two_One_Sum('_j', '_0', b1, x3, x2, x1)}
 `.trim();
 
 const Two_Two_Diff = (a1, a0, b1, b0, x3, x2, x1, x0) => `
@@ -43,10 +65,12 @@ const Two_Two_Diff = (a1, a0, b1, b0, x3, x2, x1, x0) => `
     ${Two_One_Diff('_j', '_0', b1, x3, x2, x1)}
 `.trim();
 
-const Two_Product_Presplit = (a, b, bhi, blo, x, y) => `
-  ${x} = ${a} * ${b};
-  ${Split(a, 'ahi', 'alo')}
-  ${y} = alo * ${blo} - (${x} - ahi * ${bhi} - alo * ${bhi} - ahi * ${blo});
+const Two_One_Product = (a1, a0, b, x3, x2, x1, x0) => `
+    ${Split(b, 'bhi', 'blo')}
+    ${Two_Product_Presplit(a0, b, 'bhi', 'blo', '_i', x0)}
+    ${Two_Product_Presplit(a1, b, 'bhi', 'blo', '_j', '_0')}
+    ${Two_Sum('_i', '_0', '_k', x1)}
+    ${Fast_Two_Sum('_j', '_k', x3, x2)}
 `.trim();
 
 const src = `
