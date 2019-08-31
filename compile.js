@@ -184,16 +184,16 @@ const C2 = new Float64Array(12);
 const D = new Float64Array(16);
 const u = new Float64Array(4);
 
-function orient2dadapt(pax, pay, pbx, pby, pcx, pcy, detsum) {
+function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
     let acxtail, acytail, bcxtail, bcytail;
     let detleft, detright, detlefttail, detrighttail;
     let B3, u3, s1, t1, s0, t0;
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
 
-    const acx = pax - pcx;
-    const bcx = pbx - pcx;
-    const acy = pay - pcy;
-    const bcy = pby - pcy;
+    const acx = ax - cx;
+    const bcx = bx - cx;
+    const acy = ay - cy;
+    const bcy = by - cy;
 
     ${Two_Product('acx', 'bcy', 'detleft', 'detlefttail')}
     ${Two_Product('acy', 'bcx', 'detright', 'detrighttail')}
@@ -205,10 +205,10 @@ function orient2dadapt(pax, pay, pbx, pby, pcx, pcy, detsum) {
     let errbound = ccwerrboundB * detsum;
     if (det >= errbound || -det >= errbound) return det;
 
-    ${Two_Diff_Tail('pax', 'pcx', 'acx', 'acxtail')};
-    ${Two_Diff_Tail('pbx', 'pcx', 'bcx', 'bcxtail')};
-    ${Two_Diff_Tail('pay', 'pcy', 'acy', 'acytail')};
-    ${Two_Diff_Tail('pby', 'pcy', 'bcy', 'bcytail')};
+    ${Two_Diff_Tail('ax', 'cx', 'acx', 'acxtail')};
+    ${Two_Diff_Tail('bx', 'cx', 'bcx', 'bcxtail')};
+    ${Two_Diff_Tail('ay', 'cy', 'acy', 'acytail')};
+    ${Two_Diff_Tail('by', 'cy', 'bcy', 'bcytail')};
 
     if ((acxtail === 0) && (acytail === 0) && (bcxtail === 0) && (bcytail === 0)) {
         return det;
@@ -241,9 +241,9 @@ function orient2dadapt(pax, pay, pbx, pby, pcx, pcy, detsum) {
     return(D[Dlength - 1]);
 }
 
-export function orient2d(pax, pay, pbx, pby, pcx, pcy) {
-    const detleft = (pax - pcx) * (pby - pcy);
-    const detright = (pay - pcy) * (pbx - pcx);
+export function orient2d(ax, ay, bx, by, cx, cy) {
+    const detleft = (ax - cx) * (by - cy);
+    const detright = (ay - cy) * (bx - cx);
     const det = detleft - detright;
     let detsum;
 
@@ -260,7 +260,7 @@ export function orient2d(pax, pay, pbx, pby, pcx, pcy) {
     const errbound = ccwerrboundA * detsum;
     if (det >= errbound || -det >= errbound) return det;
 
-    return orient2dadapt(pax, pay, pbx, pby, pcx, pcy, detsum);
+    return orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
 }
 `;
 
