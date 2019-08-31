@@ -7,7 +7,7 @@
     "robust arithmetic"
   ],
   "author": "Vladimir Agafonkin",
-  "license": "ISC",
+  "license": "Unlicense",
   "module": "predicates.js",
   "scripts": {
     "build-esm": "node compile.js | prettier --parser babel > predicates.js",

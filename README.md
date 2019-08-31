@@ -12,3 +12,7 @@ A work in progress:
 - [ ] tests
 - [ ] API docs & demo
 - [ ] minified UMD builds
+
+## License
+
+Since the original C code by Jonathan Shewchuk was placed in the public domain, this port follows the same choice. See https://unlicense.org
