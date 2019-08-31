@@ -10,9 +10,9 @@
   "license": "ISC",
   "module": "predicates.js",
   "scripts": {
-    "build-esm": "node index.js | prettier --parser babel > predicates.js",
+    "build-esm": "node compile.js | prettier --parser babel > predicates.js",
     "pretest": "npm run build-esm",
-    "test": "eslint index.js predicates.js"
+    "test": "eslint compile.js predicates.js"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
