@@ -1,3 +1,6 @@
+// Original code from https://www.cs.cmu.edu/~quake/robust.html for reference,
+// with all te code not directly used in geometric predicates removed
+
 /*****************************************************************************/
 /*                                                                           */
 /*  Routines for Arbitrary Precision Floating-point Arithmetic               */
@@ -40,7 +43,6 @@
 /*    functions or geometric predicates.  Also be sure to turn on the        */
 /*    optimizer when compiling this file.                                    */
 /*                                                                           */
-/*                                                                           */
 /*  Several geometric predicates are defined.  Their parameters are all      */
 /*    points.  Each point is an array of two or three floating-point         */
 /*    numbers.  The geometric predicates, described in the papers, are       */
@@ -55,11 +57,7 @@
 /*    inspherefast(pa, pb, pc, pd, pe)                                       */
 /*                                                                           */
 /*  Those with suffix "fast" are approximate, non-robust versions.  Those    */
-/*    without the suffix are adaptive precision, robust versions.  There     */
-/*    are also versions with the suffices "exact" and "slow", which are      */
-/*    non-adaptive, exact arithmetic versions, which I use only for timings  */
-/*    in my arithmetic papers.                                               */
-/*                                                                           */
+/*    without the suffix are adaptive precision, robust versions.            */
 /*                                                                           */
 /*  An expansion is represented by an array of floating-point numbers,       */
 /*    sorted from smallest to largest magnitude (possibly with interspersed  */
@@ -76,65 +74,16 @@
 /*                                                                           */
 /*  The arithmetic functions are                                             */
 /*                                                                           */
-/*    grow_expansion(elen, e, b, h)                                          */
-/*    grow_expansion_zeroelim(elen, e, b, h)                                 */
-/*    expansion_sum(elen, e, flen, f, h)                                     */
-/*    expansion_sum_zeroelim1(elen, e, flen, f, h)                           */
-/*    expansion_sum_zeroelim2(elen, e, flen, f, h)                           */
-/*    fast_expansion_sum(elen, e, flen, f, h)                                */
 /*    fast_expansion_sum_zeroelim(elen, e, flen, f, h)                       */
-/*    linear_expansion_sum(elen, e, flen, f, h)                              */
-/*    linear_expansion_sum_zeroelim(elen, e, flen, f, h)                     */
-/*    scale_expansion(elen, e, b, h)                                         */
 /*    scale_expansion_zeroelim(elen, e, b, h)                                */
-/*    compress(elen, e, h)                                                   */
-/*                                                                           */
-/*  All of these are described in the long version of the paper; some are    */
-/*    described in the short version.  All return an integer that is the     */
-/*    length of h.  Those with suffix _zeroelim perform zero elimination,    */
-/*    and are recommended over their counterparts.  The procedure            */
-/*    fast_expansion_sum_zeroelim() (or linear_expansion_sum_zeroelim() on   */
-/*    processors that do not use the round-to-even tiebreaking rule) is      */
-/*    recommended over expansion_sum_zeroelim().  Each procedure has a       */
-/*    little note next to it (in the code below) that tells you whether or   */
-/*    not the output expansion may be the same array as one of the input     */
-/*    expansions.                                                            */
-/*                                                                           */
-/*                                                                           */
-/*  If you look around below, you'll also find macros for a bunch of         */
-/*    simple unrolled arithmetic operations, and procedures for printing     */
-/*    expansions (commented out because they don't work with all C           */
-/*    compilers) and for generating random floating-point numbers whose      */
-/*    significand bits are all random.  Most of the macros have undocumented */
-/*    requirements that certain of their parameters should not be the same   */
-/*    variable; for safety, better to make sure all the parameters are       */
-/*    distinct variables.  Feel free to send email to jrs@cs.cmu.edu if you  */
-/*    have questions.                                                        */
 /*                                                                           */
 /*****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <sys/time.h>
-
-/* On some machines, the exact arithmetic routines might be defeated by the  */
-/*   use of internal extended precision floating-point registers.  Sometimes */
-/*   this problem can be fixed by defining certain values to be volatile,    */
-/*   thus forcing them to be stored to memory and rounded off.  This isn't   */
-/*   a great solution, though, as it slows the arithmetic down.              */
-/*                                                                           */
-/* To try this out, write "#define INEXACT volatile" below.  Normally,       */
-/*   however, INEXACT should be defined to be nothing.  ("#define INEXACT".) */
-
-#define INEXACT                          /* Nothing */
-/* #define INEXACT volatile */
 
 #define REAL double                      /* float or double */
-#define REALPRINT doubleprint
-#define REALRAND doublerand
-#define NARROWRAND narrowdoublerand
-#define UNIFORMRAND uniformdoublerand
 
 /* Which of the following two methods of finding the absolute values is      */
 /*   fastest is compiler-dependent.  A few compilers can inline and optimize */
@@ -152,11 +101,7 @@
 /* The operations Fast_Two_Sum(), Fast_Two_Diff(), Two_Sum(), Two_Diff(),    */
 /*   Split(), and Two_Product() are all implemented as described in the      */
 /*   reference.  Each of these macros requires certain variables to be       */
-/*   defined in the calling routine.  The variables `bvirt', `c', `abig',    */
-/*   `_i', `_j', `_k', `_l', `_m', and `_n' are declared `INEXACT' because   */
-/*   they store the result of an operation that may incur roundoff error.    */
-/*   The input parameter `x' (or the highest numbered `x_' parameter) must   */
-/*   also be declared `INEXACT'.                                             */
+/*   defined in the calling routine.                                         */
 
 #define Fast_Two_Sum_Tail(a, b, x, y) \
   bvirt = x - a; \
@@ -225,16 +170,6 @@
   err3 = err2 - (ahi * blo); \
   y = (alo * blo) - err3
 
-/* Two_Product_2Presplit() is Two_Product() where both of the inputs have    */
-/*   already been split.  Avoids redundant splitting.                        */
-
-#define Two_Product_2Presplit(a, ahi, alo, b, bhi, blo, x, y) \
-  x = (REAL) (a * b); \
-  err1 = x - (ahi * bhi); \
-  err2 = err1 - (alo * bhi); \
-  err3 = err2 - (ahi * blo); \
-  y = (alo * blo) - err3
-
 /* Square() can be done more quickly than Two_Product().                     */
 
 #define Square_Tail(a, x, y) \
@@ -266,38 +201,6 @@
   Two_One_Diff(a1, a0, b0, _j, _0, x0); \
   Two_One_Diff(_j, _0, b1, x3, x2, x1)
 
-#define Four_One_Sum(a3, a2, a1, a0, b, x4, x3, x2, x1, x0) \
-  Two_One_Sum(a1, a0, b , _j, x1, x0); \
-  Two_One_Sum(a3, a2, _j, x4, x3, x2)
-
-#define Four_Two_Sum(a3, a2, a1, a0, b1, b0, x5, x4, x3, x2, x1, x0) \
-  Four_One_Sum(a3, a2, a1, a0, b0, _k, _2, _1, _0, x0); \
-  Four_One_Sum(_k, _2, _1, _0, b1, x5, x4, x3, x2, x1)
-
-#define Four_Four_Sum(a3, a2, a1, a0, b4, b3, b1, b0, x7, x6, x5, x4, x3, x2, \
-                      x1, x0) \
-  Four_Two_Sum(a3, a2, a1, a0, b1, b0, _l, _2, _1, _0, x1, x0); \
-  Four_Two_Sum(_l, _2, _1, _0, b4, b3, x7, x6, x5, x4, x3, x2)
-
-#define Eight_One_Sum(a7, a6, a5, a4, a3, a2, a1, a0, b, x8, x7, x6, x5, x4, \
-                      x3, x2, x1, x0) \
-  Four_One_Sum(a3, a2, a1, a0, b , _j, x3, x2, x1, x0); \
-  Four_One_Sum(a7, a6, a5, a4, _j, x8, x7, x6, x5, x4)
-
-#define Eight_Two_Sum(a7, a6, a5, a4, a3, a2, a1, a0, b1, b0, x9, x8, x7, \
-                      x6, x5, x4, x3, x2, x1, x0) \
-  Eight_One_Sum(a7, a6, a5, a4, a3, a2, a1, a0, b0, _k, _6, _5, _4, _3, _2, \
-                _1, _0, x0); \
-  Eight_One_Sum(_k, _6, _5, _4, _3, _2, _1, _0, b1, x9, x8, x7, x6, x5, x4, \
-                x3, x2, x1)
-
-#define Eight_Four_Sum(a7, a6, a5, a4, a3, a2, a1, a0, b4, b3, b1, b0, x11, \
-                       x10, x9, x8, x7, x6, x5, x4, x3, x2, x1, x0) \
-  Eight_Two_Sum(a7, a6, a5, a4, a3, a2, a1, a0, b1, b0, _l, _6, _5, _4, _3, \
-                _2, _1, _0, x1, x0); \
-  Eight_Two_Sum(_l, _6, _5, _4, _3, _2, _1, _0, b4, b3, x11, x10, x9, x8, \
-                x7, x6, x5, x4, x3, x2)
-
 /* Macros for multiplying expansions of various fixed lengths.               */
 
 #define Two_One_Product(a1, a0, b, x3, x2, x1, x0) \
@@ -306,57 +209,6 @@
   Two_Product_Presplit(a1, b, bhi, blo, _j, _0); \
   Two_Sum(_i, _0, _k, x1); \
   Fast_Two_Sum(_j, _k, x3, x2)
-
-#define Four_One_Product(a3, a2, a1, a0, b, x7, x6, x5, x4, x3, x2, x1, x0) \
-  Split(b, bhi, blo); \
-  Two_Product_Presplit(a0, b, bhi, blo, _i, x0); \
-  Two_Product_Presplit(a1, b, bhi, blo, _j, _0); \
-  Two_Sum(_i, _0, _k, x1); \
-  Fast_Two_Sum(_j, _k, _i, x2); \
-  Two_Product_Presplit(a2, b, bhi, blo, _j, _0); \
-  Two_Sum(_i, _0, _k, x3); \
-  Fast_Two_Sum(_j, _k, _i, x4); \
-  Two_Product_Presplit(a3, b, bhi, blo, _j, _0); \
-  Two_Sum(_i, _0, _k, x5); \
-  Fast_Two_Sum(_j, _k, x7, x6)
-
-#define Two_Two_Product(a1, a0, b1, b0, x7, x6, x5, x4, x3, x2, x1, x0) \
-  Split(a0, a0hi, a0lo); \
-  Split(b0, bhi, blo); \
-  Two_Product_2Presplit(a0, a0hi, a0lo, b0, bhi, blo, _i, x0); \
-  Split(a1, a1hi, a1lo); \
-  Two_Product_2Presplit(a1, a1hi, a1lo, b0, bhi, blo, _j, _0); \
-  Two_Sum(_i, _0, _k, _1); \
-  Fast_Two_Sum(_j, _k, _l, _2); \
-  Split(b1, bhi, blo); \
-  Two_Product_2Presplit(a0, a0hi, a0lo, b1, bhi, blo, _i, _0); \
-  Two_Sum(_1, _0, _k, x1); \
-  Two_Sum(_2, _k, _j, _1); \
-  Two_Sum(_l, _j, _m, _2); \
-  Two_Product_2Presplit(a1, a1hi, a1lo, b1, bhi, blo, _j, _0); \
-  Two_Sum(_i, _0, _n, _0); \
-  Two_Sum(_1, _0, _i, x2); \
-  Two_Sum(_2, _i, _k, _1); \
-  Two_Sum(_m, _k, _l, _2); \
-  Two_Sum(_j, _n, _k, _0); \
-  Two_Sum(_1, _0, _j, x3); \
-  Two_Sum(_2, _j, _i, _1); \
-  Two_Sum(_l, _i, _m, _2); \
-  Two_Sum(_1, _k, _i, x4); \
-  Two_Sum(_2, _i, _k, x5); \
-  Two_Sum(_m, _k, x7, x6)
-
-/* An expansion of length two can be squared more quickly than finding the   */
-/*   product of two different expansions of length two, and the result is    */
-/*   guaranteed to have no more than six (rather than eight) components.     */
-
-#define Two_Square(a1, a0, x5, x4, x3, x2, x1, x0) \
-  Square(a0, _j, x0); \
-  _0 = a0 + a0; \
-  Two_Product(a1, _0, _k, _1); \
-  Two_One_Sum(_k, _1, _j, _l, _2, x1); \
-  Square(a1, _j, _1); \
-  Two_Two_Sum(_j, _1, _l, _2, x5, x4, x3, x2)
 
 REAL splitter;     /* = 2^ceiling(p / 2) + 1.  Used to split floats in half. */
 REAL epsilon;                /* = 2^(-p).  Used to estimate roundoff errors. */
@@ -450,9 +302,9 @@ REAL *f;
 REAL *h;
 {
   REAL Q;
-  INEXACT REAL Qnew;
-  INEXACT REAL hh;
-  INEXACT REAL bvirt;
+  REAL Qnew;
+  REAL hh;
+  REAL bvirt;
   REAL avirt, bround, around;
   int eindex, findex, hindex;
   REAL enow, fnow;
@@ -537,16 +389,16 @@ REAL *e;
 REAL b;
 REAL *h;
 {
-  INEXACT REAL Q, sum;
+  REAL Q, sum;
   REAL hh;
-  INEXACT REAL product1;
+  REAL product1;
   REAL product0;
   int eindex, hindex;
   REAL enow;
-  INEXACT REAL bvirt;
+  REAL bvirt;
   REAL avirt, bround, around;
-  INEXACT REAL c;
-  INEXACT REAL abig;
+  REAL c;
+  REAL abig;
   REAL ahi, alo, bhi, blo;
   REAL err1, err2, err3;
 
@@ -572,55 +424,6 @@ REAL *h;
     h[hindex++] = Q;
   }
   return hindex;
-}
-
-/*****************************************************************************/
-/*                                                                           */
-/*  compress()   Compress an expansion.                                      */
-/*                                                                           */
-/*  See the long version of my paper for details.                            */
-/*                                                                           */
-/*  Maintains the nonoverlapping property.  If round-to-even is used (as     */
-/*  with IEEE 754), then any nonoverlapping expansion is converted to a      */
-/*  nonadjacent expansion.                                                   */
-/*                                                                           */
-/*****************************************************************************/
-
-int compress(elen, e, h)                         /* e and h may be the same. */
-int elen;
-REAL *e;
-REAL *h;
-{
-  REAL Q, q;
-  INEXACT REAL Qnew;
-  int eindex, hindex;
-  INEXACT REAL bvirt;
-  REAL enow, hnow;
-  int top, bottom;
-
-  bottom = elen - 1;
-  Q = e[bottom];
-  for (eindex = elen - 2; eindex >= 0; eindex--) {
-    enow = e[eindex];
-    Fast_Two_Sum(Q, enow, Qnew, q);
-    if (q != 0) {
-      h[bottom--] = Qnew;
-      Q = q;
-    } else {
-      Q = Qnew;
-    }
-  }
-  top = 0;
-  for (hindex = bottom + 1; hindex < elen; hindex++) {
-    hnow = h[hindex];
-    Fast_Two_Sum(hnow, Q, Qnew, q);
-    if (q != 0) {
-      h[top++] = q;
-    }
-    Q = Qnew;
-  }
-  h[top] = Q;
-  return top + 1;
 }
 
 /*****************************************************************************/
@@ -691,26 +494,26 @@ REAL *pb;
 REAL *pc;
 REAL detsum;
 {
-  INEXACT REAL acx, acy, bcx, bcy;
+  REAL acx, acy, bcx, bcy;
   REAL acxtail, acytail, bcxtail, bcytail;
-  INEXACT REAL detleft, detright;
+  REAL detleft, detright;
   REAL detlefttail, detrighttail;
   REAL det, errbound;
   REAL B[4], C1[8], C2[12], D[16];
-  INEXACT REAL B3;
+  REAL B3;
   int C1length, C2length, Dlength;
   REAL u[4];
-  INEXACT REAL u3;
-  INEXACT REAL s1, t1;
+  REAL u3;
+  REAL s1, t1;
   REAL s0, t0;
 
-  INEXACT REAL bvirt;
+  REAL bvirt;
   REAL avirt, bround, around;
-  INEXACT REAL c;
-  INEXACT REAL abig;
+  REAL c;
+  REAL abig;
   REAL ahi, alo, bhi, blo;
   REAL err1, err2, err3;
-  INEXACT REAL _i, _j;
+  REAL _i, _j;
   REAL _0;
 
   acx = (REAL) (pa[0] - pc[0]);
@@ -866,13 +669,13 @@ REAL *pc;
 REAL *pd;
 REAL permanent;
 {
-  INEXACT REAL adx, bdx, cdx, ady, bdy, cdy, adz, bdz, cdz;
+  REAL adx, bdx, cdx, ady, bdy, cdy, adz, bdz, cdz;
   REAL det, errbound;
 
-  INEXACT REAL bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
+  REAL bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
   REAL bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
   REAL bc[4], ca[4], ab[4];
-  INEXACT REAL bc3, ca3, ab3;
+  REAL bc3, ca3, ab3;
   REAL adet[8], bdet[8], cdet[8];
   int alen, blen, clen;
   REAL abdet[16];
@@ -884,37 +687,37 @@ REAL permanent;
   REAL adxtail, bdxtail, cdxtail;
   REAL adytail, bdytail, cdytail;
   REAL adztail, bdztail, cdztail;
-  INEXACT REAL at_blarge, at_clarge;
-  INEXACT REAL bt_clarge, bt_alarge;
-  INEXACT REAL ct_alarge, ct_blarge;
+  REAL at_blarge, at_clarge;
+  REAL bt_clarge, bt_alarge;
+  REAL ct_alarge, ct_blarge;
   REAL at_b[4], at_c[4], bt_c[4], bt_a[4], ct_a[4], ct_b[4];
   int at_blen, at_clen, bt_clen, bt_alen, ct_alen, ct_blen;
-  INEXACT REAL bdxt_cdy1, cdxt_bdy1, cdxt_ady1;
-  INEXACT REAL adxt_cdy1, adxt_bdy1, bdxt_ady1;
+  REAL bdxt_cdy1, cdxt_bdy1, cdxt_ady1;
+  REAL adxt_cdy1, adxt_bdy1, bdxt_ady1;
   REAL bdxt_cdy0, cdxt_bdy0, cdxt_ady0;
   REAL adxt_cdy0, adxt_bdy0, bdxt_ady0;
-  INEXACT REAL bdyt_cdx1, cdyt_bdx1, cdyt_adx1;
-  INEXACT REAL adyt_cdx1, adyt_bdx1, bdyt_adx1;
+  REAL bdyt_cdx1, cdyt_bdx1, cdyt_adx1;
+  REAL adyt_cdx1, adyt_bdx1, bdyt_adx1;
   REAL bdyt_cdx0, cdyt_bdx0, cdyt_adx0;
   REAL adyt_cdx0, adyt_bdx0, bdyt_adx0;
   REAL bct[8], cat[8], abt[8];
   int bctlen, catlen, abtlen;
-  INEXACT REAL bdxt_cdyt1, cdxt_bdyt1, cdxt_adyt1;
-  INEXACT REAL adxt_cdyt1, adxt_bdyt1, bdxt_adyt1;
+  REAL bdxt_cdyt1, cdxt_bdyt1, cdxt_adyt1;
+  REAL adxt_cdyt1, adxt_bdyt1, bdxt_adyt1;
   REAL bdxt_cdyt0, cdxt_bdyt0, cdxt_adyt0;
   REAL adxt_cdyt0, adxt_bdyt0, bdxt_adyt0;
   REAL u[4], v[12], w[16];
-  INEXACT REAL u3;
+  REAL u3;
   int vlength, wlength;
   REAL negate;
 
-  INEXACT REAL bvirt;
+  REAL bvirt;
   REAL avirt, bround, around;
-  INEXACT REAL c;
-  INEXACT REAL abig;
+  REAL c;
+  REAL abig;
   REAL ahi, alo, bhi, blo;
   REAL err1, err2, err3;
-  INEXACT REAL _i, _j, _k;
+  REAL _i, _j, _k;
   REAL _0;
 
   adx = (REAL) (pa[0] - pd[0]);
@@ -1369,13 +1172,13 @@ REAL *pc;
 REAL *pd;
 REAL permanent;
 {
-  INEXACT REAL adx, bdx, cdx, ady, bdy, cdy;
+  REAL adx, bdx, cdx, ady, bdy, cdy;
   REAL det, errbound;
 
-  INEXACT REAL bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
+  REAL bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
   REAL bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
   REAL bc[4], ca[4], ab[4];
-  INEXACT REAL bc3, ca3, ab3;
+  REAL bc3, ca3, ab3;
   REAL axbc[8], axxbc[16], aybc[8], ayybc[16], adet[32];
   int axbclen, axxbclen, aybclen, ayybclen, alen;
   REAL bxca[8], bxxca[16], byca[8], byyca[16], bdet[32];
@@ -1389,14 +1192,14 @@ REAL permanent;
   int finlength;
 
   REAL adxtail, bdxtail, cdxtail, adytail, bdytail, cdytail;
-  INEXACT REAL adxadx1, adyady1, bdxbdx1, bdybdy1, cdxcdx1, cdycdy1;
+  REAL adxadx1, adyady1, bdxbdx1, bdybdy1, cdxcdx1, cdycdy1;
   REAL adxadx0, adyady0, bdxbdx0, bdybdy0, cdxcdx0, cdycdy0;
   REAL aa[4], bb[4], cc[4];
-  INEXACT REAL aa3, bb3, cc3;
-  INEXACT REAL ti1, tj1;
+  REAL aa3, bb3, cc3;
+  REAL ti1, tj1;
   REAL ti0, tj0;
   REAL u[4], v[4];
-  INEXACT REAL u3, v3;
+  REAL u3, v3;
   REAL temp8[8], temp16a[16], temp16b[16], temp16c[16];
   REAL temp32a[32], temp32b[32], temp48[48], temp64[64];
   int temp8len, temp16alen, temp16blen, temp16clen;
@@ -1418,16 +1221,16 @@ REAL permanent;
   int abtlen, bctlen, catlen;
   REAL abtt[4], bctt[4], catt[4];
   int abttlen, bcttlen, cattlen;
-  INEXACT REAL abtt3, bctt3, catt3;
+  REAL abtt3, bctt3, catt3;
   REAL negate;
 
-  INEXACT REAL bvirt;
+  REAL bvirt;
   REAL avirt, bround, around;
-  INEXACT REAL c;
-  INEXACT REAL abig;
+  REAL c;
+  REAL abig;
   REAL ahi, alo, bhi, blo;
   REAL err1, err2, err3;
-  INEXACT REAL _i, _j;
+  REAL _i, _j;
   REAL _0;
 
   adx = (REAL) (pa[0] - pd[0]);
@@ -2065,17 +1868,17 @@ REAL *pd;
 REAL *pe;
 REAL permanent;
 {
-  INEXACT REAL aex, bex, cex, dex, aey, bey, cey, dey, aez, bez, cez, dez;
+  REAL aex, bex, cex, dex, aey, bey, cey, dey, aez, bez, cez, dez;
   REAL det, errbound;
 
-  INEXACT REAL aexbey1, bexaey1, bexcey1, cexbey1;
-  INEXACT REAL cexdey1, dexcey1, dexaey1, aexdey1;
-  INEXACT REAL aexcey1, cexaey1, bexdey1, dexbey1;
+  REAL aexbey1, bexaey1, bexcey1, cexbey1;
+  REAL cexdey1, dexcey1, dexaey1, aexdey1;
+  REAL aexcey1, cexaey1, bexdey1, dexbey1;
   REAL aexbey0, bexaey0, bexcey0, cexbey0;
   REAL cexdey0, dexcey0, dexaey0, aexdey0;
   REAL aexcey0, cexaey0, bexdey0, dexbey0;
   REAL ab[4], bc[4], cd[4], da[4], ac[4], bd[4];
-  INEXACT REAL ab3, bc3, cd3, da3, ac3, bd3;
+  REAL ab3, bc3, cd3, da3, ac3, bd3;
   REAL abeps, bceps, cdeps, daeps, aceps, bdeps;
   REAL temp8a[8], temp8b[8], temp8c[8], temp16[16], temp24[24], temp48[48];
   int temp8alen, temp8blen, temp8clen, temp16len, temp24len, temp48len;
@@ -2092,13 +1895,13 @@ REAL permanent;
   REAL aeytail, beytail, ceytail, deytail;
   REAL aeztail, beztail, ceztail, deztail;
 
-  INEXACT REAL bvirt;
+  REAL bvirt;
   REAL avirt, bround, around;
-  INEXACT REAL c;
-  INEXACT REAL abig;
+  REAL c;
+  REAL abig;
   REAL ahi, alo, bhi, blo;
   REAL err1, err2, err3;
-  INEXACT REAL _i, _j;
+  REAL _i, _j;
   REAL _0;
 
   aex = (REAL) (pa[0] - pe[0]);
