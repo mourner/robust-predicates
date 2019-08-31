@@ -43,6 +43,12 @@ const Two_Two_Diff = (a1, a0, b1, b0, x3, x2, x1, x0) => `
     ${Two_One_Diff('_j', '_0', b1, x3, x2, x1)}
 `.trim();
 
+const Two_Product_Presplit = (a, b, bhi, blo, x, y) => `
+  ${x} = ${a} * ${b};
+  ${Split(a, 'ahi', 'alo')}
+  ${y} = alo * ${blo} - (${x} - ahi * ${bhi} - alo * ${bhi} - ahi * ${blo});
+`.trim();
+
 const src = `
 const epsilon = 1.1102230246251565e-16;
 const splitter = 134217729;
@@ -112,6 +118,34 @@ function fast_expansion_sum_zeroelim(elen, e, flen, f, h) {
         h[hindex++] = Q;
     }
     return hindex;
+}
+
+function scale_expansion_zeroelim(elen, e, b, h) {
+  let Q, sum, hh, product1, product0;
+  let bvirt, c, ahi, alo, bhi, blo;
+
+  ${Split('b', 'bhi', 'blo')}
+  ${Two_Product_Presplit('e[0]', 'b', 'bhi', 'blo', 'Q', 'hh')}
+  let hindex = 0;
+  if (hh !== 0) {
+    h[hindex++] = hh;
+  }
+  for (let eindex = 1; eindex < elen; eindex++) {
+    let enow = e[eindex];
+    ${Two_Product_Presplit('enow', 'b', 'bhi', 'blo', 'product1', 'product0')}
+    ${Two_Sum('Q', 'product0', 'sum', 'hh')}
+    if (hh !== 0) {
+      h[hindex++] = hh;
+    }
+    ${Fast_Two_Sum('product1', 'sum', 'Q', 'hh')}
+    if (hh !== 0) {
+      h[hindex++] = hh;
+    }
+  }
+  if ((Q !== 0.0) || (hindex === 0)) {
+    h[hindex++] = Q;
+  }
+  return hindex;
 }
 
 function estimate(elen, e) {
