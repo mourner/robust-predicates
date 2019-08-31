@@ -11,13 +11,16 @@
   "module": "predicates.js",
   "scripts": {
     "build-esm": "node compile.js | prettier --parser babel > predicates.js",
-    "pretest": "npm run build-esm",
-    "test": "eslint compile.js predicates.js"
+    "prelint": "npm run build-esm",
+    "lint": "eslint compile.js test.js predicates.js",
+    "test": "npm run lint && node -r esm test.js"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-config-mourner": "^3.0.0",
+    "esm": "^3.2.25",
     "prettier": "^1.18.2",
+    "tape": "^4.11.0",
     "terser": "^4.2.1"
   },
   "eslintConfig": {
@@ -25,7 +28,8 @@
     "rules": {
       "camelcase": 0,
       "new-cap": 0,
-      "prefer-const": 0
+      "prefer-const": 0,
+      "no-unused-vars": 0
     }
   },
   "prettier": {
