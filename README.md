@@ -4,6 +4,7 @@ Fast robust predicates for computational geometry in JavaScript. A modern port o
 
 [![Build Status](https://travis-ci.com/mourner/robust-predicates.svg?branch=master)](https://travis-ci.com/mourner/robust-predicates)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
+[![Browser Build](https://badgen.net/bundlephobia/minzip/robust-predicates)](https://unpkg.com/robust-predicates)
 
 ## [Demo](https://observablehq.com/@mourner/non-robust-arithmetic-as-art)
 
@@ -47,9 +48,11 @@ const ccw = orient2d(ax, ay, bx, by, cx, cy) > 0;
 
 Install with `npm install robust-predicates` or `yarn add robust-predicates`, or use one of the browser builds:
 
-- [predicates.min.js](https://unpkg.com/robust-predicates@0.1.0/umd/predicates.min.js) (all predicates)
-- [orient2d.min.js](https://unpkg.com/robust-predicates@0.1.0/umd/orient2d.min.js) (`orient2d`)
-- [incircle.min.js](https://unpkg.com/robust-predicates@0.1.0/umd/incircle.min.js) (`incircle`)
+- all predicates: [predicates.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/predicates.min.js)
+- `orient2d`: [orient2d.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/orient2d.min.js)
+- `orient3d`: [orient3d.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/orient3d.min.js)
+- `incircle`: [incircle.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/incircle.min.js)
+- `insphere`: [insphere.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/insphere.min.js)
 
 ## License
 
