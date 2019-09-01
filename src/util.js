@@ -97,3 +97,7 @@ export function estimate(elen, e) {
     for (let i = 1; i < elen; i++) Q += e[i];
     return Q;
 }
+
+export function vec(n) {
+    return new Float64Array(n);
+}

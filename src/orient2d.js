@@ -1,5 +1,5 @@
 import {
-    epsilon, splitter, resulterrbound, estimate,
+    epsilon, splitter, resulterrbound, estimate, vec,
     fast_expansion_sum_zeroelim
 } from './util.js';
 
@@ -7,11 +7,11 @@ const ccwerrboundA = (3 + 16 * epsilon) * epsilon;
 const ccwerrboundB = (2 + 12 * epsilon) * epsilon;
 const ccwerrboundC = (9 + 64 * epsilon) * epsilon * epsilon;
 
-const B = new Float64Array(4);
-const C1 = new Float64Array(8);
-const C2 = new Float64Array(12);
-const D = new Float64Array(16);
-const u = new Float64Array(4);
+const B = vec(4);
+const C1 = vec(8);
+const C2 = vec(12);
+const D = vec(16);
+const u = vec(4);
 
 function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
     let acxtail, acytail, bcxtail, bcytail;

@@ -1,5 +1,5 @@
 import {
-    epsilon, splitter, resulterrbound, estimate,
+    epsilon, splitter, resulterrbound, estimate, vec,
     fast_expansion_sum_zeroelim, scale_expansion_zeroelim
 } from './util.js';
 
@@ -7,50 +7,50 @@ const isperrboundA = (16 + 224 * epsilon) * epsilon;
 const isperrboundB = (5 + 72 * epsilon) * epsilon;
 const isperrboundC = (71 + 1408 * epsilon) * epsilon * epsilon;
 
-const ab = new Float64Array(4);
-const bc = new Float64Array(4);
-const cd = new Float64Array(4);
-const de = new Float64Array(4);
-const ea = new Float64Array(4);
-const ac = new Float64Array(4);
-const bd = new Float64Array(4);
-const ce = new Float64Array(4);
-const da = new Float64Array(4);
-const eb = new Float64Array(4);
-const temp8a = new Float64Array(8);
-const temp8b = new Float64Array(8);
-const temp16 = new Float64Array(16);
-const abc = new Float64Array(24);
-const bcd = new Float64Array(24);
-const cde = new Float64Array(24);
-const dea = new Float64Array(24);
-const eab = new Float64Array(24);
-const abd = new Float64Array(24);
-const bce = new Float64Array(24);
-const cda = new Float64Array(24);
-const deb = new Float64Array(24);
-const eac = new Float64Array(24);
-const temp48a = new Float64Array(48);
-const temp48b = new Float64Array(48);
-const abcd = new Float64Array(96);
-const bcde = new Float64Array(96);
-const cdea = new Float64Array(96);
-const deab = new Float64Array(96);
-const eabc = new Float64Array(96);
-const temp192 = new Float64Array(192);
-const det384x = new Float64Array(384);
-const det384y = new Float64Array(384);
-const det384z = new Float64Array(384);
-const detxy = new Float64Array(768);
-const adet = new Float64Array(1152);
-const bdet = new Float64Array(1152);
-const cdet = new Float64Array(1152);
-const ddet = new Float64Array(1152);
-const edet = new Float64Array(1152);
-const abdet = new Float64Array(2304);
-const cddet = new Float64Array(2304);
-const cdedet = new Float64Array(3456);
-const deter = new Float64Array(5760);
+const ab = vec(4);
+const bc = vec(4);
+const cd = vec(4);
+const de = vec(4);
+const ea = vec(4);
+const ac = vec(4);
+const bd = vec(4);
+const ce = vec(4);
+const da = vec(4);
+const eb = vec(4);
+const temp8a = vec(8);
+const temp8b = vec(8);
+const temp16 = vec(16);
+const abc = vec(24);
+const bcd = vec(24);
+const cde = vec(24);
+const dea = vec(24);
+const eab = vec(24);
+const abd = vec(24);
+const bce = vec(24);
+const cda = vec(24);
+const deb = vec(24);
+const eac = vec(24);
+const temp48a = vec(48);
+const temp48b = vec(48);
+const abcd = vec(96);
+const bcde = vec(96);
+const cdea = vec(96);
+const deab = vec(96);
+const eabc = vec(96);
+const temp192 = vec(192);
+const det384x = vec(384);
+const det384y = vec(384);
+const det384z = vec(384);
+const detxy = vec(768);
+const adet = vec(1152);
+const bdet = vec(1152);
+const cdet = vec(1152);
+const ddet = vec(1152);
+const edet = vec(1152);
+const abdet = vec(2304);
+const cddet = vec(2304);
+const cdedet = vec(3456);
+const deter = vec(5760);
 
 function insphereexact(pa, pb, pc, pd, pe) {
     let axby1, bxcy1, cxdy1, dxey1, exay1;
@@ -252,14 +252,14 @@ function insphereexact(pa, pb, pc, pd, pe) {
     return deter[deterlen - 1];
 }
 
-const temp8c = new Float64Array(8);
-const temp24 = new Float64Array(24);
-const temp48 = new Float64Array(48);
-const xdet = new Float64Array(96);
-const ydet = new Float64Array(96);
-const zdet = new Float64Array(96);
-const xydet = new Float64Array(192);
-const fin1 = new Float64Array(1152);
+const temp8c = vec(8);
+const temp24 = vec(24);
+const temp48 = vec(48);
+const xdet = vec(96);
+const ydet = vec(96);
+const zdet = vec(96);
+const xydet = vec(192);
+const fin1 = vec(1152);
 
 function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent) {
     let aexbey1, bexaey1, bexcey1, cexbey1;

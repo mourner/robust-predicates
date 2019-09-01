@@ -1,5 +1,5 @@
 import {
-    epsilon, splitter, resulterrbound, estimate,
+    epsilon, splitter, resulterrbound, estimate, vec,
     fast_expansion_sum_zeroelim, scale_expansion_zeroelim
 } from './util.js';
 
@@ -7,27 +7,27 @@ const o3derrboundA = (7 + 56 * epsilon) * epsilon;
 const o3derrboundB = (3 + 28 * epsilon) * epsilon;
 const o3derrboundC = (26 + 288 * epsilon) * epsilon * epsilon;
 
-const bc = new Float64Array(4);
-const ca = new Float64Array(4);
-const ab = new Float64Array(4);
-const adet = new Float64Array(8);
-const bdet = new Float64Array(8);
-const cdet = new Float64Array(8);
-const abdet = new Float64Array(16);
-const fin1 = new Float64Array(192);
-const fin2 = new Float64Array(192);
-const at_b = new Float64Array(4);
-const at_c = new Float64Array(4);
-const bt_c = new Float64Array(4);
-const bt_a = new Float64Array(4);
-const ct_a = new Float64Array(4);
-const ct_b = new Float64Array(4);
-const bct = new Float64Array(8);
-const cat = new Float64Array(8);
-const abt = new Float64Array(8);
-const u = new Float64Array(4);
-const v = new Float64Array(12);
-const w = new Float64Array(16);
+const bc = vec(4);
+const ca = vec(4);
+const ab = vec(4);
+const adet = vec(8);
+const bdet = vec(8);
+const cdet = vec(8);
+const abdet = vec(16);
+const fin1 = vec(192);
+const fin2 = vec(192);
+const at_b = vec(4);
+const at_c = vec(4);
+const bt_c = vec(4);
+const bt_a = vec(4);
+const ct_a = vec(4);
+const ct_b = vec(4);
+const bct = vec(8);
+const cat = vec(8);
+const abt = vec(8);
+const u = vec(4);
+const v = vec(12);
+const w = vec(16);
 
 function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent) {
     let bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
