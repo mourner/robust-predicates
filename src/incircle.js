@@ -79,7 +79,7 @@ const abtt = new Float64Array(4);
 const bctt = new Float64Array(4);
 const catt = new Float64Array(4);
 
-function incircleadapt(pax, pay, pbx, pby, pcx, pcy, pdx, pdy, permanent) {
+function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     let bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
     let bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
     let bc3, ca3, ab3;
@@ -107,12 +107,12 @@ function incircleadapt(pax, pay, pbx, pby, pcx, pcy, pdx, pdy, permanent) {
 
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
 
-    const adx = pax - pdx;
-    const bdx = pbx - pdx;
-    const cdx = pcx - pdx;
-    const ady = pay - pdy;
-    const bdy = pby - pdy;
-    const cdy = pcy - pdy;
+    const adx = ax - dx;
+    const bdx = bx - dx;
+    const cdx = cx - dx;
+    const ady = ay - dy;
+    const bdy = by - dy;
+    const cdy = cy - dy;
 
     $Two_Product(bdx, cdy, bdxcdy1, bdxcdy0);
     $Two_Product(cdx, bdy, cdxbdy1, cdxbdy0);
@@ -153,12 +153,12 @@ function incircleadapt(pax, pay, pbx, pby, pcx, pcy, pdx, pdy, permanent) {
         return det;
     }
 
-    $Two_Diff_Tail(pax, pdx, adx, adxtail);
-    $Two_Diff_Tail(pay, pdy, ady, adytail);
-    $Two_Diff_Tail(pbx, pdx, bdx, bdxtail);
-    $Two_Diff_Tail(pby, pdy, bdy, bdytail);
-    $Two_Diff_Tail(pcx, pdx, cdx, cdxtail);
-    $Two_Diff_Tail(pcy, pdy, cdy, cdytail);
+    $Two_Diff_Tail(ax, dx, adx, adxtail);
+    $Two_Diff_Tail(ay, dy, ady, adytail);
+    $Two_Diff_Tail(bx, dx, bdx, bdxtail);
+    $Two_Diff_Tail(by, dy, bdy, bdytail);
+    $Two_Diff_Tail(cx, dx, cdx, cdxtail);
+    $Two_Diff_Tail(cy, dy, cdy, cdytail);
     if (adxtail === 0 && bdxtail === 0 && cdxtail === 0 && adytail === 0 && bdytail === 0 && cdytail === 0) {
         return det;
     }
@@ -513,13 +513,13 @@ function incircleadapt(pax, pay, pbx, pby, pcx, pcy, pdx, pdy, permanent) {
     return finnow[finlength - 1];
 }
 
-export function incircle(pax, pay, pbx, pby, pcx, pcy, pdx, pdy) {
-    const adx = pax - pdx;
-    const bdx = pbx - pdx;
-    const cdx = pcx - pdx;
-    const ady = pay - pdy;
-    const bdy = pby - pdy;
-    const cdy = pcy - pdy;
+export function incircle(ax, ay, bx, by, cx, cy, dx, dy) {
+    const adx = ax - dx;
+    const bdx = bx - dx;
+    const cdx = cx - dx;
+    const ady = ay - dy;
+    const bdy = by - dy;
+    const cdy = cy - dy;
 
     const bdxcdy = bdx * cdy;
     const cdxbdy = cdx * bdy;
@@ -549,5 +549,5 @@ export function incircle(pax, pay, pbx, pby, pcx, pcy, pdx, pdy) {
         return det;
     }
 
-    return incircleadapt(pax, pay, pbx, pby, pcx, pcy, pdx, pdy, permanent);
+    return incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent);
 }

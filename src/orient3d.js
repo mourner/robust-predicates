@@ -30,12 +30,10 @@ const u = new Float64Array(4);
 const v = new Float64Array(12);
 const w = new Float64Array(16);
 
-function orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pdz, permanent) {
+function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent) {
     let bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
     let bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
     let bc3, ca3, ab3;
-    let alen, blen, clen;
-    let ablen;
     let finnow, finother, finswap;
     let finlength;
 
@@ -54,7 +52,6 @@ function orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pd
     let adyt_cdx1, adyt_bdx1, bdyt_adx1;
     let bdyt_cdx0, cdyt_bdx0, cdyt_adx0;
     let adyt_cdx0, adyt_bdx0, bdyt_adx0;
-    let bctlen, catlen, abtlen;
     let bdxt_cdyt1, cdxt_bdyt1, cdxt_adyt1;
     let adxt_cdyt1, adxt_bdyt1, bdxt_adyt1;
     let bdxt_cdyt0, cdxt_bdyt0, cdxt_adyt0;
@@ -65,35 +62,35 @@ function orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pd
 
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0;
 
-    const adx = pax - pdx;
-    const bdx = pbx - pdx;
-    const cdx = pcx - pdx;
-    const ady = pay - pdy;
-    const bdy = pby - pdy;
-    const cdy = pcy - pdy;
-    const adz = paz - pdz;
-    const bdz = pbz - pdz;
-    const cdz = pcz - pdz;
+    const adx = ax - dx;
+    const bdx = bx - dx;
+    const cdx = cx - dx;
+    const ady = ay - dy;
+    const bdy = by - dy;
+    const cdy = cy - dy;
+    const adz = az - dz;
+    const bdz = bz - dz;
+    const cdz = cz - dz;
 
     $Two_Product(bdx, cdy, bdxcdy1, bdxcdy0);
     $Two_Product(cdx, bdy, cdxbdy1, cdxbdy0);
     $Two_Two_Diff(bdxcdy1, bdxcdy0, cdxbdy1, cdxbdy0, bc3, bc[2], bc[1], bc[0]);
     bc[3] = bc3;
-    alen = scale_expansion_zeroelim(4, bc, adz, adet);
+    const alen = scale_expansion_zeroelim(4, bc, adz, adet);
 
     $Two_Product(cdx, ady, cdxady1, cdxady0);
     $Two_Product(adx, cdy, adxcdy1, adxcdy0);
     $Two_Two_Diff(cdxady1, cdxady0, adxcdy1, adxcdy0, ca3, ca[2], ca[1], ca[0]);
     ca[3] = ca3;
-    blen = scale_expansion_zeroelim(4, ca, bdz, bdet);
+    const blen = scale_expansion_zeroelim(4, ca, bdz, bdet);
 
     $Two_Product(adx, bdy, adxbdy1, adxbdy0);
     $Two_Product(bdx, ady, bdxady1, bdxady0);
     $Two_Two_Diff(adxbdy1, adxbdy0, bdxady1, bdxady0, ab3, ab[2], ab[1], ab[0]);
     ab[3] = ab3;
-    clen = scale_expansion_zeroelim(4, ab, cdz, cdet);
+    const clen = scale_expansion_zeroelim(4, ab, cdz, cdet);
 
-    ablen = fast_expansion_sum_zeroelim(alen, adet, blen, bdet, abdet);
+    const ablen = fast_expansion_sum_zeroelim(alen, adet, blen, bdet, abdet);
     finlength = fast_expansion_sum_zeroelim(ablen, abdet, clen, cdet, fin1);
 
     let det = estimate(finlength, fin1);
@@ -102,15 +99,15 @@ function orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pd
         return det;
     }
 
-    $Two_Diff_Tail(pax, pdx, adx, adxtail);
-    $Two_Diff_Tail(pbx, pdx, bdx, bdxtail);
-    $Two_Diff_Tail(pcx, pdx, cdx, cdxtail);
-    $Two_Diff_Tail(pay, pdy, ady, adytail);
-    $Two_Diff_Tail(pby, pdy, bdy, bdytail);
-    $Two_Diff_Tail(pcy, pdy, cdy, cdytail);
-    $Two_Diff_Tail(paz, pdz, adz, adztail);
-    $Two_Diff_Tail(pbz, pdz, bdz, bdztail);
-    $Two_Diff_Tail(pcz, pdz, cdz, cdztail);
+    $Two_Diff_Tail(ax, dx, adx, adxtail);
+    $Two_Diff_Tail(bx, dx, bdx, bdxtail);
+    $Two_Diff_Tail(cx, dx, cdx, cdxtail);
+    $Two_Diff_Tail(ay, dy, ady, adytail);
+    $Two_Diff_Tail(by, dy, bdy, bdytail);
+    $Two_Diff_Tail(cy, dy, cdy, cdytail);
+    $Two_Diff_Tail(az, dz, adz, adztail);
+    $Two_Diff_Tail(bz, dz, bdz, bdztail);
+    $Two_Diff_Tail(cz, dz, cdz, cdztail);
 
     if (
         (adxtail === 0.0) && (bdxtail === 0.0) && (cdxtail === 0.0) &&
@@ -243,17 +240,17 @@ function orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pd
         }
     }
 
-    bctlen = fast_expansion_sum_zeroelim(bt_clen, bt_c, ct_blen, ct_b, bct);
+    const bctlen = fast_expansion_sum_zeroelim(bt_clen, bt_c, ct_blen, ct_b, bct);
     wlength = scale_expansion_zeroelim(bctlen, bct, adz, w);
     finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
     finswap = finnow; finnow = finother; finother = finswap;
 
-    catlen = fast_expansion_sum_zeroelim(ct_alen, ct_a, at_clen, at_c, cat);
+    const catlen = fast_expansion_sum_zeroelim(ct_alen, ct_a, at_clen, at_c, cat);
     wlength = scale_expansion_zeroelim(catlen, cat, bdz, w);
     finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
     finswap = finnow; finnow = finother; finother = finswap;
 
-    abtlen = fast_expansion_sum_zeroelim(at_blen, at_b, bt_alen, bt_a, abt);
+    const abtlen = fast_expansion_sum_zeroelim(at_blen, at_b, bt_alen, bt_a, abt);
     wlength = scale_expansion_zeroelim(abtlen, abt, cdz, w);
     finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
     finswap = finnow; finnow = finother; finother = finswap;
@@ -381,16 +378,16 @@ function orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pd
     return finnow[finlength - 1];
 }
 
-export function orient3d(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pdz) {
-    const adx = pax - pdx;
-    const bdx = pbx - pdx;
-    const cdx = pcx - pdx;
-    const ady = pay - pdy;
-    const bdy = pby - pdy;
-    const cdy = pcy - pdy;
-    const adz = paz - pdz;
-    const bdz = pbz - pdz;
-    const cdz = pcz - pdz;
+export function orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz) {
+    const adx = ax - dx;
+    const bdx = bx - dx;
+    const cdx = cx - dx;
+    const ady = ay - dy;
+    const bdy = by - dy;
+    const cdy = cy - dy;
+    const adz = az - dz;
+    const bdz = bz - dz;
+    const cdz = cz - dz;
 
     const bdxcdy = bdx * cdy;
     const cdxbdy = cdx * bdy;
@@ -416,5 +413,5 @@ export function orient3d(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, 
         return det;
     }
 
-    return orient3dadapt(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pdz, permanent);
+    return orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent);
 }

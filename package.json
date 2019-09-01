@@ -41,7 +41,6 @@
     "rules": {
       "camelcase": 0,
       "new-cap": 0,
-      "prefer-const": 0,
       "no-unused-vars": 0,
       "no-lonely-if": 0
     },
