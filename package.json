@@ -10,7 +10,7 @@
   "license": "Unlicense",
   "module": "index.js",
   "scripts": {
-    "build": "node compile.js",
+    "build": "mkdirp esm && node compile.js",
     "lint": "eslint *.js esm src",
     "test": "npm run build && npm run lint && node -r esm test.js",
     "bench": "node -r esm bench.js"
@@ -19,6 +19,7 @@
     "eslint": "^6.3.0",
     "eslint-config-mourner": "^3.0.0",
     "esm": "^3.2.25",
+    "mkdirp": "^0.5.1",
     "nextafter": "^1.0.0",
     "robust-orientation": "^1.1.3",
     "tape": "^4.11.0",
