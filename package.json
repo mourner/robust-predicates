@@ -16,7 +16,7 @@
     "lint": "eslint *.js src",
     "test": "npm run lint && npm run build && node -r esm test.js",
     "bench": "node -r esm bench.js",
-    "prepublishOnly": "rollup -c"
+    "prepublishOnly": "npm run test && rollup -c"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
