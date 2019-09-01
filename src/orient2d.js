@@ -1,5 +1,8 @@
 
-import {epsilon, splitter, resulterrbound, estimate, fast_expansion_sum_zeroelim} from './util.js';
+import {
+    epsilon, splitter, resulterrbound, estimate,
+    fast_expansion_sum_zeroelim
+} from './util.js';
 
 const ccwerrboundA = (3 + 16 * epsilon) * epsilon;
 const ccwerrboundB = (2 + 12 * epsilon) * epsilon;

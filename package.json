@@ -13,8 +13,8 @@
   "module": "index.js",
   "scripts": {
     "build": "mkdirp esm && node compile.js",
-    "lint": "eslint *.js esm src",
-    "test": "npm run build && npm run lint && node -r esm test.js",
+    "lint": "eslint *.js src",
+    "test": "npm run lint && npm run build && node -r esm test.js",
     "bench": "node -r esm bench.js",
     "prepublishOnly": "rollup -c"
   },
@@ -41,7 +41,8 @@
       "camelcase": 0,
       "new-cap": 0,
       "prefer-const": 0,
-      "no-unused-vars": 0
+      "no-unused-vars": 0,
+      "no-lonely-if": 0
     },
     "globals": {
       "$Fast_Two_Sum": false,

@@ -1,7 +1,7 @@
 
 import {
-    epsilon, splitter, resulterrbound,
-    estimate, fast_expansion_sum_zeroelim, scale_expansion_zeroelim
+    epsilon, splitter, resulterrbound, estimate,
+    fast_expansion_sum_zeroelim, scale_expansion_zeroelim
 } from './util.js';
 
 const iccerrboundA = (10.0 + 96.0 * epsilon) * epsilon;

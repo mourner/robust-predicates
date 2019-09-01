@@ -3,7 +3,7 @@ import {test} from 'tape';
 import orient2dOld from 'robust-orientation';
 import nextafter from 'nextafter';
 
-import {orient2d, incircle} from './index.js';
+import {orient2d, orient3d, incircle} from './index.js';
 
 test('orient2d', (t) => {
     t.ok(orient2d(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
@@ -43,6 +43,48 @@ test('incircle', (t) => {
 
     t.ok(incircle(1, 0, 0, 1, -1, 0, 0, a) > 0, 'near inside');
     t.ok(incircle(1, 0, 0, 1, -1, 0, 0, b) < 0, 'near outside');
+
+    t.end();
+});
+
+test('orient3d', (t) => {
+    t.ok(orient3d(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, 1
+    ) > 0, 'below');
+
+    t.ok(orient3d(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, -1
+    ) < 0, 'above');
+
+    t.ok(orient3d(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, 0
+    ) === 0, 'coplanar');
+
+    const a = nextafter(0, 1);
+    const b = nextafter(0, -1);
+
+    t.ok(orient3d(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, a
+    ) > 0, 'near below');
+
+    t.ok(orient3d(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, b
+    ) < 0, 'near above');
 
     t.end();
 });
