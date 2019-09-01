@@ -1103,8 +1103,6 @@ REAL *pd;
 /*****************************************************************************/
 /*                                                                           */
 /*  incirclefast()   Approximate 2D incircle test.  Nonrobust.               */
-/*  incircleexact()   Exact 2D incircle test.  Robust.                       */
-/*  incircleslow()   Another exact 2D incircle test.  Robust.                */
 /*  incircle()   Adaptive exact 2D incircle test.  Robust.                   */
 /*                                                                           */
 /*               Return a positive value if the point pd lies inside the     */
@@ -1113,10 +1111,7 @@ REAL *pd;
 /*               The points pa, pb, and pc must be in counterclockwise       */
 /*               order, or the sign of the result will be reversed.          */
 /*                                                                           */
-/*  Only the first and last routine should be used; the middle two are for   */
-/*  timings.                                                                 */
-/*                                                                           */
-/*  The last three use exact arithmetic to ensure a correct answer.  The     */
+/*  The second one uses exact arithmetic to ensure a correct answer. The     */
 /*  result returned is the determinant of a matrix.  In incircle() only,     */
 /*  this determinant is computed adaptively, in the sense that exact         */
 /*  arithmetic is used only to the degree it is needed to ensure that the    */
