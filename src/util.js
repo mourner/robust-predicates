@@ -1,4 +1,3 @@
-
 export const epsilon = 1.1102230246251565e-16;
 export const splitter = 134217729;
 export const resulterrbound = (3 + 8 * epsilon) * epsilon;

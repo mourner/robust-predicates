@@ -1,12 +1,11 @@
-
 import {
     epsilon, splitter, resulterrbound, estimate,
     fast_expansion_sum_zeroelim, scale_expansion_zeroelim
 } from './util.js';
 
-const o3derrboundA = (7.0 + 56.0 * epsilon) * epsilon;
-const o3derrboundB = (3.0 + 28.0 * epsilon) * epsilon;
-const o3derrboundC = (26.0 + 288.0 * epsilon) * epsilon * epsilon;
+const o3derrboundA = (7 + 56 * epsilon) * epsilon;
+const o3derrboundB = (3 + 28 * epsilon) * epsilon;
+const o3derrboundC = (26 + 288 * epsilon) * epsilon * epsilon;
 
 const bc = new Float64Array(4);
 const ca = new Float64Array(4);
@@ -95,7 +94,7 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
 
     let det = estimate(finlength, fin1);
     let errbound = o3derrboundB * permanent;
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
@@ -109,10 +108,9 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     $Two_Diff_Tail(bz, dz, bdz, bdztail);
     $Two_Diff_Tail(cz, dz, cdz, cdztail);
 
-    if (
-        (adxtail === 0.0) && (bdxtail === 0.0) && (cdxtail === 0.0) &&
-        (adytail === 0.0) && (bdytail === 0.0) && (cdytail === 0.0) &&
-        (adztail === 0.0) && (bdztail === 0.0) && (cdztail === 0.0)) {
+    if (adxtail === 0 && bdxtail === 0 && cdxtail === 0 &&
+        adytail === 0 && bdytail === 0 && cdytail === 0 &&
+        adztail === 0 && bdztail === 0 && cdztail === 0) {
         return det;
     }
 
@@ -121,18 +119,18 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         adz * (bdx * cdytail + cdy * bdxtail - (bdy * cdxtail + cdx * bdytail)) + adztail * (bdx * cdy - bdy * cdx) +
         bdz * (cdx * adytail + ady * cdxtail - (cdy * adxtail + adx * cdytail)) + bdztail * (cdx * ady - cdy * adx) +
         cdz * (adx * bdytail + bdy * adxtail - (ady * bdxtail + bdx * adytail)) + cdztail * (adx * bdy - ady * bdx);
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
     finnow = fin1;
     finother = fin2;
 
-    if (adxtail === 0.0) {
-        if (adytail === 0.0) {
-            at_b[0] = 0.0;
+    if (adxtail === 0) {
+        if (adytail === 0) {
+            at_b[0] = 0;
             at_blen = 1;
-            at_c[0] = 0.0;
+            at_c[0] = 0;
             at_clen = 1;
         } else {
             negate = -adytail;
@@ -144,7 +142,7 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             at_clen = 2;
         }
     } else {
-        if (adytail === 0.0) {
+        if (adytail === 0) {
             $Two_Product(adxtail, bdy, at_blarge, at_b[0]);
             at_b[1] = at_blarge;
             at_blen = 2;
@@ -165,11 +163,11 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             at_clen = 4;
         }
     }
-    if (bdxtail === 0.0) {
-        if (bdytail === 0.0) {
-            bt_c[0] = 0.0;
+    if (bdxtail === 0) {
+        if (bdytail === 0) {
+            bt_c[0] = 0;
             bt_clen = 1;
-            bt_a[0] = 0.0;
+            bt_a[0] = 0;
             bt_alen = 1;
         } else {
             negate = -bdytail;
@@ -181,7 +179,7 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             bt_alen = 2;
         }
     } else {
-        if (bdytail === 0.0) {
+        if (bdytail === 0) {
             $Two_Product(bdxtail, cdy, bt_clarge, bt_c[0]);
             bt_c[1] = bt_clarge;
             bt_clen = 2;
@@ -202,11 +200,11 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             bt_alen = 4;
         }
     }
-    if (cdxtail === 0.0) {
-        if (cdytail === 0.0) {
-            ct_a[0] = 0.0;
+    if (cdxtail === 0) {
+        if (cdytail === 0) {
+            ct_a[0] = 0;
             ct_alen = 1;
-            ct_b[0] = 0.0;
+            ct_b[0] = 0;
             ct_blen = 1;
         } else {
             negate = -cdytail;
@@ -218,7 +216,7 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             ct_blen = 2;
         }
     } else {
-        if (cdytail === 0.0) {
+        if (cdytail === 0) {
             $Two_Product(cdxtail, ady, ct_alarge, ct_a[0]);
             ct_a[1] = ct_alarge;
             ct_alen = 2;
@@ -255,44 +253,44 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
     finswap = finnow; finnow = finother; finother = finswap;
 
-    if (adztail !== 0.0) {
+    if (adztail !== 0) {
         vlength = scale_expansion_zeroelim(4, bc, adztail, v);
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, vlength, v, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (bdztail !== 0.0) {
+    if (bdztail !== 0) {
         vlength = scale_expansion_zeroelim(4, ca, bdztail, v);
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, vlength, v, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (cdztail !== 0.0) {
+    if (cdztail !== 0) {
         vlength = scale_expansion_zeroelim(4, ab, cdztail, v);
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, vlength, v, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
 
-    if (adxtail !== 0.0) {
-        if (bdytail !== 0.0) {
+    if (adxtail !== 0) {
+        if (bdytail !== 0) {
             $Two_Product(adxtail, bdytail, adxt_bdyt1, adxt_bdyt0);
             $Two_One_Product(adxt_bdyt1, adxt_bdyt0, cdz, u3, u[2], u[1], u[0]);
             u[3] = u3;
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (cdztail !== 0.0) {
+            if (cdztail !== 0) {
                 $Two_One_Product(adxt_bdyt1, adxt_bdyt0, cdztail, u3, u[2], u[1], u[0]);
                 u[3] = u3;
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
         }
-        if (cdytail !== 0.0) {
+        if (cdytail !== 0) {
             negate = -adxtail;
             $Two_Product(negate, cdytail, adxt_cdyt1, adxt_cdyt0);
             $Two_One_Product(adxt_cdyt1, adxt_cdyt0, bdz, u3, u[2], u[1], u[0]);
             u[3] = u3;
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (bdztail !== 0.0) {
+            if (bdztail !== 0) {
                 $Two_One_Product(adxt_cdyt1, adxt_cdyt0, bdztail, u3, u[2], u[1], u[0]);
                 u[3] = u3;
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
@@ -300,28 +298,28 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             }
         }
     }
-    if (bdxtail !== 0.0) {
-        if (cdytail !== 0.0) {
+    if (bdxtail !== 0) {
+        if (cdytail !== 0) {
             $Two_Product(bdxtail, cdytail, bdxt_cdyt1, bdxt_cdyt0);
             $Two_One_Product(bdxt_cdyt1, bdxt_cdyt0, adz, u3, u[2], u[1], u[0]);
             u[3] = u3;
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (adztail !== 0.0) {
+            if (adztail !== 0) {
                 $Two_One_Product(bdxt_cdyt1, bdxt_cdyt0, adztail, u3, u[2], u[1], u[0]);
                 u[3] = u3;
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
         }
-        if (adytail !== 0.0) {
+        if (adytail !== 0) {
             negate = -bdxtail;
             $Two_Product(negate, adytail, bdxt_adyt1, bdxt_adyt0);
             $Two_One_Product(bdxt_adyt1, bdxt_adyt0, cdz, u3, u[2], u[1], u[0]);
             u[3] = u3;
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (cdztail !== 0.0) {
+            if (cdztail !== 0) {
                 $Two_One_Product(bdxt_adyt1, bdxt_adyt0, cdztail, u3, u[2], u[1], u[0]);
                 u[3] = u3;
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
@@ -329,28 +327,28 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             }
         }
     }
-    if (cdxtail !== 0.0) {
-        if (adytail !== 0.0) {
+    if (cdxtail !== 0) {
+        if (adytail !== 0) {
             $Two_Product(cdxtail, adytail, cdxt_adyt1, cdxt_adyt0);
             $Two_One_Product(cdxt_adyt1, cdxt_adyt0, bdz, u3, u[2], u[1], u[0]);
             u[3] = u3;
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (bdztail !== 0.0) {
+            if (bdztail !== 0) {
                 $Two_One_Product(cdxt_adyt1, cdxt_adyt0, bdztail, u3, u[2], u[1], u[0]);
                 u[3] = u3;
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
         }
-        if (bdytail !== 0.0) {
+        if (bdytail !== 0) {
             negate = -cdxtail;
             $Two_Product(negate, bdytail, cdxt_bdyt1, cdxt_bdyt0);
             $Two_One_Product(cdxt_bdyt1, cdxt_bdyt0, adz, u3, u[2], u[1], u[0]);
             u[3] = u3;
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (adztail !== 0.0) {
+            if (adztail !== 0) {
                 $Two_One_Product(cdxt_bdyt1, cdxt_bdyt0, adztail, u3, u[2], u[1], u[0]);
                 u[3] = u3;
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
@@ -359,17 +357,17 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         }
     }
 
-    if (adztail !== 0.0) {
+    if (adztail !== 0) {
         wlength = scale_expansion_zeroelim(bctlen, bct, adztail, w);
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (bdztail !== 0.0) {
+    if (bdztail !== 0) {
         wlength = scale_expansion_zeroelim(catlen, cat, bdztail, w);
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (cdztail !== 0.0) {
+    if (cdztail !== 0) {
         wlength = scale_expansion_zeroelim(abtlen, abt, cdztail, w);
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w, finother);
         finswap = finnow; finnow = finother; finother = finswap;
@@ -409,7 +407,7 @@ export function orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz) {
         (Math.abs(adxbdy) + Math.abs(bdxady)) * Math.abs(cdz);
 
     const errbound = o3derrboundA * permanent;
-    if ((det > errbound) || (-det > errbound)) {
+    if (det > errbound || -det > errbound) {
         return det;
     }
 

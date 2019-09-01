@@ -1,4 +1,3 @@
-
 import {
     epsilon, splitter, resulterrbound, estimate,
     fast_expansion_sum_zeroelim
@@ -40,13 +39,11 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
     $Two_Diff_Tail(ay, cy, acy, acytail);
     $Two_Diff_Tail(by, cy, bcy, bcytail);
 
-    if ((acxtail === 0) && (acytail === 0) && (bcxtail === 0) && (bcytail === 0)) {
-        return det;
-    }
+    if (acxtail === 0 && acytail === 0 && bcxtail === 0 && bcytail === 0) return det;
 
     errbound = ccwerrboundC * detsum + resulterrbound * Math.abs(det);
     det += (acx * bcytail + bcy * acxtail) - (acy * bcxtail + bcx * acytail);
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
@@ -78,17 +75,25 @@ export function orient2d(ax, ay, bx, by, cx, cy) {
     let detsum;
 
     if (detleft > 0) {
-        if (detright <= 0) return det;
-        else detsum = detleft + detright;
+        if (detright <= 0) {
+            return det;
+        }
+        detsum = detleft + detright;
 
     } else if (detleft < 0) {
-        if (detright >= 0) return det;
-        else detsum = -detleft - detright;
+        if (detright >= 0) {
+            return det;
+        }
+        detsum = -detleft - detright;
 
-    } else return det;
+    } else {
+        return det;
+    }
 
     const errbound = ccwerrboundA * detsum;
-    if (det >= errbound || -det >= errbound) return det;
+    if (det >= errbound || -det >= errbound) {
+        return det;
+    }
 
     return orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
 }

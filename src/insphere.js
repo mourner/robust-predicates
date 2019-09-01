@@ -1,12 +1,11 @@
-
 import {
     epsilon, splitter, resulterrbound, estimate,
     fast_expansion_sum_zeroelim, scale_expansion_zeroelim
 } from './util.js';
 
-const isperrboundA = (16.0 + 224.0 * epsilon) * epsilon;
-const isperrboundB = (5.0 + 72.0 * epsilon) * epsilon;
-const isperrboundC = (71.0 + 1408.0 * epsilon) * epsilon * epsilon;
+const isperrboundA = (16 + 224 * epsilon) * epsilon;
+const isperrboundB = (5 + 72 * epsilon) * epsilon;
+const isperrboundC = (71 + 1408 * epsilon) * epsilon * epsilon;
 
 const ab = new Float64Array(4);
 const bc = new Float64Array(4);
@@ -384,7 +383,7 @@ function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
 
     let det = estimate(finlength, fin1);
     let errbound = isperrboundB * permanent;
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
@@ -400,10 +399,10 @@ function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
     $Two_Diff_Tail(dx, ex, dex, dextail);
     $Two_Diff_Tail(dy, ey, dey, deytail);
     $Two_Diff_Tail(dz, ez, dez, deztail);
-    if ((aextail === 0.0) && (aeytail === 0.0) && (aeztail === 0.0) &&
-        (bextail === 0.0) && (beytail === 0.0) && (beztail === 0.0) &&
-        (cextail === 0.0) && (ceytail === 0.0) && (ceztail === 0.0) &&
-        (dextail === 0.0) && (deytail === 0.0) && (deztail === 0.0)) {
+    if (aextail === 0 && aeytail === 0 && aeztail === 0 &&
+        bextail === 0 && beytail === 0 && beztail === 0 &&
+        cextail === 0 && ceytail === 0 && ceztail === 0 &&
+        dextail === 0 && deytail === 0 && deztail === 0) {
         return det;
     }
 
@@ -422,12 +421,12 @@ function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
         ((aex * aex + aey * aey + aez * aez) * ((bez * cdeps - cez * bdeps + dez * bceps) +
         (beztail * cd3 - ceztail * bd3 + deztail * bc3)) + (cex * cex + cey * cey + cez * cez) *
         ((dez * abeps + aez * bdeps + bez * daeps) + (deztail * ab3 + aeztail * bd3 + beztail * da3)))) +
-        2.0 * (((bex * bextail + bey * beytail + bez * beztail) * (cez * da3 + dez * ac3 + aez * cd3) +
+        2 * (((bex * bextail + bey * beytail + bez * beztail) * (cez * da3 + dez * ac3 + aez * cd3) +
         (dex * dextail + dey * deytail + dez * deztail) * (aez * bc3 - bez * ac3 + cez * ab3)) -
         ((aex * aextail + aey * aeytail + aez * aeztail) * (bez * cd3 - cez * bd3 + dez * bc3) +
         (cex * cextail + cey * ceytail + cez * ceztail) * (dez * ab3 + aez * bd3 + bez * da3)));
 
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
@@ -501,10 +500,10 @@ export function insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey,
         ((dexaeyplus + aexdeyplus) * cezplus + (aexceyplus + cexaeyplus) * dezplus + (cexdeyplus + dexceyplus) * aezplus) * blift +
         ((aexbeyplus + bexaeyplus) * dezplus + (bexdeyplus + dexbeyplus) * aezplus + (dexaeyplus + aexdeyplus) * bezplus) * clift +
         ((bexceyplus + cexbeyplus) * aezplus + (cexaeyplus + aexceyplus) * bezplus + (aexbeyplus + bexaeyplus) * cezplus) * dlift;
+
     const errbound = isperrboundA * permanent;
-    if ((det > errbound) || (-det > errbound)) {
+    if (det > errbound || -det > errbound) {
         return det;
     }
-
     return insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent);
 }

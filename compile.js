@@ -11,11 +11,11 @@ macros.Fast_Two_Sum = (a, b, x, y) => `
 macros.Two_Sum = (a, b, x, y) => `
     ${x} = ${a} + ${b};
     bvirt = ${x} - ${a};
-    ${y} = (${a} - (${x} - bvirt)) + (${b} - bvirt);`;
+    ${y} = ${a} - (${x} - bvirt) + (${b} - bvirt);`;
 
 macros.Two_Diff_Tail = (a, b, x, y) => `
     bvirt = ${a} - ${x};
-    ${y} = (${a} - (${x} + bvirt)) + (bvirt - ${b});`;
+    ${y} = ${a} - (${x} + bvirt) + (bvirt - ${b});`;
 
 macros.Two_Diff = (a, b, x, y) => `
     ${x} = ${a} - ${b};

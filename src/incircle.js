@@ -1,12 +1,11 @@
-
 import {
     epsilon, splitter, resulterrbound, estimate,
     fast_expansion_sum_zeroelim, scale_expansion_zeroelim
 } from './util.js';
 
-const iccerrboundA = (10.0 + 96.0 * epsilon) * epsilon;
-const iccerrboundB = (4.0 + 48.0 * epsilon) * epsilon;
-const iccerrboundC = (44.0 + 576.0 * epsilon) * epsilon * epsilon;
+const iccerrboundA = (10 + 96 * epsilon) * epsilon;
+const iccerrboundB = (4 + 48 * epsilon) * epsilon;
+const iccerrboundC = (44 + 576 * epsilon) * epsilon * epsilon;
 
 const bc = new Float64Array(4);
 const ca = new Float64Array(4);
@@ -149,7 +148,7 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
     let det = estimate(finlength, fin1);
     let errbound = iccerrboundB * permanent;
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
@@ -165,41 +164,41 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
     errbound = iccerrboundC * permanent + resulterrbound * Math.abs(det);
     det += ((adx * adx + ady * ady) * ((bdx * cdytail + cdy * bdxtail) - (bdy * cdxtail + cdx * bdytail)) +
-        2.0 * (adx * adxtail + ady * adytail) * (bdx * cdy - bdy * cdx)) +
+        2 * (adx * adxtail + ady * adytail) * (bdx * cdy - bdy * cdx)) +
         ((bdx * bdx + bdy * bdy) * ((cdx * adytail + ady * cdxtail) - (cdy * adxtail + adx * cdytail)) +
-        2.0 * (bdx * bdxtail + bdy * bdytail) * (cdx * ady - cdy * adx)) +
+        2 * (bdx * bdxtail + bdy * bdytail) * (cdx * ady - cdy * adx)) +
         ((cdx * cdx + cdy * cdy) * ((adx * bdytail + bdy * adxtail) - (ady * bdxtail + bdx * adytail)) +
-        2.0 * (cdx * cdxtail + cdy * cdytail) * (adx * bdy - ady * bdx));
+        2 * (cdx * cdxtail + cdy * cdytail) * (adx * bdy - ady * bdx));
 
-    if ((det >= errbound) || (-det >= errbound)) {
+    if (det >= errbound || -det >= errbound) {
         return det;
     }
 
     finnow = fin1;
     finother = fin2;
 
-    if ((bdxtail !== 0.0) || (bdytail !== 0.0) || (cdxtail !== 0.0) || (cdytail !== 0.0)) {
+    if (bdxtail !== 0 || bdytail !== 0 || cdxtail !== 0 || cdytail !== 0) {
         $Square(adx, adxadx1, adxadx0);
         $Square(ady, adyady1, adyady0);
         $Two_Two_Sum(adxadx1, adxadx0, adyady1, adyady0, aa3, aa[2], aa[1], aa[0]);
         aa[3] = aa3;
     }
-    if ((cdxtail !== 0.0) || (cdytail !== 0.0) || (adxtail !== 0.0) || (adytail !== 0.0)) {
+    if (cdxtail !== 0 || cdytail !== 0 || adxtail !== 0 || adytail !== 0) {
         $Square(bdx, bdxbdx1, bdxbdx0);
         $Square(bdy, bdybdy1, bdybdy0);
         $Two_Two_Sum(bdxbdx1, bdxbdx0, bdybdy1, bdybdy0, bb3, bb[2], bb[1], bb[0]);
         bb[3] = bb3;
     }
-    if ((adxtail !== 0.0) || (adytail !== 0.0) || (bdxtail !== 0.0) || (bdytail !== 0.0)) {
+    if (adxtail !== 0 || adytail !== 0 || bdxtail !== 0 || bdytail !== 0) {
         $Square(cdx, cdxcdx1, cdxcdx0);
         $Square(cdy, cdycdy1, cdycdy0);
         $Two_Two_Sum(cdxcdx1, cdxcdx0, cdycdy1, cdycdy0, cc3, cc[2], cc[1], cc[0]);
         cc[3] = cc3;
     }
 
-    if (adxtail !== 0.0) {
+    if (adxtail !== 0) {
         axtbclen = scale_expansion_zeroelim(4, bc, adxtail, axtbc);
-        temp16alen = scale_expansion_zeroelim(axtbclen, axtbc, 2.0 * adx, temp16a);
+        temp16alen = scale_expansion_zeroelim(axtbclen, axtbc, 2 * adx, temp16a);
 
         axtcclen = scale_expansion_zeroelim(4, cc, adxtail, axtcc);
         temp16blen = scale_expansion_zeroelim(axtcclen, axtcc, bdy, temp16b);
@@ -212,9 +211,9 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (adytail !== 0.0) {
+    if (adytail !== 0) {
         aytbclen = scale_expansion_zeroelim(4, bc, adytail, aytbc);
-        temp16alen = scale_expansion_zeroelim(aytbclen, aytbc, 2.0 * ady, temp16a);
+        temp16alen = scale_expansion_zeroelim(aytbclen, aytbc, 2 * ady, temp16a);
 
         aytbblen = scale_expansion_zeroelim(4, bb, adytail, aytbb);
         temp16blen = scale_expansion_zeroelim(aytbblen, aytbb, cdx, temp16b);
@@ -227,9 +226,9 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (bdxtail !== 0.0) {
+    if (bdxtail !== 0) {
         bxtcalen = scale_expansion_zeroelim(4, ca, bdxtail, bxtca);
-        temp16alen = scale_expansion_zeroelim(bxtcalen, bxtca, 2.0 * bdx, temp16a);
+        temp16alen = scale_expansion_zeroelim(bxtcalen, bxtca, 2 * bdx, temp16a);
 
         bxtaalen = scale_expansion_zeroelim(4, aa, bdxtail, bxtaa);
         temp16blen = scale_expansion_zeroelim(bxtaalen, bxtaa, cdy, temp16b);
@@ -242,9 +241,9 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (bdytail !== 0.0) {
+    if (bdytail !== 0) {
         bytcalen = scale_expansion_zeroelim(4, ca, bdytail, bytca);
-        temp16alen = scale_expansion_zeroelim(bytcalen, bytca, 2.0 * bdy, temp16a);
+        temp16alen = scale_expansion_zeroelim(bytcalen, bytca, 2 * bdy, temp16a);
 
         bytcclen = scale_expansion_zeroelim(4, cc, bdytail, bytcc);
         temp16blen = scale_expansion_zeroelim(bytcclen, bytcc, adx, temp16b);
@@ -257,9 +256,9 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (cdxtail !== 0.0) {
+    if (cdxtail !== 0) {
         cxtablen = scale_expansion_zeroelim(4, ab, cdxtail, cxtab);
-        temp16alen = scale_expansion_zeroelim(cxtablen, cxtab, 2.0 * cdx, temp16a);
+        temp16alen = scale_expansion_zeroelim(cxtablen, cxtab, 2 * cdx, temp16a);
 
         cxtbblen = scale_expansion_zeroelim(4, bb, cdxtail, cxtbb);
         temp16blen = scale_expansion_zeroelim(cxtbblen, cxtbb, ady, temp16b);
@@ -272,9 +271,9 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
         finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
         finswap = finnow; finnow = finother; finother = finswap;
     }
-    if (cdytail !== 0.0) {
+    if (cdytail !== 0) {
         cytablen = scale_expansion_zeroelim(4, ab, cdytail, cytab);
-        temp16alen = scale_expansion_zeroelim(cytablen, cytab, 2.0 * cdy, temp16a);
+        temp16alen = scale_expansion_zeroelim(cytablen, cytab, 2 * cdy, temp16a);
 
         cytaalen = scale_expansion_zeroelim(4, aa, cdytail, cytaa);
         temp16blen = scale_expansion_zeroelim(cytaalen, cytaa, bdx, temp16b);
@@ -288,8 +287,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
         finswap = finnow; finnow = finother; finother = finswap;
     }
 
-    if ((adxtail !== 0.0) || (adytail !== 0.0)) {
-        if ((bdxtail !== 0.0) || (bdytail !== 0.0) || (cdxtail !== 0.0) || (cdytail !== 0.0)) {
+    if (adxtail !== 0 || adytail !== 0) {
+        if (bdxtail !== 0 || bdytail !== 0 || cdxtail !== 0 || cdytail !== 0) {
             $Two_Product(bdxtail, cdy, ti1, ti0);
             $Two_Product(bdx, cdytail, tj1, tj0);
             $Two_Two_Sum(ti1, ti0, tj1, tj0, u3, u[2], u[1], u[0]);
@@ -308,27 +307,27 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             bctt[3] = bctt3;
             bcttlen = 4;
         } else {
-            bct[0] = 0.0;
+            bct[0] = 0;
             bctlen = 1;
-            bctt[0] = 0.0;
+            bctt[0] = 0;
             bcttlen = 1;
         }
 
-        if (adxtail !== 0.0) {
+        if (adxtail !== 0) {
             temp16alen = scale_expansion_zeroelim(axtbclen, axtbc, adxtail, temp16a);
             axtbctlen = scale_expansion_zeroelim(bctlen, bct, adxtail, axtbct);
-            temp32alen = scale_expansion_zeroelim(axtbctlen, axtbct, 2.0 * adx, temp32a);
+            temp32alen = scale_expansion_zeroelim(axtbctlen, axtbct, 2 * adx, temp32a);
             temp48len = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp32alen, temp32a, temp48);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
 
-            if (bdytail !== 0.0) {
+            if (bdytail !== 0) {
                 temp8len = scale_expansion_zeroelim(4, cc, adxtail, temp8);
                 temp16alen = scale_expansion_zeroelim(temp8len, temp8, bdytail, temp16a);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp16alen, temp16a, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
-            if (cdytail !== 0.0) {
+            if (cdytail !== 0) {
                 temp8len = scale_expansion_zeroelim(4, bb, -adxtail, temp8);
                 temp16alen = scale_expansion_zeroelim(temp8len, temp8, cdytail, temp16a);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp16alen, temp16a, finother);
@@ -337,7 +336,7 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
             temp32alen = scale_expansion_zeroelim(axtbctlen, axtbct, adxtail, temp32a);
             axtbcttlen = scale_expansion_zeroelim(bcttlen, bctt, adxtail, axtbctt);
-            temp16alen = scale_expansion_zeroelim(axtbcttlen, axtbctt, 2.0 * adx, temp16a);
+            temp16alen = scale_expansion_zeroelim(axtbcttlen, axtbctt, 2 * adx, temp16a);
             temp16blen = scale_expansion_zeroelim(axtbcttlen, axtbctt, adxtail, temp16b);
             temp32blen = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp16blen, temp16b, temp32b);
             temp64len = fast_expansion_sum_zeroelim(temp32alen, temp32a, temp32blen, temp32b, temp64);
@@ -345,17 +344,17 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             finswap = finnow; finnow = finother; finother = finswap;
         }
 
-        if (adytail !== 0.0) {
+        if (adytail !== 0) {
             temp16alen = scale_expansion_zeroelim(aytbclen, aytbc, adytail, temp16a);
             aytbctlen = scale_expansion_zeroelim(bctlen, bct, adytail, aytbct);
-            temp32alen = scale_expansion_zeroelim(aytbctlen, aytbct, 2.0 * ady, temp32a);
+            temp32alen = scale_expansion_zeroelim(aytbctlen, aytbct, 2 * ady, temp32a);
             temp48len = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp32alen, temp32a, temp48);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
 
             temp32alen = scale_expansion_zeroelim(aytbctlen, aytbct, adytail, temp32a);
             aytbcttlen = scale_expansion_zeroelim(bcttlen, bctt, adytail, aytbctt);
-            temp16alen = scale_expansion_zeroelim(aytbcttlen, aytbctt, 2.0 * ady, temp16a);
+            temp16alen = scale_expansion_zeroelim(aytbcttlen, aytbctt, 2 * ady, temp16a);
             temp16blen = scale_expansion_zeroelim(aytbcttlen, aytbctt, adytail, temp16b);
             temp32blen = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp16blen, temp16b, temp32b);
             temp64len = fast_expansion_sum_zeroelim(temp32alen, temp32a, temp32blen, temp32b, temp64);
@@ -363,8 +362,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             finswap = finnow; finnow = finother; finother = finswap;
         }
     }
-    if ((bdxtail !== 0.0) || (bdytail !== 0.0)) {
-        if ((cdxtail !== 0.0) || (cdytail !== 0.0) || (adxtail !== 0.0) || (adytail !== 0.0)) {
+    if (bdxtail !== 0 || bdytail !== 0) {
+        if (cdxtail !== 0 || cdytail !== 0 || adxtail !== 0 || adytail !== 0) {
             $Two_Product(cdxtail, ady, ti1, ti0);
             $Two_Product(cdx, adytail, tj1, tj0);
             $Two_Two_Sum(ti1, ti0, tj1, tj0, u3, u[2], u[1], u[0]);
@@ -383,26 +382,26 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             catt[3] = catt3;
             cattlen = 4;
         } else {
-            cat[0] = 0.0;
+            cat[0] = 0;
             catlen = 1;
-            catt[0] = 0.0;
+            catt[0] = 0;
             cattlen = 1;
         }
 
-        if (bdxtail !== 0.0) {
+        if (bdxtail !== 0) {
             temp16alen = scale_expansion_zeroelim(bxtcalen, bxtca, bdxtail, temp16a);
             bxtcatlen = scale_expansion_zeroelim(catlen, cat, bdxtail, bxtcat);
-            temp32alen = scale_expansion_zeroelim(bxtcatlen, bxtcat, 2.0 * bdx, temp32a);
+            temp32alen = scale_expansion_zeroelim(bxtcatlen, bxtcat, 2 * bdx, temp32a);
             temp48len = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp32alen, temp32a, temp48);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (cdytail !== 0.0) {
+            if (cdytail !== 0) {
                 temp8len = scale_expansion_zeroelim(4, aa, bdxtail, temp8);
                 temp16alen = scale_expansion_zeroelim(temp8len, temp8, cdytail, temp16a);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp16alen, temp16a, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
-            if (adytail !== 0.0) {
+            if (adytail !== 0) {
                 temp8len = scale_expansion_zeroelim(4, cc, -bdxtail, temp8);
                 temp16alen = scale_expansion_zeroelim(temp8len, temp8, adytail, temp16a);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp16alen, temp16a, finother);
@@ -411,24 +410,24 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
             temp32alen = scale_expansion_zeroelim(bxtcatlen, bxtcat, bdxtail, temp32a);
             bxtcattlen = scale_expansion_zeroelim(cattlen, catt, bdxtail, bxtcatt);
-            temp16alen = scale_expansion_zeroelim(bxtcattlen, bxtcatt, 2.0 * bdx, temp16a);
+            temp16alen = scale_expansion_zeroelim(bxtcattlen, bxtcatt, 2 * bdx, temp16a);
             temp16blen = scale_expansion_zeroelim(bxtcattlen, bxtcatt, bdxtail, temp16b);
             temp32blen = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp16blen, temp16b, temp32b);
             temp64len = fast_expansion_sum_zeroelim(temp32alen, temp32a, temp32blen, temp32b, temp64);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp64len, temp64, finother);
             finswap = finnow; finnow = finother; finother = finswap;
         }
-        if (bdytail !== 0.0) {
+        if (bdytail !== 0) {
             temp16alen = scale_expansion_zeroelim(bytcalen, bytca, bdytail, temp16a);
             bytcatlen = scale_expansion_zeroelim(catlen, cat, bdytail, bytcat);
-            temp32alen = scale_expansion_zeroelim(bytcatlen, bytcat, 2.0 * bdy, temp32a);
+            temp32alen = scale_expansion_zeroelim(bytcatlen, bytcat, 2 * bdy, temp32a);
             temp48len = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp32alen, temp32a, temp48);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
 
             temp32alen = scale_expansion_zeroelim(bytcatlen, bytcat, bdytail, temp32a);
             bytcattlen = scale_expansion_zeroelim(cattlen, catt, bdytail, bytcatt);
-            temp16alen = scale_expansion_zeroelim(bytcattlen, bytcatt, 2.0 * bdy, temp16a);
+            temp16alen = scale_expansion_zeroelim(bytcattlen, bytcatt, 2 * bdy, temp16a);
             temp16blen = scale_expansion_zeroelim(bytcattlen, bytcatt, bdytail, temp16b);
             temp32blen = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp16blen, temp16b, temp32b);
             temp64len = fast_expansion_sum_zeroelim(temp32alen, temp32a, temp32blen, temp32b, temp64);
@@ -436,8 +435,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             finswap = finnow; finnow = finother; finother = finswap;
         }
     }
-    if ((cdxtail !== 0.0) || (cdytail !== 0.0)) {
-        if ((adxtail !== 0.0) || (adytail !== 0.0) || (bdxtail !== 0.0) || (bdytail !== 0.0)) {
+    if (cdxtail !== 0 || cdytail !== 0) {
+        if (adxtail !== 0 || adytail !== 0 || bdxtail !== 0 || bdytail !== 0) {
             $Two_Product(adxtail, bdy, ti1, ti0);
             $Two_Product(adx, bdytail, tj1, tj0);
             $Two_Two_Sum(ti1, ti0, tj1, tj0, u3, u[2], u[1], u[0]);
@@ -456,26 +455,26 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             abtt[3] = abtt3;
             abttlen = 4;
         } else {
-            abt[0] = 0.0;
+            abt[0] = 0;
             abtlen = 1;
-            abtt[0] = 0.0;
+            abtt[0] = 0;
             abttlen = 1;
         }
 
-        if (cdxtail !== 0.0) {
+        if (cdxtail !== 0) {
             temp16alen = scale_expansion_zeroelim(cxtablen, cxtab, cdxtail, temp16a);
             cxtabtlen = scale_expansion_zeroelim(abtlen, abt, cdxtail, cxtabt);
-            temp32alen = scale_expansion_zeroelim(cxtabtlen, cxtabt, 2.0 * cdx, temp32a);
+            temp32alen = scale_expansion_zeroelim(cxtabtlen, cxtabt, 2 * cdx, temp32a);
             temp48len = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp32alen, temp32a, temp48);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
-            if (adytail !== 0.0) {
+            if (adytail !== 0) {
                 temp8len = scale_expansion_zeroelim(4, bb, cdxtail, temp8);
                 temp16alen = scale_expansion_zeroelim(temp8len, temp8, adytail, temp16a);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp16alen, temp16a, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
-            if (bdytail !== 0.0) {
+            if (bdytail !== 0) {
                 temp8len = scale_expansion_zeroelim(4, aa, -cdxtail, temp8);
                 temp16alen = scale_expansion_zeroelim(temp8len, temp8, bdytail, temp16a);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp16alen, temp16a, finother);
@@ -484,24 +483,24 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
             temp32alen = scale_expansion_zeroelim(cxtabtlen, cxtabt, cdxtail, temp32a);
             cxtabttlen = scale_expansion_zeroelim(abttlen, abtt, cdxtail, cxtabtt);
-            temp16alen = scale_expansion_zeroelim(cxtabttlen, cxtabtt, 2.0 * cdx, temp16a);
+            temp16alen = scale_expansion_zeroelim(cxtabttlen, cxtabtt, 2 * cdx, temp16a);
             temp16blen = scale_expansion_zeroelim(cxtabttlen, cxtabtt, cdxtail, temp16b);
             temp32blen = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp16blen, temp16b, temp32b);
             temp64len = fast_expansion_sum_zeroelim(temp32alen, temp32a, temp32blen, temp32b, temp64);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp64len, temp64, finother);
             finswap = finnow; finnow = finother; finother = finswap;
         }
-        if (cdytail !== 0.0) {
+        if (cdytail !== 0) {
             temp16alen = scale_expansion_zeroelim(cytablen, cytab, cdytail, temp16a);
             cytabtlen = scale_expansion_zeroelim(abtlen, abt, cdytail, cytabt);
-            temp32alen = scale_expansion_zeroelim(cytabtlen, cytabt, 2.0 * cdy, temp32a);
+            temp32alen = scale_expansion_zeroelim(cytabtlen, cytabt, 2 * cdy, temp32a);
             temp48len = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp32alen, temp32a, temp48);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp48len, temp48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
 
             temp32alen = scale_expansion_zeroelim(cytabtlen, cytabt, cdytail, temp32a);
             cytabttlen = scale_expansion_zeroelim(abttlen, abtt, cdytail, cytabtt);
-            temp16alen = scale_expansion_zeroelim(cytabttlen, cytabtt, 2.0 * cdy, temp16a);
+            temp16alen = scale_expansion_zeroelim(cytabttlen, cytabtt, 2 * cdy, temp16a);
             temp16blen = scale_expansion_zeroelim(cytabttlen, cytabtt, cdytail, temp16b);
             temp32blen = fast_expansion_sum_zeroelim(temp16alen, temp16a, temp16blen, temp16b, temp32b);
             temp64len = fast_expansion_sum_zeroelim(temp32alen, temp32a, temp32blen, temp32b, temp64);
@@ -545,9 +544,8 @@ export function incircle(ax, ay, bx, by, cx, cy, dx, dy) {
 
     const errbound = iccerrboundA * permanent;
 
-    if ((det > errbound) || (-det > errbound)) {
+    if (det > errbound || -det > errbound) {
         return det;
     }
-
     return incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent);
 }
