@@ -1,6 +1,10 @@
 # robust-predicates
 
-Fast robust predicates for computational geometry in JavaScript. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), which has been an industry standard since 1996. Uses code generation to produce highly efficient JavaScript code.
+Fast robust predicates for computational geometry in JavaScript (`orient2d`, `orient3d`, `incircle`, `insphere`). Provides reliable 2D and 3D point orientation tests that are not susceptible to floating point errors without sacrificing performance. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), an industry standard since 1996.
+
+<a href="https://observablehq.com/@mourner/non-robust-arithmetic-as-art"><img height="200" src="predicates.png" /></a>
+
+_Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<sup>-42</sup>)._
 
 [![Build Status](https://travis-ci.com/mourner/robust-predicates.svg?branch=master)](https://travis-ci.com/mourner/robust-predicates)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
