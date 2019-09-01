@@ -1,6 +1,6 @@
 
 import {test} from 'tape';
-import {orient2d} from './predicates.js';
+import {orient2d} from './index.js';
 import orient2dOld from 'robust-orientation';
 
 test('orient2d', (t) => {

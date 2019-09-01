@@ -8,19 +8,17 @@
   ],
   "author": "Vladimir Agafonkin",
   "license": "Unlicense",
-  "module": "predicates.js",
+  "module": "index.js",
   "scripts": {
-    "build": "node compile.js | prettier --parser babel > predicates.js",
-    "prelint": "npm run build",
-    "lint": "eslint compile.js test.js predicates.js",
-    "test": "npm run lint && node -r esm test.js",
+    "build": "node compile.js",
+    "lint": "eslint *.js esm src",
+    "test": "npm run build && npm run lint && node -r esm test.js",
     "bench": "node -r esm bench.js"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
     "eslint-config-mourner": "^3.0.0",
     "esm": "^3.2.25",
-    "prettier": "^1.18.2",
     "robust-orientation": "^1.1.3",
     "tape": "^4.11.0",
     "terser": "^4.2.1"
@@ -32,6 +30,21 @@
       "new-cap": 0,
       "prefer-const": 0,
       "no-unused-vars": 0
+    },
+    "globals": {
+      "$Fast_Two_Sum": false,
+      "$Two_Sum": false,
+      "$Two_Diff_Tail": false,
+      "$Two_Diff": false,
+      "$Split": false,
+      "$Two_Product": false,
+      "$Two_Product_Presplit": false,
+      "$Square": false,
+      "$Two_One_Sum": false,
+      "$Two_One_Diff": false,
+      "$Two_Two_Sum": false,
+      "$Two_Two_Diff": false,
+      "$Two_One_Product": false
     }
   },
   "prettier": {

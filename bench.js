@@ -1,5 +1,5 @@
 
-import {orient2d} from './predicates.js';
+import {orient2d} from './index.js';
 import orientOld from 'robust-orientation';
 
 const r = 0.95;
