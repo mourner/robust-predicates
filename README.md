@@ -1,11 +1,6 @@
 # robust-predicates
 
-Fast robust predicates for computational geometry in JavaScript. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), which has been an industry standard since 1996. Uses code generation to produce highly efficient JavaScript code. _A work in progress:_
-
-- [x] `orient2d`
-- [x] `orient3d`
-- [x] `incircle`
-- [ ] `insphere`
+Fast robust predicates for computational geometry in JavaScript. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), which has been an industry standard since 1996. Uses code generation to produce highly efficient JavaScript code.
 
 [![Build Status](https://travis-ci.com/mourner/robust-predicates.svg?branch=master)](https://travis-ci.com/mourner/robust-predicates)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
@@ -32,6 +27,13 @@ Return a positive value if the point `d` lies below the plane passing through `a
 "below" is defined so that `a`, `b`, and `c` appear in counterclockwise order when viewed from above the plane.
 Returns a negative value if `d` lies above the plane. Returns zero if the points are coplanar.
 The result is also a rough approximation of six times the signed volume of the tetrahedron defined by the four points.
+
+### insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez)
+
+Return a positive value if the point `e` lies inside the sphere passing through `a`, `b`, `c`, and `d`;
+a negative value if it lies outside; and zero if the five points are cospherical.
+The points `a`, `b`, `c`, and `d` must be ordered so that they have a positive orientation
+(as defined by `orient3d`), or the sign of the result will be reversed.
 
 ## Example
 

@@ -3,7 +3,7 @@ import {test} from 'tape';
 import orient2dOld from 'robust-orientation';
 import nextafter from 'nextafter';
 
-import {orient2d, orient3d, incircle} from './index.js';
+import {orient2d, orient3d, incircle, insphere} from './index.js';
 
 test('orient2d', (t) => {
     t.ok(orient2d(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
@@ -85,6 +85,53 @@ test('orient3d', (t) => {
         1, 0, 0,
         0, 0, b
     ) < 0, 'near above');
+
+    t.end();
+});
+
+test('insphere', (t) => {
+    t.ok(insphere(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, 0
+    ) > 0, 'inside');
+
+    t.ok(insphere(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, 2
+    ) < 0, 'outside');
+
+    t.ok(insphere(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, -1
+    ) === 0, 'cospherical');
+
+    const a = nextafter(-1, 0);
+    const b = nextafter(-1, -2);
+
+    t.ok(insphere(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, a
+    ) > 0, 'near inside');
+
+    t.ok(insphere(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, b
+    ) < 0, 'near outside');
 
     t.end();
 });

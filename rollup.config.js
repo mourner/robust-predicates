@@ -19,5 +19,7 @@ const builds = (input, name) => [
 export default [
     ...builds('index.js', 'predicates'),
     ...builds('esm/orient2d.js', 'orient2d'),
-    ...builds('esm/incircle.js', 'incircle')
+    ...builds('esm/incircle.js', 'incircle'),
+    ...builds('esm/orient3d.js', 'orient3d'),
+    ...builds('esm/insphere.js', 'insphere')
 ];
