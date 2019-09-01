@@ -56,11 +56,11 @@ const ccw = orient2d(ax, ay, bx, by, cx, cy) > 0;
 
 Install with `npm install robust-predicates` or `yarn add robust-predicates`, or use one of the browser builds:
 
-- all predicates: [predicates.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/predicates.min.js)
-- `orient2d`, `orient2dfast`: [orient2d.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/orient2d.min.js)
-- `orient3d`, `orient3dfast`: [orient3d.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/orient3d.min.js)
-- `incircle`, `incirclefast`: [incircle.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/incircle.min.js)
-- `insphere`, `inspherefast`: [insphere.min.js](https://unpkg.com/robust-predicates@1.0.0/umd/insphere.min.js)
+- all predicates: [predicates.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/predicates.min.js)
+- `orient2d`, `orient2dfast`: [orient2d.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/orient2d.min.js)
+- `orient3d`, `orient3dfast`: [orient3d.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/orient3d.min.js)
+- `incircle`, `incirclefast`: [incircle.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/incircle.min.js)
+- `insphere`, `inspherefast`: [insphere.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/insphere.min.js)
 
 ## License
 
