@@ -507,3 +507,38 @@ export function insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey,
     }
     return insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent);
 }
+
+export function inspherefast(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pdz, pex, pey, pez) {
+    const aex = pax - pex;
+    const bex = pbx - pex;
+    const cex = pcx - pex;
+    const dex = pdx - pex;
+    const aey = pay - pey;
+    const bey = pby - pey;
+    const cey = pcy - pey;
+    const dey = pdy - pey;
+    const aez = paz - pez;
+    const bez = pbz - pez;
+    const cez = pcz - pez;
+    const dez = pdz - pez;
+
+    const ab = aex * bey - bex * aey;
+    const bc = bex * cey - cex * bey;
+    const cd = cex * dey - dex * cey;
+    const da = dex * aey - aex * dey;
+
+    const ac = aex * cey - cex * aey;
+    const bd = bex * dey - dex * bey;
+
+    const abc = aez * bc - bez * ac + cez * ab;
+    const bcd = bez * cd - cez * bd + dez * bc;
+    const cda = cez * da + dez * ac + aez * cd;
+    const dab = dez * ab + aez * bd + bez * da;
+
+    const alift = aex * aex + aey * aey + aez * aez;
+    const blift = bex * bex + bey * bey + bez * bez;
+    const clift = cex * cex + cey * cey + cez * cez;
+    const dlift = dex * dex + dey * dey + dez * dez;
+
+    return (dlift * abc - clift * dab) + (blift * cda - alift * bcd);
+}

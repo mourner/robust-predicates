@@ -97,3 +97,7 @@ export function orient2d(ax, ay, bx, by, cx, cy) {
 
     return orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
 }
+
+export function orient2dfast(ax, ay, bx, by, cx, cy) {
+    return (ax - cx) * (by - cy) - (ay - cy) * (bx - cx);
+}

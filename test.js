@@ -3,7 +3,12 @@ import {test} from 'tape';
 import orient2dOld from 'robust-orientation';
 import nextafter from 'nextafter';
 
-import {orient2d, orient3d, incircle, insphere} from './index.js';
+import {
+    orient2d, orient2dfast,
+    orient3d, orient3dfast,
+    incircle, incirclefast,
+    insphere, inspherefast
+} from './index.js';
 
 test('orient2d', (t) => {
     t.ok(orient2d(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
@@ -33,6 +38,13 @@ test('orient2d', (t) => {
     t.end();
 });
 
+test('orient2dfast', (t) => {
+    t.ok(orient2dfast(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
+    t.ok(orient2dfast(0, 0, 0, 1, 1, 1) < 0, 'counter-clockwise');
+    t.ok(orient2dfast(0, 0, 0.5, 0.5, 1, 1) === 0, 'collinear');
+    t.end();
+});
+
 test('incircle', (t) => {
     t.ok(incircle(0, -1, 1, 0, 0, 1, -0.5, 0) > 0, 'inside');
     t.ok(incircle(0, -1, 1, 0, 0, 1, -1, 0) === 0, 'on circle');
@@ -44,6 +56,13 @@ test('incircle', (t) => {
     t.ok(incircle(1, 0, 0, 1, -1, 0, 0, a) > 0, 'near inside');
     t.ok(incircle(1, 0, 0, 1, -1, 0, 0, b) < 0, 'near outside');
 
+    t.end();
+});
+
+test('incirclefast', (t) => {
+    t.ok(incirclefast(0, -1, 1, 0, 0, 1, -0.5, 0) > 0, 'inside');
+    t.ok(incirclefast(0, -1, 1, 0, 0, 1, -1, 0) === 0, 'on circle');
+    t.ok(incirclefast(0, -1, 1, 0, 0, 1, -1.5, 0) < 0, 'outside');
     t.end();
 });
 
@@ -85,6 +104,31 @@ test('orient3d', (t) => {
         1, 0, 0,
         0, 0, b
     ) < 0, 'near above');
+
+    t.end();
+});
+
+test('orient3dfast', (t) => {
+    t.ok(orient3dfast(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, 1
+    ) > 0, 'below');
+
+    t.ok(orient3dfast(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, -1
+    ) < 0, 'above');
+
+    t.ok(orient3dfast(
+        0, 0, 0,
+        0, 1, 0,
+        1, 0, 0,
+        0, 0, 0
+    ) === 0, 'coplanar');
 
     t.end();
 });
@@ -132,6 +176,34 @@ test('insphere', (t) => {
         0, 0, 1,
         0, 0, b
     ) < 0, 'near outside');
+
+    t.end();
+});
+
+test('inspherefast', (t) => {
+    t.ok(inspherefast(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, 0
+    ) > 0, 'inside');
+
+    t.ok(inspherefast(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, 2
+    ) < 0, 'outside');
+
+    t.ok(inspherefast(
+        1, 0, 0,
+        0, -1, 0,
+        0, 1, 0,
+        0, 0, 1,
+        0, 0, -1
+    ) === 0, 'cospherical');
 
     t.end();
 });

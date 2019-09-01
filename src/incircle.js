@@ -549,3 +549,21 @@ export function incircle(ax, ay, bx, by, cx, cy, dx, dy) {
     }
     return incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent);
 }
+
+export function incirclefast(ax, ay, bx, by, cx, cy, dx, dy) {
+    const adx = ax - dx;
+    const ady = ay - dy;
+    const bdx = bx - dx;
+    const bdy = by - dy;
+    const cdx = cx - dx;
+    const cdy = cy - dy;
+
+    const abdet = adx * bdy - bdx * ady;
+    const bcdet = bdx * cdy - cdx * bdy;
+    const cadet = cdx * ady - adx * cdy;
+    const alift = adx * adx + ady * ady;
+    const blift = bdx * bdx + bdy * bdy;
+    const clift = cdx * cdx + cdy * cdy;
+
+    return alift * bcdet + blift * cadet + clift * abdet;
+}

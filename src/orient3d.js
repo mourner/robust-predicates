@@ -413,3 +413,19 @@ export function orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz) {
 
     return orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent);
 }
+
+export function orient3dfast(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz) {
+    const adx = ax - dx;
+    const bdx = bx - dx;
+    const cdx = cx - dx;
+    const ady = ay - dy;
+    const bdy = by - dy;
+    const cdy = cy - dy;
+    const adz = az - dz;
+    const bdz = bz - dz;
+    const cdz = cz - dz;
+
+    return adx * (bdy * cdz - bdz * cdy) +
+        bdx * (cdy * adz - cdz * ady) +
+        cdx * (ady * bdz - adz * bdy);
+}
