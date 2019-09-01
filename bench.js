@@ -18,9 +18,9 @@ for (let i = 0; i < size; i++) {
 }
 
 console.time('robust-predicates orient2d');
-for (let r of points) orient2d(r[0], r[1], q[0], q[1], p[0], p[1]);
+for (const r of points) orient2d(r[0], r[1], q[0], q[1], p[0], p[1]);
 console.timeEnd('robust-predicates orient2d');
 
 console.time('robust-orientation');
-for (let r of points) orientOld[3](r, p, q);
+for (const r of points) orientOld[3](r, p, q);
 console.timeEnd('robust-orientation');

@@ -19,6 +19,7 @@
     "eslint": "^6.3.0",
     "eslint-config-mourner": "^3.0.0",
     "esm": "^3.2.25",
+    "nextafter": "^1.0.0",
     "robust-orientation": "^1.1.3",
     "tape": "^4.11.0",
     "terser": "^4.2.1"

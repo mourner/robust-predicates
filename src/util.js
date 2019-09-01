@@ -76,7 +76,7 @@ export function scale_expansion_zeroelim(elen, e, b, h) {
         h[hindex++] = hh;
     }
     for (let eindex = 1; eindex < elen; eindex++) {
-        let enow = e[eindex];
+        const enow = e[eindex];
         $Two_Product_Presplit(enow, b, bhi, blo, product1, product0);
         $Two_Sum(Q, product0, sum, hh);
         if (hh !== 0) {

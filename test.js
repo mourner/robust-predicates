@@ -1,12 +1,14 @@
 
 import {test} from 'tape';
-import {orient2d} from './index.js';
 import orient2dOld from 'robust-orientation';
+import nextafter from 'nextafter';
+
+import {orient2d, incircle} from './index.js';
 
 test('orient2d', (t) => {
-    t.ok(orient2d(0, 0, 1, 1, 0, 1) > 0, 'basic clockwise');
-    t.ok(orient2d(0, 0, 0, 1, 1, 1) < 0, 'basic counter-clockwise');
-    t.ok(orient2d(0, 0, 0.5, 0.5, 1, 1) === 0, 'basic collinear');
+    t.ok(orient2d(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
+    t.ok(orient2d(0, 0, 0, 1, 1, 1) < 0, 'counter-clockwise');
+    t.ok(orient2d(0, 0, 0.5, 0.5, 1, 1) === 0, 'collinear');
 
     const r = 0.95;
     const q = 18;
@@ -27,6 +29,20 @@ test('orient2d', (t) => {
         }
     }
     t.pass('512x512 near-collinear');
+
+    t.end();
+});
+
+test('incircle', (t) => {
+    t.ok(incircle(0, -1, 1, 0, 0, 1, -0.5, 0) > 0, 'inside');
+    t.ok(incircle(0, -1, 1, 0, 0, 1, -1, 0) === 0, 'on circle');
+    t.ok(incircle(0, -1, 1, 0, 0, 1, -1.5, 0) < 0, 'outside');
+
+    const a = nextafter(-1, 0);
+    const b = nextafter(-1, -2);
+
+    t.ok(incircle(1, 0, 0, 1, -1, 0, 0, a) > 0, 'near inside');
+    t.ok(incircle(1, 0, 0, 1, -1, 0, 0, b) < 0, 'near outside');
 
     t.end();
 });

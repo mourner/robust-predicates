@@ -4,7 +4,7 @@ Fast robust predicates for computational geometry in JavaScript. A modern port o
 
 - [x] `orient2d`
 - [ ] `orient3d`
-- [ ] `incircle`
+- [x] `incircle`
 - [ ] `insphere`
 - [ ] API docs & demo
 - [ ] minified UMD builds
