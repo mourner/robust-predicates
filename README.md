@@ -24,6 +24,22 @@ Return a positive value if the point `d` lies inside the circle passing through 
 a negative value if it lies outside; and zero if the four points are cocircular.
 The points `a`, `b`, and `c` must be in counterclockwise order, or the sign of the result will be reversed.
 
+## Example
+
+```js
+import {orient2d} from 'robust-predicates';
+
+const ccw = orient2d(ax, ay, bx, by, cx, cy) > 0;
+````
+
+## Install
+
+Install with `npm install robust-predicates` or `yarn add robust-predicates`, or use one of the browser builds:
+
+- [predicates.min.js](https://unpkg.com/robust-predicates@0.1.0/umd/predicates.min.js) (all predicates)
+- [orient2d.min.js](https://unpkg.com/robust-predicates@0.1.0/umd/orient2d.min.js) (`orient2d`)
+- [incircle.min.js](https://unpkg.com/robust-predicates@0.1.0/umd/incircle.min.js) (`incircle`)
+
 ## License
 
 Since the original code by J. Shewchuk is in the public domain, this port follows the same choice. See [Unlicense](https://unlicense.org)

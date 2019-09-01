@@ -30,6 +30,11 @@
     "tape": "^4.11.0",
     "terser": "^4.2.1"
   },
+  "files": [
+    "index.js",
+    "esm",
+    "umd"
+  ],
   "eslintConfig": {
     "extends": "mourner",
     "rules": {
