@@ -14,12 +14,12 @@ _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<
 
 ## API
 
-Note: all the functions assume `y` axis is oriented top to bottom, unlike J. Shewchuk's original code.
+Note: all the functions assume `y` axis is oriented top to bottom, unlike J. Shewchuk's original code, so the result for the same input has the opposite sign.
 
 ### `orient2d(ax,ay, bx,by, cx,cy)`
 
-- Returns a *positive* value if the points `a`, `b`, and `c` occur in _counterclockwise_ order (`c` lies to the left of the line `ab`).
-- Returns a *negative* value if they occur in _clockwise_ order (`c` lies to the right of the line `ab`).
+- Returns a *positive* value if the points `a`, `b`, and `c` occur in _counterclockwise_ order (`c` lies to the left of the directed line `ab`).
+- Returns a *negative* value if they occur in _clockwise_ order (`c` lies to the right of the directed line `ab`).
 - Returns *zero* if they are _collinear_.
 
 The result is also an approximation of twice the signed area of the triangle defined by the three points.
