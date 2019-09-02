@@ -46,23 +46,23 @@ test('orient2dfast', (t) => {
 });
 
 test('incircle', (t) => {
-    t.ok(incircle(0, -1, 1, 0, 0, 1, -0.5, 0) > 0, 'inside');
+    t.ok(incircle(0, -1, 0, 1, 1, 0, -0.5, 0) < 0, 'inside');
     t.ok(incircle(0, -1, 1, 0, 0, 1, -1, 0) === 0, 'on circle');
-    t.ok(incircle(0, -1, 1, 0, 0, 1, -1.5, 0) < 0, 'outside');
+    t.ok(incircle(0, -1, 0, 1, 1, 0, -1.5, 0) > 0, 'outside');
 
     const a = nextafter(-1, 0);
     const b = nextafter(-1, -2);
 
-    t.ok(incircle(1, 0, 0, 1, -1, 0, 0, a) > 0, 'near inside');
-    t.ok(incircle(1, 0, 0, 1, -1, 0, 0, b) < 0, 'near outside');
+    t.ok(incircle(1, 0, -1, 0, 0, 1, 0, a) < 0, 'near inside');
+    t.ok(incircle(1, 0, -1, 0, 0, 1, 0, b) > 0, 'near outside');
 
     t.end();
 });
 
 test('incirclefast', (t) => {
-    t.ok(incirclefast(0, -1, 1, 0, 0, 1, -0.5, 0) > 0, 'inside');
-    t.ok(incirclefast(0, -1, 1, 0, 0, 1, -1, 0) === 0, 'on circle');
-    t.ok(incirclefast(0, -1, 1, 0, 0, 1, -1.5, 0) < 0, 'outside');
+    t.ok(incirclefast(0, -1, 0, 1, 1, 0, -0.5, 0) < 0, 'inside');
+    t.ok(incirclefast(0, -1, 0, 1, 1, 0, -1, 0) === 0, 'on circle');
+    t.ok(incirclefast(0, -1, 0, 1, 1, 0, -1.5, 0) > 0, 'outside');
     t.end();
 });
 
@@ -140,7 +140,7 @@ test('insphere', (t) => {
         0, 1, 0,
         0, 0, 1,
         0, 0, 0
-    ) > 0, 'inside');
+    ) < 0, 'inside');
 
     t.ok(insphere(
         1, 0, 0,
@@ -148,7 +148,7 @@ test('insphere', (t) => {
         0, 1, 0,
         0, 0, 1,
         0, 0, 2
-    ) < 0, 'outside');
+    ) > 0, 'outside');
 
     t.ok(insphere(
         1, 0, 0,
@@ -167,7 +167,7 @@ test('insphere', (t) => {
         0, 1, 0,
         0, 0, 1,
         0, 0, a
-    ) > 0, 'near inside');
+    ) < 0, 'near inside');
 
     t.ok(insphere(
         1, 0, 0,
@@ -175,7 +175,7 @@ test('insphere', (t) => {
         0, 1, 0,
         0, 0, 1,
         0, 0, b
-    ) < 0, 'near outside');
+    ) > 0, 'near outside');
 
     t.end();
 });
@@ -187,7 +187,7 @@ test('inspherefast', (t) => {
         0, 1, 0,
         0, 0, 1,
         0, 0, 0
-    ) > 0, 'inside');
+    ) < 0, 'inside');
 
     t.ok(inspherefast(
         1, 0, 0,
@@ -195,7 +195,7 @@ test('inspherefast', (t) => {
         0, 1, 0,
         0, 0, 1,
         0, 0, 2
-    ) < 0, 'outside');
+    ) > 0, 'outside');
 
     t.ok(inspherefast(
         1, 0, 0,

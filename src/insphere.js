@@ -477,7 +477,7 @@ export function insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey,
     const clift = cex * cex + cey * cey + cez * cez;
     const dlift = dex * dex + dey * dey + dez * dez;
 
-    const det = (dlift * abc - clift * dab) + (blift * cda - alift * bcd);
+    const det = (clift * dab - dlift * abc) + (alift * bcd - blift * cda);
 
     const aezplus = Math.abs(aez);
     const bezplus = Math.abs(bez);
@@ -505,7 +505,7 @@ export function insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey,
     if (det > errbound || -det > errbound) {
         return det;
     }
-    return insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent);
+    return -insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent);
 }
 
 export function inspherefast(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pdz, pex, pey, pez) {
@@ -540,5 +540,5 @@ export function inspherefast(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, p
     const clift = cex * cex + cey * cey + cez * cez;
     const dlift = dex * dex + dey * dey + dez * dez;
 
-    return (dlift * abc - clift * dab) + (blift * cda - alift * bcd);
+    return (clift * dab - dlift * abc) + (alift * bcd - blift * cda);
 }

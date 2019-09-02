@@ -26,8 +26,8 @@ The result is also an approximation of twice the signed area of the triangle def
 
 ### `incircle(ax,ay, bx,by, cx,cy, dx,dy)`
 
-- Returns a _positive_ value if the point `d` lies _inside_ the circle passing through `a`, `b`, and `c`.
-- Returns a _negative_ value if it lies _outside_.
+- Returns a _positive_ value if the point `d` lies _outside_ the circle passing through `a`, `b`, and `c`.
+- Returns a _negative_ value if it lies _inside_.
 - Returns _zero_ if the four points are _cocircular_.
 
 The points `a`, `b`, and `c` must be in _counterclockwise_ order, or the sign of the result will be reversed.
@@ -42,8 +42,8 @@ The result is also an approximation of six times the signed volume of the tetrah
 
 ### `insphere(ax,ay,az, bx,by,bz, cx,cy,cz, dx,dy,dz, ex,ey,ez)`
 
-- Returns a _positive_ value if the point `e` lies _inside_ the sphere passing through `a`, `b`, `c`, and `d`.
-- Returns a _negative_ value if it lies _outside_.
+- Returns a _positive_ value if the point `e` lies _outside_ the sphere passing through `a`, `b`, `c`, and `d`.
+- Returns a _negative_ value if it lies _inside_.
 - Returns _zero_ if the five points are _cospherical_.
 
 The points `a`, `b`, `c`, and `d` must be ordered so that they have a _positive orientation_
