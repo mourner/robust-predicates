@@ -69,8 +69,8 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
 }
 
 export function orient2d(ax, ay, bx, by, cx, cy) {
-    const detleft = (ax - cx) * (by - cy);
-    const detright = (ay - cy) * (bx - cx);
+    const detleft = (ay - cy) * (bx - cx);
+    const detright = (ax - cx) * (by - cy);
     const det = detleft - detright;
     let detsum;
 
@@ -95,9 +95,9 @@ export function orient2d(ax, ay, bx, by, cx, cy) {
         return det;
     }
 
-    return orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
+    return -orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
 }
 
 export function orient2dfast(ax, ay, bx, by, cx, cy) {
-    return (ax - cx) * (by - cy) - (ay - cy) * (bx - cx);
+    return (ay - cy) * (bx - cx) - (ax - cx) * (by - cy);
 }

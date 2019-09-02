@@ -1,6 +1,6 @@
 
 import {test} from 'tape';
-import orient2dOld from 'robust-orientation';
+import robustOrientation from 'robust-orientation';
 import nextafter from 'nextafter';
 
 import {
@@ -11,8 +11,8 @@ import {
 } from './index.js';
 
 test('orient2d', (t) => {
-    t.ok(orient2d(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
-    t.ok(orient2d(0, 0, 0, 1, 1, 1) < 0, 'counter-clockwise');
+    t.ok(orient2d(0, 0, 1, 1, 0, 1) < 0, 'clockwise');
+    t.ok(orient2d(0, 0, 0, 1, 1, 1) > 0, 'counterclockwise');
     t.ok(orient2d(0, 0, 0.5, 0.5, 1, 1) === 0, 'collinear');
 
     const r = 0.95;
@@ -26,7 +26,7 @@ test('orient2d', (t) => {
             const y = r + w * j / 512;
 
             const o = orient2d(x, y, q, q, p, p);
-            const o2 = orient2dOld[3]([x, y], [p, p], [q, q]);
+            const o2 = robustOrientation[3]([x, y], [q, q], [p, p]);
 
             if (Math.sign(o) !== Math.sign(o2)) {
                 t.fail(`${x},${y}, ${q},${q}, ${p},${p}: ${o} vs ${o2}`);
@@ -39,8 +39,8 @@ test('orient2d', (t) => {
 });
 
 test('orient2dfast', (t) => {
-    t.ok(orient2dfast(0, 0, 1, 1, 0, 1) > 0, 'clockwise');
-    t.ok(orient2dfast(0, 0, 0, 1, 1, 1) < 0, 'counter-clockwise');
+    t.ok(orient2dfast(0, 0, 1, 1, 0, 1) < 0, 'counterclockwise');
+    t.ok(orient2dfast(0, 0, 0, 1, 1, 1) > 0, 'clockwise');
     t.ok(orient2dfast(0, 0, 0.5, 0.5, 1, 1) === 0, 'collinear');
     t.end();
 });
@@ -72,14 +72,14 @@ test('orient3d', (t) => {
         0, 1, 0,
         1, 0, 0,
         0, 0, 1
-    ) > 0, 'below');
+    ) > 0, 'above');
 
     t.ok(orient3d(
         0, 0, 0,
         0, 1, 0,
         1, 0, 0,
         0, 0, -1
-    ) < 0, 'above');
+    ) < 0, 'below');
 
     t.ok(orient3d(
         0, 0, 0,
@@ -96,14 +96,14 @@ test('orient3d', (t) => {
         0, 1, 0,
         1, 0, 0,
         0, 0, a
-    ) > 0, 'near below');
+    ) > 0, 'near above');
 
     t.ok(orient3d(
         0, 0, 0,
         0, 1, 0,
         1, 0, 0,
         0, 0, b
-    ) < 0, 'near above');
+    ) < 0, 'near below');
 
     t.end();
 });
@@ -114,14 +114,14 @@ test('orient3dfast', (t) => {
         0, 1, 0,
         1, 0, 0,
         0, 0, 1
-    ) > 0, 'below');
+    ) > 0, 'above');
 
     t.ok(orient3dfast(
         0, 0, 0,
         0, 1, 0,
         1, 0, 0,
         0, 0, -1
-    ) < 0, 'above');
+    ) < 0, 'below');
 
     t.ok(orient3dfast(
         0, 0, 0,

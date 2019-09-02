@@ -14,12 +14,12 @@ _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<
 
 ## API
 
-Note: all the functions assume `y` axis is oriented bottom to top.
+Note: all the functions assume `y` axis is oriented top to bottom, unlike J. Shewchuk's original code.
 
 ### `orient2d(ax,ay, bx,by, cx,cy)`
 
 - Returns a *positive* value if the points `a`, `b`, and `c` occur in _counterclockwise_ order (`c` lies to the left of the line `ab`).
-- Returns a *negative* value if they occur in _clockwise_ order.
+- Returns a *negative* value if they occur in _clockwise_ order (`c` lies to the right of the line `ab`).
 - Returns *zero* if they are _collinear_.
 
 The result is also an approximation of twice the signed area of the triangle defined by the three points.
@@ -34,8 +34,8 @@ The points `a`, `b`, and `c` must be in _counterclockwise_ order, or the sign of
 
 ### `orient3d(ax,ay,az, bx,by,bz, cx,cy,cz, dx,dy,dz)`
 
-- Returns a _positive_ value if the point `d` lies _below_ the plane passing through `a`, `b`, and `c`; "below" is defined so that `a`, `b`, and `c` appear in counterclockwise order when viewed from above the plane.
-- Returns a _negative_ value if `d` lies _above_ the plane.
+- Returns a _positive_ value if the point `d` lies _above_ the plane passing through `a`, `b`, and `c`, meaning that `a`, `b`, and `c` appear in counterclockwise order when viewed from `d`.
+- Returns a _negative_ value if `d` lies _below_ the plane.
 - Returns _zero_ if the points are _coplanar_.
 
 The result is also an approximation of six times the signed volume of the tetrahedron defined by the four points.
