@@ -1,8 +1,8 @@
 # robust-predicates
 
-Fast robust predicates for computational geometry in JavaScript (`orient2d`, `orient3d`, `incircle`, `insphere`). Provides reliable 2D and 3D point orientation tests that are not susceptible to floating point errors without sacrificing performance. A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), an industry standard since 1996.
+Fast robust predicates for computational geometry in JavaScript. Provides reliable 2D and 3D point orientation tests (`orient2d`, `orient3d`, `incircle`, `insphere`) that are not susceptible to floating point errors (without sacrificing performance). A modern port of [Jonathan R Shewchuk's C code](https://www.cs.cmu.edu/~quake/robust.html), an industry standard since 1996.
 
-<a href="https://observablehq.com/@mourner/non-robust-arithmetic-as-art"><img height="200" src="predicates.png" /></a>
+<a href="https://observablehq.com/@mourner/non-robust-arithmetic-as-art"><img width="600" height="200" src="predicates.png" /></a>
 
 _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<sup>-42</sup>)._
 
@@ -14,30 +14,37 @@ _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<
 
 ## API
 
-### `orient2d(ax, ay, bx, by, cx, cy)`
+### `orient2d(ax,ay, bx,by, cx,cy)`
 
-Return a positive value if the points `a`, `b`, and `c` occur in counterclockwise order;
-a negative value if they occur in clockwise order; and zero if they are collinear.
-The result is also a rough approximation of twice the signed area of the triangle defined by the three points.
+- Returns a *positive* value if the points `a`, `b`, and `c` occur in _counterclockwise_ order.
+- Returns a *negative* value if they occur in _clockwise_ order.
+- Returns *zero* if they are _collinear_.
 
-### `incircle(ax, ay, bx, by, cx, cy, dx, dy)`
+The result is also an approximation of twice the signed area of the triangle defined by the three points.
 
-Return a positive value if the point `d` lies inside the circle passing through `a`, `b`, and `c`;
-a negative value if it lies outside; and zero if the four points are cocircular.
-The points `a`, `b`, and `c` must be in counterclockwise order, or the sign of the result will be reversed.
+### `incircle(ax,ay, bx,by, cx,cy, dx,dy)`
 
-### `orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz)`
+- Returns a _positive_ value if the point `d` lies _inside_ the circle passing through `a`, `b`, and `c`.
+- Returns a _negative_ value if it lies _outside_.
+- Returns _zero_ if the four points are _cocircular_.
 
-Return a positive value if the point `d` lies below the plane passing through `a`, `b`, and `c`;
-"below" is defined so that `a`, `b`, and `c` appear in counterclockwise order when viewed from above the plane.
-Returns a negative value if `d` lies above the plane. Returns zero if the points are coplanar.
-The result is also a rough approximation of six times the signed volume of the tetrahedron defined by the four points.
+The points `a`, `b`, and `c` must be in _counterclockwise_ order, or the sign of the result will be reversed.
 
-### `insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez)`
+### `orient3d(ax,ay,az, bx,by,bz, cx,cy,cz, dx,dy,dz)`
 
-Return a positive value if the point `e` lies inside the sphere passing through `a`, `b`, `c`, and `d`;
-a negative value if it lies outside; and zero if the five points are cospherical.
-The points `a`, `b`, `c`, and `d` must be ordered so that they have a positive orientation
+- Returns a _positive_ value if the point `d` lies _below_ the plane passing through `a`, `b`, and `c`; "below" is defined so that `a`, `b`, and `c` appear in counterclockwise order when viewed from above the plane.
+- Returns a _negative_ value if `d` lies _above_ the plane.
+- Returns _zero_ if the points are _coplanar_.
+
+The result is also an approximation of six times the signed volume of the tetrahedron defined by the four points.
+
+### `insphere(ax,ay,az, bx,by,bz, cx,cy,cz, dx,dy,dz, ex,ey,ez)`
+
+- Returns a _positive_ value if the point `e` lies _inside_ the sphere passing through `a`, `b`, `c`, and `d`.
+- Returns a _negative_ value if it lies _outside_.
+- Returns _zero_ if the five points are _cospherical_.
+
+The points `a`, `b`, `c`, and `d` must be ordered so that they have a _positive orientation_
 (as defined by `orient3d`), or the sign of the result will be reversed.
 
 ### `orient2dfast`, `orient3dfast`, `incirclefast`, `inspherefast`
@@ -62,6 +69,12 @@ Install with `npm install robust-predicates` or `yarn add robust-predicates`, or
 - `incircle`, `incirclefast`: [incircle.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/incircle.min.js)
 - `insphere`, `inspherefast`: [insphere.min.js](https://unpkg.com/robust-predicates@1.1.0/umd/insphere.min.js)
 
+## Thanks
+
+This project is just a port — all the brilliant, hard work was done by [Jonathan Richard Shewchuk](https://people.eecs.berkeley.edu/~jrs/).
+
+The port was also inspired by [Mikola Lysenko](https://twitter.com/MikolaLysenko)'s excellent [Robust Arithmetic Notes](https://github.com/mikolalysenko/robust-arithmetic-notes) and related projects like [robust-orientation](https://github.com/mikolalysenko/robust-orientation) and [robust-in-sphere](https://github.com/mikolalysenko/robust-in-sphere).
+
 ## License
 
-Since the original code by J. Shewchuk is in the public domain, this port follows the same choice. See [Unlicense](https://unlicense.org)
+Since the original code is in the public domain, this port follows the same choice. See [Unlicense](https://unlicense.org)
