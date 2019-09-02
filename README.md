@@ -14,11 +14,11 @@ _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<
 
 ## API
 
-Note: all the functions assume `y` axis is oriented top to bottom, unlike J. Shewchuk's original code, so the result for the same input has the opposite sign.
+Note: unlike J. Shewchuk's original code, all the functions in this library assume `y` axis is oriented _downwards_ &darr;, so the semantics are different.
 
 ### `orient2d(ax,ay, bx,by, cx,cy)`
 
-- Returns a *positive* value if the points `a`, `b`, and `c` occur in _counterclockwise_ order (`c` lies to the left of the directed line `ab`).
+- Returns a *positive* value if the points `a`, `b`, and `c` occur in _counterclockwise_ order (`c` lies to the left of the directed line defined by points `a` and `b`).
 - Returns a *negative* value if they occur in _clockwise_ order (`c` lies to the right of the directed line `ab`).
 - Returns *zero* if they are _collinear_.
 
@@ -65,11 +65,11 @@ const ccw = orient2d(ax, ay, bx, by, cx, cy) > 0;
 
 Install with `npm install robust-predicates` or `yarn add robust-predicates`, or use one of the browser builds:
 
-- all predicates: [predicates.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/predicates.min.js)
-- `orient2d`, `orient2dfast`: [orient2d.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/orient2d.min.js)
-- `orient3d`, `orient3dfast`: [orient3d.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/orient3d.min.js)
-- `incircle`, `incirclefast`: [incircle.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/incircle.min.js)
-- `insphere`, `inspherefast`: [insphere.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/insphere.min.js)
+- [predicates.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/predicates.min.js) (all predicates)
+- [orient2d.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/orient2d.min.js) (`orient2d`, `orient2dfast`)
+- [orient3d.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/orient3d.min.js) (`orient3d`, `orient3dfast`)
+- [incircle.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/incircle.min.js) (`incircle`, `incirclefast`)
+- [insphere.min.js](https://unpkg.com/robust-predicates@2.0.1/umd/insphere.min.js) (`insphere`, `inspherefast`)
 
 ## Thanks
 
@@ -79,4 +79,4 @@ The port was also inspired by [Mikola Lysenko](https://twitter.com/MikolaLysenko
 
 ## License
 
-Since the original code is in the public domain, this port follows the same choice. See [Unlicense](https://unlicense.org)
+Since the original code is in the public domain, this project follows the same choice. See [Unlicense](https://unlicense.org).

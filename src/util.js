@@ -58,7 +58,7 @@ export function fast_expansion_sum_zeroelim(elen, e, flen, f, h) {
             h[hindex++] = hh;
         }
     }
-    if ((Q !== 0) || (hindex === 0)) {
+    if (Q !== 0 || hindex === 0) {
         h[hindex++] = Q;
     }
     return hindex;
@@ -86,7 +86,7 @@ export function scale_expansion_zeroelim(elen, e, b, h) {
             h[hindex++] = hh;
         }
     }
-    if ((Q !== 0.0) || (hindex === 0)) {
+    if (Q !== 0.0 || hindex === 0) {
         h[hindex++] = Q;
     }
     return hindex;
