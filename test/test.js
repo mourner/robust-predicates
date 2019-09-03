@@ -1,4 +1,6 @@
 
+import fs from 'fs';
+import path from 'path';
 import {test} from 'tape';
 import robustOrientation from 'robust-orientation';
 import nextafter from 'nextafter';
@@ -8,7 +10,7 @@ import {
     orient3d, orient3dfast,
     incircle, incirclefast,
     insphere, inspherefast
-} from './index.js';
+} from '../index.js';
 
 test('orient2d', (t) => {
     t.ok(orient2d(0, 0, 1, 1, 0, 1) < 0, 'clockwise');
@@ -34,6 +36,16 @@ test('orient2d', (t) => {
         }
     }
     t.pass('512x512 near-collinear');
+
+    const lines = fs.readFileSync(path.join(__dirname, 'fixtures/orient2d.txt'), 'utf8').trim().split(/\r?\n/);
+    for (const line of lines) {
+        const [, ax, ay, bx, by, cx, cy, sign] = line.split(' ').map(Number);
+        const result = orient2d(ax, ay, bx, by, cx, cy);
+        if (Math.sign(result) !== -sign) {
+            t.fail(`${line}: ${result} vs ${-sign}`);
+        }
+    }
+    t.pass('1000 hard orient2d fixtures');
 
     t.end();
 });
@@ -64,6 +76,16 @@ test('incircle', (t) => {
         x *= 10;
     }
     t.pass(`${128 * 3} incircle tests`);
+
+    const lines = fs.readFileSync(path.join(__dirname, 'fixtures/incircle.txt'), 'utf8').trim().split(/\r?\n/);
+    for (const line of lines) {
+        const [, ax, ay, bx, by, cx, cy, dx, dy, sign] = line.split(' ').map(Number);
+        const result = incircle(ax, ay, bx, by, cx, cy, dx, dy);
+        if (Math.sign(result) !== sign) {
+            t.fail(`${line}: ${result} vs ${sign}`);
+        }
+    }
+    t.pass('1000 hard incircle fixtures');
 
     t.end();
 });
@@ -113,6 +135,16 @@ test('orient3d', (t) => {
         1, 0, 0,
         0, 0, b
     ) < 0, 'near below');
+
+    const lines = fs.readFileSync(path.join(__dirname, 'fixtures/orient3d.txt'), 'utf8').trim().split(/\r?\n/);
+    for (const line of lines) {
+        const [, ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, sign] = line.split(' ').map(Number);
+        const result = orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz);
+        if (Math.sign(result) !== sign) {
+            t.fail(`${line}: ${result} vs ${sign}`);
+        }
+    }
+    t.pass('1000 hard orient3d fixtures');
 
     t.end();
 });
@@ -185,6 +217,16 @@ test('insphere', (t) => {
         0, 0, 1,
         0, 0, b
     ) > 0, 'near outside');
+
+    const lines = fs.readFileSync(path.join(__dirname, 'fixtures/insphere.txt'), 'utf8').trim().split(/\r?\n/);
+    for (const line of lines) {
+        const [, ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, sign] = line.split(' ').map(Number);
+        const result = insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez);
+        if (Math.sign(result) !== -sign) {
+            t.fail(`${line}: ${result} vs ${-sign}`);
+        }
+    }
+    t.pass('1000 hard insphere fixtures');
 
     t.end();
 });
