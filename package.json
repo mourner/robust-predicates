@@ -16,7 +16,7 @@
     "build": "mkdirp esm && node compile.js",
     "lint": "eslint *.js src",
     "test": "npm run lint && npm run build && node -r esm test.js",
-    "cov": "nyc -r lcov -r text node -r esm test.js",
+    "cov": "ESM_DISABLE_CACHE=true nyc --require esm -r lcov -r text node test.js",
     "bench": "node -r esm bench.js",
     "prepublishOnly": "npm run test && rollup -c"
   },

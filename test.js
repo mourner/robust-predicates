@@ -20,10 +20,10 @@ test('orient2d', (t) => {
     const p = 16.8;
     const w = Math.pow(2, -43);
 
-    for (let i = 0; i < 512; i++) {
-        for (let j = 0; j < 512; j++) {
-            const x = r + w * i / 512;
-            const y = r + w * j / 512;
+    for (let i = 0; i < 128; i++) {
+        for (let j = 0; j < 128; j++) {
+            const x = r + w * i / 128;
+            const y = r + w * j / 128;
 
             const o = orient2d(x, y, q, q, p, p);
             const o2 = robustOrientation[3]([x, y], [q, q], [p, p]);
@@ -55,6 +55,15 @@ test('incircle', (t) => {
 
     t.ok(incircle(1, 0, -1, 0, 0, 1, 0, a) < 0, 'near inside');
     t.ok(incircle(1, 0, -1, 0, 0, 1, 0, b) > 0, 'near outside');
+
+    let x = 1e-64;
+    for (let i = 0; i < 128; i++) {
+        if (incircle(0, x, -x, -x, x, -x, 0, 0) <= 0) t.fail(`incircle test ${x}, outside`);
+        if (incircle(0, x, -x, -x, x, -x, 0, 2 * x) >= 0) t.fail(`incircle test ${x}, inside`);
+        if (incircle(0, x, -x, -x, x, -x, 0, x) !== 0) t.fail(`incircle test ${x}, cocircular`);
+        x *= 10;
+    }
+    t.pass(`${128 * 3} incircle tests`);
 
     t.end();
 });
