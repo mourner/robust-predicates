@@ -45,7 +45,7 @@ test('orient2d', (t) => {
             t.fail(`${line}: ${result} vs ${-sign}`);
         }
     }
-    t.pass('1000 hard orient2d fixtures');
+    t.pass('1000 hard fixtures');
 
     t.end();
 });
@@ -85,7 +85,7 @@ test('incircle', (t) => {
             t.fail(`${line}: ${result} vs ${sign}`);
         }
     }
-    t.pass('1000 hard incircle fixtures');
+    t.pass('1000 hard fixtures');
 
     t.end();
 });
@@ -140,11 +140,22 @@ test('orient3d', (t) => {
     for (const line of lines) {
         const [, ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, sign] = line.split(' ').map(Number);
         const result = orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz);
-        if (Math.sign(result) !== sign) {
-            t.fail(`${line}: ${result} vs ${sign}`);
-        }
+        if (Math.sign(result) !== sign) t.fail(`${line}: ${result} vs ${sign}`);
+        if (Math.sign(result) !== Math.sign(orient3d(dx, dy, dz, bx, by, bz, ax, ay, az, cx, cy, cz))) t.fail('symmetry');
     }
-    t.pass('1000 hard orient3d fixtures');
+    t.pass('1000 hard fixtures');
+
+    const tol = 5.0e-14;
+
+    for (let i = 0; i < 1000; i++) {
+        const ax = 0.5 + tol * Math.random();
+        const ay = 0.5 + tol * Math.random();
+        const az = 0.5 + tol * Math.random();
+        const b = 12, c = 24, d = 48;
+        if (orient3d(b, b, b, c, c, c, d, d, d, ax, ay, az) !== 0) t.fail('degenerate');
+        if (orient3d(c, c, c, d, d, d, ax, ay, az, b, b, b) !== 0) t.fail('degenerate');
+    }
+    t.pass('1000 degenerate cases');
 
     t.end();
 });
@@ -226,7 +237,7 @@ test('insphere', (t) => {
             t.fail(`${line}: ${result} vs ${-sign}`);
         }
     }
-    t.pass('1000 hard insphere fixtures');
+    t.pass('1000 hard fixtures');
 
     t.end();
 });
