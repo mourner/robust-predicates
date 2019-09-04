@@ -53,14 +53,7 @@ const cdedet = vec(3456);
 const deter = vec(5760);
 
 function insphereexact(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez) {
-    let axby1, bxcy1, cxdy1, dxey1, exay1;
-    let bxay1, cxby1, dxcy1, exdy1, axey1;
-    let axcy1, bxdy1, cxey1, dxay1, exby1;
-    let cxay1, dxby1, excy1, axdy1, bxey1;
-    let axby0, bxcy0, cxdy0, dxey0, exay0;
-    let bxay0, cxby0, dxcy0, exdy0, axey0;
-    let axcy0, bxdy0, cxey0, dxay0, exby0;
-    let cxay0, dxby0, excy0, axdy0, bxey0;
+    let s1, s0, t1, t0, u3;
     let temp8alen, temp8blen, temp16len;
     let temp48alen, temp48blen;
     let xlen, ylen, zlen;
@@ -69,45 +62,16 @@ function insphereexact(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
 
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
 
-    $Two_Product(ax, by, axby1, axby0);
-    $Two_Product(bx, ay, bxay1, bxay0);
-    $Two_Two_Diff(axby1, axby0, bxay1, bxay0, ab[3], ab[2], ab[1], ab[0]);
-
-    $Two_Product(bx, cy, bxcy1, bxcy0);
-    $Two_Product(cx, by, cxby1, cxby0);
-    $Two_Two_Diff(bxcy1, bxcy0, cxby1, cxby0, bc[3], bc[2], bc[1], bc[0]);
-
-    $Two_Product(cx, dy, cxdy1, cxdy0);
-    $Two_Product(dx, cy, dxcy1, dxcy0);
-    $Two_Two_Diff(cxdy1, cxdy0, dxcy1, dxcy0, cd[3], cd[2], cd[1], cd[0]);
-
-    $Two_Product(dx, ey, dxey1, dxey0);
-    $Two_Product(ex, dy, exdy1, exdy0);
-    $Two_Two_Diff(dxey1, dxey0, exdy1, exdy0, de[3], de[2], de[1], de[0]);
-
-    $Two_Product(ex, ay, exay1, exay0);
-    $Two_Product(ax, ey, axey1, axey0);
-    $Two_Two_Diff(exay1, exay0, axey1, axey0, ea[3], ea[2], ea[1], ea[0]);
-
-    $Two_Product(ax, cy, axcy1, axcy0);
-    $Two_Product(cx, ay, cxay1, cxay0);
-    $Two_Two_Diff(axcy1, axcy0, cxay1, cxay0, ac[3], ac[2], ac[1], ac[0]);
-
-    $Two_Product(bx, dy, bxdy1, bxdy0);
-    $Two_Product(dx, by, dxby1, dxby0);
-    $Two_Two_Diff(bxdy1, bxdy0, dxby1, dxby0, bd[3], bd[2], bd[1], bd[0]);
-
-    $Two_Product(cx, ey, cxey1, cxey0);
-    $Two_Product(ex, cy, excy1, excy0);
-    $Two_Two_Diff(cxey1, cxey0, excy1, excy0, ce[3], ce[2], ce[1], ce[0]);
-
-    $Two_Product(dx, ay, dxay1, dxay0);
-    $Two_Product(ax, dy, axdy1, axdy0);
-    $Two_Two_Diff(dxay1, dxay0, axdy1, axdy0, da[3], da[2], da[1], da[0]);
-
-    $Two_Product(ex, by, exby1, exby0);
-    $Two_Product(bx, ey, bxey1, bxey0);
-    $Two_Two_Diff(exby1, exby0, bxey1, bxey0, eb[3], eb[2], eb[1], eb[0]);
+    $Cross_Product(ax, ay, bx, by, ab);
+    $Cross_Product(bx, by, cx, cy, bc);
+    $Cross_Product(cx, cy, dx, dy, cd);
+    $Cross_Product(dx, dy, ex, ey, de);
+    $Cross_Product(ex, ey, ax, ay, ea);
+    $Cross_Product(ax, ay, cx, cy, ac);
+    $Cross_Product(bx, by, dx, dy, bd);
+    $Cross_Product(cx, cy, ex, ey, ce);
+    $Cross_Product(dx, dy, ax, ay, da);
+    $Cross_Product(ex, ey, bx, by, eb);
 
     temp8alen = scale_expansion_zeroelim(4, bc, az, temp8a);
     temp8blen = scale_expansion_zeroelim(4, ac, -bz, temp8b);
@@ -262,13 +226,8 @@ const xydet = vec(192);
 const fin1 = vec(1152);
 
 function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent) {
-    let aexbey1, bexaey1, bexcey1, cexbey1;
-    let cexdey1, dexcey1, dexaey1, aexdey1;
-    let aexcey1, cexaey1, bexdey1, dexbey1;
-    let aexbey0, bexaey0, bexcey0, cexbey0;
-    let cexdey0, dexcey0, dexaey0, aexdey0;
-    let aexcey0, cexaey0, bexdey0, dexbey0;
     let ab3, bc3, cd3, da3, ac3, bd3;
+    let s1, s0, t1, t0;
     let temp8alen, temp8blen, temp8clen, temp16len, temp24len, temp48len;
     let xlen, ylen, zlen, xylen;
 
@@ -291,35 +250,12 @@ function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
     const cez = cz - ez;
     const dez = dz - ez;
 
-    $Two_Product(aex, bey, aexbey1, aexbey0);
-    $Two_Product(bex, aey, bexaey1, bexaey0);
-    $Two_Two_Diff(aexbey1, aexbey0, bexaey1, bexaey0, ab3, ab[2], ab[1], ab[0]);
-    ab[3] = ab3;
-
-    $Two_Product(bex, cey, bexcey1, bexcey0);
-    $Two_Product(cex, bey, cexbey1, cexbey0);
-    $Two_Two_Diff(bexcey1, bexcey0, cexbey1, cexbey0, bc3, bc[2], bc[1], bc[0]);
-    bc[3] = bc3;
-
-    $Two_Product(cex, dey, cexdey1, cexdey0);
-    $Two_Product(dex, cey, dexcey1, dexcey0);
-    $Two_Two_Diff(cexdey1, cexdey0, dexcey1, dexcey0, cd3, cd[2], cd[1], cd[0]);
-    cd[3] = cd3;
-
-    $Two_Product(dex, aey, dexaey1, dexaey0);
-    $Two_Product(aex, dey, aexdey1, aexdey0);
-    $Two_Two_Diff(dexaey1, dexaey0, aexdey1, aexdey0, da3, da[2], da[1], da[0]);
-    da[3] = da3;
-
-    $Two_Product(aex, cey, aexcey1, aexcey0);
-    $Two_Product(cex, aey, cexaey1, cexaey0);
-    $Two_Two_Diff(aexcey1, aexcey0, cexaey1, cexaey0, ac3, ac[2], ac[1], ac[0]);
-    ac[3] = ac3;
-
-    $Two_Product(bex, dey, bexdey1, bexdey0);
-    $Two_Product(dex, bey, dexbey1, dexbey0);
-    $Two_Two_Diff(bexdey1, bexdey0, dexbey1, dexbey0, bd3, bd[2], bd[1], bd[0]);
-    bd[3] = bd3;
+    $Cross_Product(aex, aey, bex, bey, ab, ab3);
+    $Cross_Product(bex, bey, cex, cey, bc, bc3);
+    $Cross_Product(cex, cey, dex, dey, cd, cd3);
+    $Cross_Product(dex, dey, aex, aey, da, da3);
+    $Cross_Product(aex, aey, cex, cey, ac, ac3);
+    $Cross_Product(bex, bey, dex, dey, bd, bd3);
 
     temp8alen = scale_expansion_zeroelim(4, cd, bez, temp8a);
     temp8blen = scale_expansion_zeroelim(4, bd, -cez, temp8b);

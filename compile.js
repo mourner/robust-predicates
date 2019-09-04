@@ -58,6 +58,12 @@ macros.Two_Two_Diff = (a1, a0, b1, b0, x3, x2, x1, x0) => `
     ${macros.Two_One_Diff(a1, a0, b0, '_j', '_0', x0)}
     ${macros.Two_One_Diff('_j', '_0', b1, x3, x2, x1)}`;
 
+macros.Cross_Product = (a, b, c, d, D, u3 = 'u3') => `
+    ${macros.Two_Product(a, d, 's1', 's0')}
+    ${macros.Two_Product(c, b, 't1', 't0')}
+    ${macros.Two_Two_Diff('s1', 's0', 't1', 't0', u3, `${D}[2]`, `${D}[1]`, `${D}[0]`)}
+    ${D}[3] = ${u3};`;
+
 macros.Two_One_Product = (a1, a0, b, x3, x2, x1, x0) => `
     ${macros.Split(b, 'bhi', 'blo')}
     ${macros.Two_Product_Presplit(a0, b, 'bhi', 'blo', '_i', x0)}

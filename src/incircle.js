@@ -79,11 +79,8 @@ const bctt = vec(4);
 const catt = vec(4);
 
 function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
-    let bdxcdy1, cdxbdy1, cdxady1, adxcdy1, adxbdy1, bdxady1;
-    let bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
-    let bc3, ca3, ab3;
+    let s1, s0, t1, t0;
     let finnow, finother, finswap, finlength;
-
     let adxtail, bdxtail, cdxtail, adytail, bdytail, cdytail;
     let adxadx1, adyady1, bdxbdx1, bdybdy1, cdxcdx1, cdycdy1;
     let adxadx0, adyady0, bdxbdx0, bdybdy0, cdxcdx0, cdycdy0;
@@ -96,7 +93,6 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     let axtbclen, aytbclen, bxtcalen, bytcalen, cxtablen, cytablen;
     let abtlen, bctlen, catlen;
     let abttlen, bcttlen, cattlen;
-    let abtt3, bctt3, catt3;
     let negate;
 
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
@@ -108,30 +104,21 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     const bdy = by - dy;
     const cdy = cy - dy;
 
-    $Two_Product(bdx, cdy, bdxcdy1, bdxcdy0);
-    $Two_Product(cdx, bdy, cdxbdy1, cdxbdy0);
-    $Two_Two_Diff(bdxcdy1, bdxcdy0, cdxbdy1, cdxbdy0, bc3, bc[2], bc[1], bc[0]);
-    bc[3] = bc3;
+    $Cross_Product(bdx, bdy, cdx, cdy, bc);
     const axbclen = scale_expansion_zeroelim(4, bc, adx, axbc);
     const axxbclen = scale_expansion_zeroelim(axbclen, axbc, adx, axxbc);
     const aybclen = scale_expansion_zeroelim(4, bc, ady, aybc);
     const ayybclen = scale_expansion_zeroelim(aybclen, aybc, ady, ayybc);
     const alen = fast_expansion_sum_zeroelim(axxbclen, axxbc, ayybclen, ayybc, adet);
 
-    $Two_Product(cdx, ady, cdxady1, cdxady0);
-    $Two_Product(adx, cdy, adxcdy1, adxcdy0);
-    $Two_Two_Diff(cdxady1, cdxady0, adxcdy1, adxcdy0, ca3, ca[2], ca[1], ca[0]);
-    ca[3] = ca3;
+    $Cross_Product(cdx, cdy, adx, ady, ca);
     const bxcalen = scale_expansion_zeroelim(4, ca, bdx, bxca);
     const bxxcalen = scale_expansion_zeroelim(bxcalen, bxca, bdx, bxxca);
     const bycalen = scale_expansion_zeroelim(4, ca, bdy, byca);
     const byycalen = scale_expansion_zeroelim(bycalen, byca, bdy, byyca);
     const blen = fast_expansion_sum_zeroelim(bxxcalen, bxxca, byycalen, byyca, bdet);
 
-    $Two_Product(adx, bdy, adxbdy1, adxbdy0);
-    $Two_Product(bdx, ady, bdxady1, bdxady0);
-    $Two_Two_Diff(adxbdy1, adxbdy0, bdxady1, bdxady0, ab3, ab[2], ab[1], ab[0]);
-    ab[3] = ab3;
+    $Cross_Product(adx, ady, bdx, bdy, ab);
     const cxablen = scale_expansion_zeroelim(4, ab, cdx, cxab);
     const cxxablen = scale_expansion_zeroelim(cxablen, cxab, cdx, cxxab);
     const cyablen = scale_expansion_zeroelim(4, ab, cdy, cyab);
@@ -296,10 +283,7 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             v[3] = v3;
             bctlen = fast_expansion_sum_zeroelim(4, u, 4, v, bct);
 
-            $Two_Product(bdxtail, cdytail, ti1, ti0);
-            $Two_Product(cdxtail, bdytail, tj1, tj0);
-            $Two_Two_Diff(ti1, ti0, tj1, tj0, bctt3, bctt[2], bctt[1], bctt[0]);
-            bctt[3] = bctt3;
+            $Cross_Product(bdxtail, bdytail, cdxtail, cdytail, bctt);
             bcttlen = 4;
         } else {
             bct[0] = 0;
@@ -371,10 +355,7 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             v[3] = v3;
             catlen = fast_expansion_sum_zeroelim(4, u, 4, v, cat);
 
-            $Two_Product(cdxtail, adytail, ti1, ti0);
-            $Two_Product(adxtail, cdytail, tj1, tj0);
-            $Two_Two_Diff(ti1, ti0, tj1, tj0, catt3, catt[2], catt[1], catt[0]);
-            catt[3] = catt3;
+            $Cross_Product(cdxtail, cdytail, adxtail, adytail, catt);
             cattlen = 4;
         } else {
             cat[0] = 0;
@@ -444,10 +425,7 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             v[3] = v3;
             abtlen = fast_expansion_sum_zeroelim(4, u, 4, v, abt);
 
-            $Two_Product(adxtail, bdytail, ti1, ti0);
-            $Two_Product(bdxtail, adytail, tj1, tj0);
-            $Two_Two_Diff(ti1, ti0, tj1, tj0, abtt3, abtt[2], abtt[1], abtt[0]);
-            abtt[3] = abtt3;
+            $Cross_Product(adxtail, adytail, bdxtail, bdytail, abtt);
             abttlen = 4;
         } else {
             abt[0] = 0;
