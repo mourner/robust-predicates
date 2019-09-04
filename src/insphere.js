@@ -1,6 +1,6 @@
 import {
     epsilon, splitter, resulterrbound, estimate, vec,
-    fast_expansion_sum_zeroelim, scale_expansion_zeroelim
+    expansion_sum, scale_expansion
 } from './util.js';
 
 const isperrboundA = (16 + 224 * epsilon) * epsilon;
@@ -69,145 +69,145 @@ function insphereexact(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
     $Cross_Product(dx, dy, ax, ay, da);
     $Cross_Product(ex, ey, bx, by, eb);
 
-    temp8alen = scale_expansion_zeroelim(4, bc, az, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, ac, -bz, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, ab, cz, temp8a);
-    const abclen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, abc);
+    temp8alen = scale_expansion(4, bc, az, temp8a);
+    temp8blen = scale_expansion(4, ac, -bz, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, ab, cz, temp8a);
+    const abclen = expansion_sum(temp8alen, temp8a, temp16len, temp16, abc);
 
-    temp8alen = scale_expansion_zeroelim(4, cd, bz, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, bd, -cz, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, bc, dz, temp8a);
-    const bcdlen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, bcd);
+    temp8alen = scale_expansion(4, cd, bz, temp8a);
+    temp8blen = scale_expansion(4, bd, -cz, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, bc, dz, temp8a);
+    const bcdlen = expansion_sum(temp8alen, temp8a, temp16len, temp16, bcd);
 
-    temp8alen = scale_expansion_zeroelim(4, de, cz, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, ce, -dz, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, cd, ez, temp8a);
-    let cdelen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, cde);
+    temp8alen = scale_expansion(4, de, cz, temp8a);
+    temp8blen = scale_expansion(4, ce, -dz, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, cd, ez, temp8a);
+    let cdelen = expansion_sum(temp8alen, temp8a, temp16len, temp16, cde);
 
-    temp8alen = scale_expansion_zeroelim(4, ea, dz, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, da, -ez, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, de, az, temp8a);
-    const dealen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, dea);
+    temp8alen = scale_expansion(4, ea, dz, temp8a);
+    temp8blen = scale_expansion(4, da, -ez, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, de, az, temp8a);
+    const dealen = expansion_sum(temp8alen, temp8a, temp16len, temp16, dea);
 
-    temp8alen = scale_expansion_zeroelim(4, ab, ez, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, eb, -az, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, ea, bz, temp8a);
-    const eablen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, eab);
+    temp8alen = scale_expansion(4, ab, ez, temp8a);
+    temp8blen = scale_expansion(4, eb, -az, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, ea, bz, temp8a);
+    const eablen = expansion_sum(temp8alen, temp8a, temp16len, temp16, eab);
 
-    temp8alen = scale_expansion_zeroelim(4, bd, az, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, da, bz, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, ab, dz, temp8a);
-    const abdlen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, abd);
+    temp8alen = scale_expansion(4, bd, az, temp8a);
+    temp8blen = scale_expansion(4, da, bz, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, ab, dz, temp8a);
+    const abdlen = expansion_sum(temp8alen, temp8a, temp16len, temp16, abd);
 
-    temp8alen = scale_expansion_zeroelim(4, ce, bz, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, eb, cz, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, bc, ez, temp8a);
-    const bcelen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, bce);
+    temp8alen = scale_expansion(4, ce, bz, temp8a);
+    temp8blen = scale_expansion(4, eb, cz, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, bc, ez, temp8a);
+    const bcelen = expansion_sum(temp8alen, temp8a, temp16len, temp16, bce);
 
-    temp8alen = scale_expansion_zeroelim(4, da, cz, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, ac, dz, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, cd, az, temp8a);
-    const cdalen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, cda);
+    temp8alen = scale_expansion(4, da, cz, temp8a);
+    temp8blen = scale_expansion(4, ac, dz, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, cd, az, temp8a);
+    const cdalen = expansion_sum(temp8alen, temp8a, temp16len, temp16, cda);
 
-    temp8alen = scale_expansion_zeroelim(4, eb, dz, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, bd, ez, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, de, bz, temp8a);
-    const deblen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, deb);
+    temp8alen = scale_expansion(4, eb, dz, temp8a);
+    temp8blen = scale_expansion(4, bd, ez, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, de, bz, temp8a);
+    const deblen = expansion_sum(temp8alen, temp8a, temp16len, temp16, deb);
 
-    temp8alen = scale_expansion_zeroelim(4, ac, ez, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, ce, az, temp8b);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp8alen = scale_expansion_zeroelim(4, ea, cz, temp8a);
-    const eaclen = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp16len, temp16, eac);
+    temp8alen = scale_expansion(4, ac, ez, temp8a);
+    temp8blen = scale_expansion(4, ce, az, temp8b);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp8alen = scale_expansion(4, ea, cz, temp8a);
+    const eaclen = expansion_sum(temp8alen, temp8a, temp16len, temp16, eac);
 
-    temp48alen = fast_expansion_sum_zeroelim(cdelen, cde, bcelen, bce, temp48a);
-    temp48blen = fast_expansion_sum_zeroelim(deblen, deb, bcdlen, bcd, temp48b);
+    temp48alen = expansion_sum(cdelen, cde, bcelen, bce, temp48a);
+    temp48blen = expansion_sum(deblen, deb, bcdlen, bcd, temp48b);
     for (i = 0; i < temp48blen; i++) {
         temp48b[i] = -temp48b[i];
     }
-    const bcdelen = fast_expansion_sum_zeroelim(temp48alen, temp48a, temp48blen, temp48b, bcde);
-    xlen = scale_expansion_zeroelim(bcdelen, bcde, ax, temp192);
-    xlen = scale_expansion_zeroelim(xlen, temp192, ax, det384x);
-    ylen = scale_expansion_zeroelim(bcdelen, bcde, ay, temp192);
-    ylen = scale_expansion_zeroelim(ylen, temp192, ay, det384y);
-    zlen = scale_expansion_zeroelim(bcdelen, bcde, az, temp192);
-    zlen = scale_expansion_zeroelim(zlen, temp192, az, det384z);
-    xylen = fast_expansion_sum_zeroelim(xlen, det384x, ylen, det384y, detxy);
-    const alen = fast_expansion_sum_zeroelim(xylen, detxy, zlen, det384z, adet);
+    const bcdelen = expansion_sum(temp48alen, temp48a, temp48blen, temp48b, bcde);
+    xlen = scale_expansion(bcdelen, bcde, ax, temp192);
+    xlen = scale_expansion(xlen, temp192, ax, det384x);
+    ylen = scale_expansion(bcdelen, bcde, ay, temp192);
+    ylen = scale_expansion(ylen, temp192, ay, det384y);
+    zlen = scale_expansion(bcdelen, bcde, az, temp192);
+    zlen = scale_expansion(zlen, temp192, az, det384z);
+    xylen = expansion_sum(xlen, det384x, ylen, det384y, detxy);
+    const alen = expansion_sum(xylen, detxy, zlen, det384z, adet);
 
-    temp48alen = fast_expansion_sum_zeroelim(dealen, dea, cdalen, cda, temp48a);
-    temp48blen = fast_expansion_sum_zeroelim(eaclen, eac, cdelen, cde, temp48b);
+    temp48alen = expansion_sum(dealen, dea, cdalen, cda, temp48a);
+    temp48blen = expansion_sum(eaclen, eac, cdelen, cde, temp48b);
     for (i = 0; i < temp48blen; i++) {
         temp48b[i] = -temp48b[i];
     }
-    const cdealen = fast_expansion_sum_zeroelim(temp48alen, temp48a, temp48blen, temp48b, cdea);
-    xlen = scale_expansion_zeroelim(cdealen, cdea, bx, temp192);
-    xlen = scale_expansion_zeroelim(xlen, temp192, bx, det384x);
-    ylen = scale_expansion_zeroelim(cdealen, cdea, by, temp192);
-    ylen = scale_expansion_zeroelim(ylen, temp192, by, det384y);
-    zlen = scale_expansion_zeroelim(cdealen, cdea, bz, temp192);
-    zlen = scale_expansion_zeroelim(zlen, temp192, bz, det384z);
-    xylen = fast_expansion_sum_zeroelim(xlen, det384x, ylen, det384y, detxy);
-    const blen = fast_expansion_sum_zeroelim(xylen, detxy, zlen, det384z, bdet);
+    const cdealen = expansion_sum(temp48alen, temp48a, temp48blen, temp48b, cdea);
+    xlen = scale_expansion(cdealen, cdea, bx, temp192);
+    xlen = scale_expansion(xlen, temp192, bx, det384x);
+    ylen = scale_expansion(cdealen, cdea, by, temp192);
+    ylen = scale_expansion(ylen, temp192, by, det384y);
+    zlen = scale_expansion(cdealen, cdea, bz, temp192);
+    zlen = scale_expansion(zlen, temp192, bz, det384z);
+    xylen = expansion_sum(xlen, det384x, ylen, det384y, detxy);
+    const blen = expansion_sum(xylen, detxy, zlen, det384z, bdet);
 
-    temp48alen = fast_expansion_sum_zeroelim(eablen, eab, deblen, deb, temp48a);
-    temp48blen = fast_expansion_sum_zeroelim(abdlen, abd, dealen, dea, temp48b);
+    temp48alen = expansion_sum(eablen, eab, deblen, deb, temp48a);
+    temp48blen = expansion_sum(abdlen, abd, dealen, dea, temp48b);
     for (i = 0; i < temp48blen; i++) {
         temp48b[i] = -temp48b[i];
     }
-    const deablen = fast_expansion_sum_zeroelim(temp48alen, temp48a, temp48blen, temp48b, deab);
-    xlen = scale_expansion_zeroelim(deablen, deab, cx, temp192);
-    xlen = scale_expansion_zeroelim(xlen, temp192, cx, det384x);
-    ylen = scale_expansion_zeroelim(deablen, deab, cy, temp192);
-    ylen = scale_expansion_zeroelim(ylen, temp192, cy, det384y);
-    zlen = scale_expansion_zeroelim(deablen, deab, cz, temp192);
-    zlen = scale_expansion_zeroelim(zlen, temp192, cz, det384z);
-    xylen = fast_expansion_sum_zeroelim(xlen, det384x, ylen, det384y, detxy);
-    const clen = fast_expansion_sum_zeroelim(xylen, detxy, zlen, det384z, cdet);
+    const deablen = expansion_sum(temp48alen, temp48a, temp48blen, temp48b, deab);
+    xlen = scale_expansion(deablen, deab, cx, temp192);
+    xlen = scale_expansion(xlen, temp192, cx, det384x);
+    ylen = scale_expansion(deablen, deab, cy, temp192);
+    ylen = scale_expansion(ylen, temp192, cy, det384y);
+    zlen = scale_expansion(deablen, deab, cz, temp192);
+    zlen = scale_expansion(zlen, temp192, cz, det384z);
+    xylen = expansion_sum(xlen, det384x, ylen, det384y, detxy);
+    const clen = expansion_sum(xylen, detxy, zlen, det384z, cdet);
 
-    temp48alen = fast_expansion_sum_zeroelim(abclen, abc, eaclen, eac, temp48a);
-    temp48blen = fast_expansion_sum_zeroelim(bcelen, bce, eablen, eab, temp48b);
+    temp48alen = expansion_sum(abclen, abc, eaclen, eac, temp48a);
+    temp48blen = expansion_sum(bcelen, bce, eablen, eab, temp48b);
     for (i = 0; i < temp48blen; i++) {
         temp48b[i] = -temp48b[i];
     }
-    const eabclen = fast_expansion_sum_zeroelim(temp48alen, temp48a, temp48blen, temp48b, eabc);
-    xlen = scale_expansion_zeroelim(eabclen, eabc, dx, temp192);
-    xlen = scale_expansion_zeroelim(xlen, temp192, dx, det384x);
-    ylen = scale_expansion_zeroelim(eabclen, eabc, dy, temp192);
-    ylen = scale_expansion_zeroelim(ylen, temp192, dy, det384y);
-    zlen = scale_expansion_zeroelim(eabclen, eabc, dz, temp192);
-    zlen = scale_expansion_zeroelim(zlen, temp192, dz, det384z);
-    xylen = fast_expansion_sum_zeroelim(xlen, det384x, ylen, det384y, detxy);
-    const dlen = fast_expansion_sum_zeroelim(xylen, detxy, zlen, det384z, ddet);
+    const eabclen = expansion_sum(temp48alen, temp48a, temp48blen, temp48b, eabc);
+    xlen = scale_expansion(eabclen, eabc, dx, temp192);
+    xlen = scale_expansion(xlen, temp192, dx, det384x);
+    ylen = scale_expansion(eabclen, eabc, dy, temp192);
+    ylen = scale_expansion(ylen, temp192, dy, det384y);
+    zlen = scale_expansion(eabclen, eabc, dz, temp192);
+    zlen = scale_expansion(zlen, temp192, dz, det384z);
+    xylen = expansion_sum(xlen, det384x, ylen, det384y, detxy);
+    const dlen = expansion_sum(xylen, detxy, zlen, det384z, ddet);
 
-    temp48alen = fast_expansion_sum_zeroelim(bcdlen, bcd, abdlen, abd, temp48a);
-    temp48blen = fast_expansion_sum_zeroelim(cdalen, cda, abclen, abc, temp48b);
+    temp48alen = expansion_sum(bcdlen, bcd, abdlen, abd, temp48a);
+    temp48blen = expansion_sum(cdalen, cda, abclen, abc, temp48b);
     for (i = 0; i < temp48blen; i++) {
         temp48b[i] = -temp48b[i];
     }
-    const abcdlen = fast_expansion_sum_zeroelim(temp48alen, temp48a, temp48blen, temp48b, abcd);
-    xlen = scale_expansion_zeroelim(abcdlen, abcd, ex, temp192);
-    xlen = scale_expansion_zeroelim(xlen, temp192, ex, det384x);
-    ylen = scale_expansion_zeroelim(abcdlen, abcd, ey, temp192);
-    ylen = scale_expansion_zeroelim(ylen, temp192, ey, det384y);
-    zlen = scale_expansion_zeroelim(abcdlen, abcd, ez, temp192);
-    zlen = scale_expansion_zeroelim(zlen, temp192, ez, det384z);
-    xylen = fast_expansion_sum_zeroelim(xlen, det384x, ylen, det384y, detxy);
-    const elen = fast_expansion_sum_zeroelim(xylen, detxy, zlen, det384z, edet);
+    const abcdlen = expansion_sum(temp48alen, temp48a, temp48blen, temp48b, abcd);
+    xlen = scale_expansion(abcdlen, abcd, ex, temp192);
+    xlen = scale_expansion(xlen, temp192, ex, det384x);
+    ylen = scale_expansion(abcdlen, abcd, ey, temp192);
+    ylen = scale_expansion(ylen, temp192, ey, det384y);
+    zlen = scale_expansion(abcdlen, abcd, ez, temp192);
+    zlen = scale_expansion(zlen, temp192, ez, det384z);
+    xylen = expansion_sum(xlen, det384x, ylen, det384y, detxy);
+    const elen = expansion_sum(xylen, detxy, zlen, det384z, edet);
 
-    const ablen = fast_expansion_sum_zeroelim(alen, adet, blen, bdet, abdet);
-    const cdlen = fast_expansion_sum_zeroelim(clen, cdet, dlen, ddet, cddet);
-    cdelen = fast_expansion_sum_zeroelim(cdlen, cddet, elen, edet, cdedet);
-    const deterlen = fast_expansion_sum_zeroelim(ablen, abdet, cdelen, cdedet, deter);
+    const ablen = expansion_sum(alen, adet, blen, bdet, abdet);
+    const cdlen = expansion_sum(clen, cdet, dlen, ddet, cddet);
+    cdelen = expansion_sum(cdlen, cddet, elen, edet, cdedet);
+    const deterlen = expansion_sum(ablen, abdet, cdelen, cdedet, deter);
 
     return deter[deterlen - 1];
 }
@@ -252,65 +252,65 @@ function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
     $Cross_Product(aex, aey, cex, cey, ac, ac3);
     $Cross_Product(bex, bey, dex, dey, bd, bd3);
 
-    temp8alen = scale_expansion_zeroelim(4, cd, bez, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, bd, -cez, temp8b);
-    temp8clen = scale_expansion_zeroelim(4, bc, dez, temp8c);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp24len = fast_expansion_sum_zeroelim(temp8clen, temp8c, temp16len, temp16, temp24);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, aex, temp48);
-    xlen = scale_expansion_zeroelim(temp48len, temp48, -aex, xdet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, aey, temp48);
-    ylen = scale_expansion_zeroelim(temp48len, temp48, -aey, ydet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, aez, temp48);
-    zlen = scale_expansion_zeroelim(temp48len, temp48, -aez, zdet);
-    xylen = fast_expansion_sum_zeroelim(xlen, xdet, ylen, ydet, xydet);
-    const alen = fast_expansion_sum_zeroelim(xylen, xydet, zlen, zdet, adet);
+    temp8alen = scale_expansion(4, cd, bez, temp8a);
+    temp8blen = scale_expansion(4, bd, -cez, temp8b);
+    temp8clen = scale_expansion(4, bc, dez, temp8c);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp24len = expansion_sum(temp8clen, temp8c, temp16len, temp16, temp24);
+    temp48len = scale_expansion(temp24len, temp24, aex, temp48);
+    xlen = scale_expansion(temp48len, temp48, -aex, xdet);
+    temp48len = scale_expansion(temp24len, temp24, aey, temp48);
+    ylen = scale_expansion(temp48len, temp48, -aey, ydet);
+    temp48len = scale_expansion(temp24len, temp24, aez, temp48);
+    zlen = scale_expansion(temp48len, temp48, -aez, zdet);
+    xylen = expansion_sum(xlen, xdet, ylen, ydet, xydet);
+    const alen = expansion_sum(xylen, xydet, zlen, zdet, adet);
 
-    temp8alen = scale_expansion_zeroelim(4, da, cez, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, ac, dez, temp8b);
-    temp8clen = scale_expansion_zeroelim(4, cd, aez, temp8c);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp24len = fast_expansion_sum_zeroelim(temp8clen, temp8c, temp16len, temp16, temp24);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, bex, temp48);
-    xlen = scale_expansion_zeroelim(temp48len, temp48, bex, xdet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, bey, temp48);
-    ylen = scale_expansion_zeroelim(temp48len, temp48, bey, ydet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, bez, temp48);
-    zlen = scale_expansion_zeroelim(temp48len, temp48, bez, zdet);
-    xylen = fast_expansion_sum_zeroelim(xlen, xdet, ylen, ydet, xydet);
-    const blen = fast_expansion_sum_zeroelim(xylen, xydet, zlen, zdet, bdet);
+    temp8alen = scale_expansion(4, da, cez, temp8a);
+    temp8blen = scale_expansion(4, ac, dez, temp8b);
+    temp8clen = scale_expansion(4, cd, aez, temp8c);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp24len = expansion_sum(temp8clen, temp8c, temp16len, temp16, temp24);
+    temp48len = scale_expansion(temp24len, temp24, bex, temp48);
+    xlen = scale_expansion(temp48len, temp48, bex, xdet);
+    temp48len = scale_expansion(temp24len, temp24, bey, temp48);
+    ylen = scale_expansion(temp48len, temp48, bey, ydet);
+    temp48len = scale_expansion(temp24len, temp24, bez, temp48);
+    zlen = scale_expansion(temp48len, temp48, bez, zdet);
+    xylen = expansion_sum(xlen, xdet, ylen, ydet, xydet);
+    const blen = expansion_sum(xylen, xydet, zlen, zdet, bdet);
 
-    temp8alen = scale_expansion_zeroelim(4, ab, dez, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, bd, aez, temp8b);
-    temp8clen = scale_expansion_zeroelim(4, da, bez, temp8c);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp24len = fast_expansion_sum_zeroelim(temp8clen, temp8c, temp16len, temp16, temp24);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, cex, temp48);
-    xlen = scale_expansion_zeroelim(temp48len, temp48, -cex, xdet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, cey, temp48);
-    ylen = scale_expansion_zeroelim(temp48len, temp48, -cey, ydet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, cez, temp48);
-    zlen = scale_expansion_zeroelim(temp48len, temp48, -cez, zdet);
-    xylen = fast_expansion_sum_zeroelim(xlen, xdet, ylen, ydet, xydet);
-    const clen = fast_expansion_sum_zeroelim(xylen, xydet, zlen, zdet, cdet);
+    temp8alen = scale_expansion(4, ab, dez, temp8a);
+    temp8blen = scale_expansion(4, bd, aez, temp8b);
+    temp8clen = scale_expansion(4, da, bez, temp8c);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp24len = expansion_sum(temp8clen, temp8c, temp16len, temp16, temp24);
+    temp48len = scale_expansion(temp24len, temp24, cex, temp48);
+    xlen = scale_expansion(temp48len, temp48, -cex, xdet);
+    temp48len = scale_expansion(temp24len, temp24, cey, temp48);
+    ylen = scale_expansion(temp48len, temp48, -cey, ydet);
+    temp48len = scale_expansion(temp24len, temp24, cez, temp48);
+    zlen = scale_expansion(temp48len, temp48, -cez, zdet);
+    xylen = expansion_sum(xlen, xdet, ylen, ydet, xydet);
+    const clen = expansion_sum(xylen, xydet, zlen, zdet, cdet);
 
-    temp8alen = scale_expansion_zeroelim(4, bc, aez, temp8a);
-    temp8blen = scale_expansion_zeroelim(4, ac, -bez, temp8b);
-    temp8clen = scale_expansion_zeroelim(4, ab, cez, temp8c);
-    temp16len = fast_expansion_sum_zeroelim(temp8alen, temp8a, temp8blen, temp8b, temp16);
-    temp24len = fast_expansion_sum_zeroelim(temp8clen, temp8c, temp16len, temp16, temp24);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, dex, temp48);
-    xlen = scale_expansion_zeroelim(temp48len, temp48, dex, xdet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, dey, temp48);
-    ylen = scale_expansion_zeroelim(temp48len, temp48, dey, ydet);
-    temp48len = scale_expansion_zeroelim(temp24len, temp24, dez, temp48);
-    zlen = scale_expansion_zeroelim(temp48len, temp48, dez, zdet);
-    xylen = fast_expansion_sum_zeroelim(xlen, xdet, ylen, ydet, xydet);
-    const dlen = fast_expansion_sum_zeroelim(xylen, xydet, zlen, zdet, ddet);
+    temp8alen = scale_expansion(4, bc, aez, temp8a);
+    temp8blen = scale_expansion(4, ac, -bez, temp8b);
+    temp8clen = scale_expansion(4, ab, cez, temp8c);
+    temp16len = expansion_sum(temp8alen, temp8a, temp8blen, temp8b, temp16);
+    temp24len = expansion_sum(temp8clen, temp8c, temp16len, temp16, temp24);
+    temp48len = scale_expansion(temp24len, temp24, dex, temp48);
+    xlen = scale_expansion(temp48len, temp48, dex, xdet);
+    temp48len = scale_expansion(temp24len, temp24, dey, temp48);
+    ylen = scale_expansion(temp48len, temp48, dey, ydet);
+    temp48len = scale_expansion(temp24len, temp24, dez, temp48);
+    zlen = scale_expansion(temp48len, temp48, dez, zdet);
+    xylen = expansion_sum(xlen, xdet, ylen, ydet, xydet);
+    const dlen = expansion_sum(xylen, xydet, zlen, zdet, ddet);
 
-    const ablen = fast_expansion_sum_zeroelim(alen, adet, blen, bdet, abdet);
-    const cdlen = fast_expansion_sum_zeroelim(clen, cdet, dlen, ddet, cddet);
-    const finlength = fast_expansion_sum_zeroelim(ablen, abdet, cdlen, cddet, fin1);
+    const ablen = expansion_sum(alen, adet, blen, bdet, abdet);
+    const cdlen = expansion_sum(clen, cdet, dlen, ddet, cddet);
+    const finlength = expansion_sum(ablen, abdet, cdlen, cddet, fin1);
 
     let det = estimate(finlength, fin1);
     let errbound = isperrboundB * permanent;

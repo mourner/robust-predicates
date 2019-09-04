@@ -1,7 +1,4 @@
-import {
-    epsilon, splitter, resulterrbound, estimate, vec,
-    fast_expansion_sum_zeroelim
-} from './util.js';
+import {epsilon, splitter, resulterrbound, estimate, vec, expansion_sum} from './util.js';
 
 const ccwerrboundA = (3 + 16 * epsilon) * epsilon;
 const ccwerrboundB = (2 + 12 * epsilon) * epsilon;
@@ -26,31 +23,33 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
 
     let det = estimate(4, B);
     let errbound = ccwerrboundB * detsum;
-    if (det >= errbound || -det >= errbound) return det;
+    if (det >= errbound || -det >= errbound) {
+        return det;
+    }
 
     $Two_Diff_Tail(ax, cx, acx, acxtail);
     $Two_Diff_Tail(bx, cx, bcx, bcxtail);
     $Two_Diff_Tail(ay, cy, acy, acytail);
     $Two_Diff_Tail(by, cy, bcy, bcytail);
 
-    if (acxtail === 0 && acytail === 0 && bcxtail === 0 && bcytail === 0) return det;
-
-    errbound = ccwerrboundC * detsum + resulterrbound * Math.abs(det);
-    det += (acx * bcytail + bcy * acxtail) - (acy * bcxtail + bcx * acytail);
-    if (det >= errbound || -det >= errbound) {
+    if (acxtail === 0 && acytail === 0 && bcxtail === 0 && bcytail === 0) {
         return det;
     }
 
+    errbound = ccwerrboundC * detsum + resulterrbound * Math.abs(det);
+    det += (acx * bcytail + bcy * acxtail) - (acy * bcxtail + bcx * acytail);
+    if (det >= errbound || -det >= errbound) return det;
+
     $Cross_Product(acxtail, bcx, acytail, bcy, u);
-    const C1length = fast_expansion_sum_zeroelim(4, B, 4, u, C1);
+    const C1len = expansion_sum(4, B, 4, u, C1);
 
     $Cross_Product(acx, bcxtail, acy, bcytail, u);
-    const C2length = fast_expansion_sum_zeroelim(C1length, C1, 4, u, C2);
+    const C2len = expansion_sum(C1len, C1, 4, u, C2);
 
     $Cross_Product(acxtail, bcxtail, acytail, bcytail, u);
-    const Dlength = fast_expansion_sum_zeroelim(C2length, C2, 4, u, D);
+    const Dlen = expansion_sum(C2len, C2, 4, u, D);
 
-    return D[Dlength - 1];
+    return D[Dlen - 1];
 }
 
 export function orient2d(ax, ay, bx, by, cx, cy) {

@@ -2,7 +2,8 @@ export const epsilon = 1.1102230246251565e-16;
 export const splitter = 134217729;
 export const resulterrbound = (3 + 8 * epsilon) * epsilon;
 
-export function fast_expansion_sum_zeroelim(elen, e, flen, f, h) {
+// fast_expansion_sum_zeroelim routine from oritinal code
+export function expansion_sum(elen, e, flen, f, h) {
     let Q, Qnew, hh, bvirt;
     let enow = e[0];
     let fnow = f[0];
@@ -16,7 +17,7 @@ export function fast_expansion_sum_zeroelim(elen, e, flen, f, h) {
         fnow = f[++findex];
     }
     let hindex = 0;
-    if ((eindex < elen) && (findex < flen)) {
+    if (eindex < elen && findex < flen) {
         if ((fnow > enow) === (fnow > -enow)) {
             $Fast_Two_Sum(enow, Q, Qnew, hh);
             enow = e[++eindex];
@@ -28,7 +29,7 @@ export function fast_expansion_sum_zeroelim(elen, e, flen, f, h) {
         if (hh !== 0) {
             h[hindex++] = hh;
         }
-        while ((eindex < elen) && (findex < flen)) {
+        while (eindex < elen && findex < flen) {
             if ((fnow > enow) === (fnow > -enow)) {
                 $Two_Sum(Q, enow, Qnew, hh);
                 enow = e[++eindex];
@@ -64,18 +65,20 @@ export function fast_expansion_sum_zeroelim(elen, e, flen, f, h) {
     return hindex;
 }
 
-export function scale_expansion_zeroelim(elen, e, b, h) {
+// scale_expansion_zeroelim routine from oritinal code
+export function scale_expansion(elen, e, b, h) {
     let Q, sum, hh, product1, product0;
     let bvirt, c, ahi, alo, bhi, blo;
 
     $Split(b, bhi, blo);
-    $Two_Product_Presplit(e[0], b, bhi, blo, Q, hh);
+    let enow = e[0];
+    $Two_Product_Presplit(enow, b, bhi, blo, Q, hh);
     let hindex = 0;
     if (hh !== 0) {
         h[hindex++] = hh;
     }
-    for (let eindex = 1; eindex < elen; eindex++) {
-        const enow = e[eindex];
+    for (let i = 1; i < elen; i++) {
+        enow = e[i];
         $Two_Product_Presplit(enow, b, bhi, blo, product1, product0);
         $Two_Sum(Q, product0, sum, hh);
         if (hh !== 0) {
@@ -86,7 +89,7 @@ export function scale_expansion_zeroelim(elen, e, b, h) {
             h[hindex++] = hh;
         }
     }
-    if (Q !== 0.0 || hindex === 0) {
+    if (Q !== 0 || hindex === 0) {
         h[hindex++] = Q;
     }
     return hindex;
