@@ -1,6 +1,6 @@
 {
   "name": "robust-predicates",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Fast robust predicates for computational geometry",
   "keywords": [
     "computational geometry",
