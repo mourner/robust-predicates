@@ -58,18 +58,31 @@ macros.Two_Two_Diff = (a1, a0, b1, b0, x3, x2, x1, x0) => `
     ${macros.Two_One_Diff(a1, a0, b0, '_j', '_0', x0)}
     ${macros.Two_One_Diff('_j', '_0', b1, x3, x2, x1)}`;
 
+macros.Two_One_Product = (a1, a0, b, D) => `
+    ${macros.Split(b, 'bhi', 'blo')}
+    ${macros.Two_Product_Presplit(a0, b, 'bhi', 'blo', '_i', `${D}[0]`)}
+    ${macros.Two_Product_Presplit(a1, b, 'bhi', 'blo', '_j', '_0')}
+    ${macros.Two_Sum('_i', '_0', '_k', `${D}[1]`)}
+    ${macros.Fast_Two_Sum('_j', '_k', 'u3', `${D}[2]`)}
+    ${D}[3] = u3;`;
+
 macros.Cross_Product = (a, b, c, d, D, u3 = 'u3') => `
     ${macros.Two_Product(a, d, 's1', 's0')}
     ${macros.Two_Product(c, b, 't1', 't0')}
     ${macros.Two_Two_Diff('s1', 's0', 't1', 't0', u3, `${D}[2]`, `${D}[1]`, `${D}[0]`)}
     ${D}[3] = ${u3};`;
 
-macros.Two_One_Product = (a1, a0, b, x3, x2, x1, x0) => `
-    ${macros.Split(b, 'bhi', 'blo')}
-    ${macros.Two_Product_Presplit(a0, b, 'bhi', 'blo', '_i', x0)}
-    ${macros.Two_Product_Presplit(a1, b, 'bhi', 'blo', '_j', '_0')}
-    ${macros.Two_Sum('_i', '_0', '_k', x1)}
-    ${macros.Fast_Two_Sum('_j', '_k', x3, x2)}`;
+macros.Two_Product_Sum = (a, b, c, d, D) => `
+    ${macros.Two_Product(a, b, 's1', 's0')}
+    ${macros.Two_Product(c, d, 't1', 't0')}
+    ${macros.Two_Two_Sum('s1', 's0', 't1', 't0', 'u3', `${D}[2]`, `${D}[1]`, `${D}[0]`)}
+    ${D}[3] = u3;`;
+
+macros.Square_Sum = (a, b, D) => `
+    ${macros.Square(a, 's1', 's0')}
+    ${macros.Square(b, 't1', 't0')}
+    ${macros.Two_Two_Sum('s1', 's0', 't1', 't0', 'u3', `${D}[2]`, `${D}[1]`, `${D}[0]`)}
+    ${D}[3] = u3;`;
 
 const replaceMacros = (_, indent, id, args) => macros[id](...args.split(/, +/))
     .split('\n')

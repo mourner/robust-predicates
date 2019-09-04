@@ -15,8 +15,7 @@ const u = vec(4);
 
 function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
     let acxtail, acytail, bcxtail, bcytail;
-    let u3, s1, t1, s0, t0;
-    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0, u3;
 
     const acx = ax - cx;
     const bcx = bx - cx;

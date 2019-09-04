@@ -30,24 +30,14 @@ const v = vec(12);
 const w = vec(16);
 
 function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent) {
-    let finnow, finother, finswap;
-    let finlength;
+    let finnow, finother, finswap, finlength;
     let adxtail, bdxtail, cdxtail;
     let adytail, bdytail, cdytail;
     let adztail, bdztail, cdztail;
-    let at_blarge, at_clarge;
-    let bt_clarge, bt_alarge;
-    let ct_alarge, ct_blarge;
     let at_blen, at_clen, bt_clen, bt_alen, ct_alen, ct_blen;
-    let bdxt_cdyt1, cdxt_bdyt1, cdxt_adyt1;
-    let adxt_cdyt1, adxt_bdyt1, bdxt_adyt1;
-    let bdxt_cdyt0, cdxt_bdyt0, cdxt_adyt0;
-    let adxt_cdyt0, adxt_bdyt0, bdxt_adyt0;
-    let s1, s0, t1, t0, u3;
     let vlength, wlength;
     let negate;
-
-    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0;
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0, s1, s0, t1, t0, u3;
 
     const adx = ax - dx;
     const bdx = bx - dx;
@@ -113,21 +103,21 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             at_clen = 1;
         } else {
             negate = -adytail;
-            $Two_Product(negate, bdx, at_blarge, at_b[0]);
-            at_b[1] = at_blarge;
+            $Two_Product(negate, bdx, s1, at_b[0]);
+            at_b[1] = s1;
             at_blen = 2;
-            $Two_Product(adytail, cdx, at_clarge, at_c[0]);
-            at_c[1] = at_clarge;
+            $Two_Product(adytail, cdx, s1, at_c[0]);
+            at_c[1] = s1;
             at_clen = 2;
         }
     } else {
         if (adytail === 0) {
-            $Two_Product(adxtail, bdy, at_blarge, at_b[0]);
-            at_b[1] = at_blarge;
+            $Two_Product(adxtail, bdy, s1, at_b[0]);
+            at_b[1] = s1;
             at_blen = 2;
             negate = -adxtail;
-            $Two_Product(negate, cdy, at_clarge, at_c[0]);
-            at_c[1] = at_clarge;
+            $Two_Product(negate, cdy, s1, at_c[0]);
+            at_c[1] = s1;
             at_clen = 2;
         } else {
             $Cross_Product(adxtail, bdx, adytail, bdy, at_b);
@@ -144,21 +134,21 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             bt_alen = 1;
         } else {
             negate = -bdytail;
-            $Two_Product(negate, cdx, bt_clarge, bt_c[0]);
-            bt_c[1] = bt_clarge;
+            $Two_Product(negate, cdx, s1, bt_c[0]);
+            bt_c[1] = s1;
             bt_clen = 2;
-            $Two_Product(bdytail, adx, bt_alarge, bt_a[0]);
-            bt_a[1] = bt_alarge;
+            $Two_Product(bdytail, adx, s1, bt_a[0]);
+            bt_a[1] = s1;
             bt_alen = 2;
         }
     } else {
         if (bdytail === 0) {
-            $Two_Product(bdxtail, cdy, bt_clarge, bt_c[0]);
-            bt_c[1] = bt_clarge;
+            $Two_Product(bdxtail, cdy, s1, bt_c[0]);
+            bt_c[1] = s1;
             bt_clen = 2;
             negate = -bdxtail;
-            $Two_Product(negate, ady, bt_alarge, bt_a[0]);
-            bt_a[1] = bt_alarge;
+            $Two_Product(negate, ady, s1, bt_a[0]);
+            bt_a[1] = s1;
             bt_alen = 2;
         } else {
             $Cross_Product(bdxtail, cdx, bdytail, cdy, bt_c);
@@ -175,21 +165,21 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
             ct_blen = 1;
         } else {
             negate = -cdytail;
-            $Two_Product(negate, adx, ct_alarge, ct_a[0]);
-            ct_a[1] = ct_alarge;
+            $Two_Product(negate, adx, s1, ct_a[0]);
+            ct_a[1] = s1;
             ct_alen = 2;
-            $Two_Product(cdytail, bdx, ct_blarge, ct_b[0]);
-            ct_b[1] = ct_blarge;
+            $Two_Product(cdytail, bdx, s1, ct_b[0]);
+            ct_b[1] = s1;
             ct_blen = 2;
         }
     } else {
         if (cdytail === 0) {
-            $Two_Product(cdxtail, ady, ct_alarge, ct_a[0]);
-            ct_a[1] = ct_alarge;
+            $Two_Product(cdxtail, ady, s1, ct_a[0]);
+            ct_a[1] = s1;
             ct_alen = 2;
             negate = -cdxtail;
-            $Two_Product(negate, bdy, ct_blarge, ct_b[0]);
-            ct_b[1] = ct_blarge;
+            $Two_Product(negate, bdy, s1, ct_b[0]);
+            ct_b[1] = s1;
             ct_blen = 2;
         } else {
             $Cross_Product(cdxtail, adx, cdytail, ady, ct_a);
@@ -232,28 +222,24 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
 
     if (adxtail !== 0) {
         if (bdytail !== 0) {
-            $Two_Product(adxtail, bdytail, adxt_bdyt1, adxt_bdyt0);
-            $Two_One_Product(adxt_bdyt1, adxt_bdyt0, cdz, u3, u[2], u[1], u[0]);
-            u[3] = u3;
+            $Two_Product(adxtail, bdytail, s1, s0);
+            $Two_One_Product(s1, s0, cdz, u);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (cdztail !== 0) {
-                $Two_One_Product(adxt_bdyt1, adxt_bdyt0, cdztail, u3, u[2], u[1], u[0]);
-                u[3] = u3;
+                $Two_One_Product(s1, s0, cdztail, u);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
         }
         if (cdytail !== 0) {
             negate = -adxtail;
-            $Two_Product(negate, cdytail, adxt_cdyt1, adxt_cdyt0);
-            $Two_One_Product(adxt_cdyt1, adxt_cdyt0, bdz, u3, u[2], u[1], u[0]);
-            u[3] = u3;
+            $Two_Product(negate, cdytail, s1, s0);
+            $Two_One_Product(s1, s0, bdz, u);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (bdztail !== 0) {
-                $Two_One_Product(adxt_cdyt1, adxt_cdyt0, bdztail, u3, u[2], u[1], u[0]);
-                u[3] = u3;
+                $Two_One_Product(s1, s0, bdztail, u);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
@@ -261,28 +247,24 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     }
     if (bdxtail !== 0) {
         if (cdytail !== 0) {
-            $Two_Product(bdxtail, cdytail, bdxt_cdyt1, bdxt_cdyt0);
-            $Two_One_Product(bdxt_cdyt1, bdxt_cdyt0, adz, u3, u[2], u[1], u[0]);
-            u[3] = u3;
+            $Two_Product(bdxtail, cdytail, s1, s0);
+            $Two_One_Product(s1, s0, adz, u);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (adztail !== 0) {
-                $Two_One_Product(bdxt_cdyt1, bdxt_cdyt0, adztail, u3, u[2], u[1], u[0]);
-                u[3] = u3;
+                $Two_One_Product(s1, s0, adztail, u);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
         }
         if (adytail !== 0) {
             negate = -bdxtail;
-            $Two_Product(negate, adytail, bdxt_adyt1, bdxt_adyt0);
-            $Two_One_Product(bdxt_adyt1, bdxt_adyt0, cdz, u3, u[2], u[1], u[0]);
-            u[3] = u3;
+            $Two_Product(negate, adytail, s1, s0);
+            $Two_One_Product(s1, s0, cdz, u);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (cdztail !== 0) {
-                $Two_One_Product(bdxt_adyt1, bdxt_adyt0, cdztail, u3, u[2], u[1], u[0]);
-                u[3] = u3;
+                $Two_One_Product(s1, s0, cdztail, u);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
@@ -290,28 +272,24 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     }
     if (cdxtail !== 0) {
         if (adytail !== 0) {
-            $Two_Product(cdxtail, adytail, cdxt_adyt1, cdxt_adyt0);
-            $Two_One_Product(cdxt_adyt1, cdxt_adyt0, bdz, u3, u[2], u[1], u[0]);
-            u[3] = u3;
+            $Two_Product(cdxtail, adytail, s1, s0);
+            $Two_One_Product(s1, s0, bdz, u);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (bdztail !== 0) {
-                $Two_One_Product(cdxt_adyt1, cdxt_adyt0, bdztail, u3, u[2], u[1], u[0]);
-                u[3] = u3;
+                $Two_One_Product(s1, s0, bdztail, u);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
         }
         if (bdytail !== 0) {
             negate = -cdxtail;
-            $Two_Product(negate, bdytail, cdxt_bdyt1, cdxt_bdyt0);
-            $Two_One_Product(cdxt_bdyt1, cdxt_bdyt0, adz, u3, u[2], u[1], u[0]);
-            u[3] = u3;
+            $Two_Product(negate, bdytail, s1, s0);
+            $Two_One_Product(s1, s0, adz, u);
             finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (adztail !== 0) {
-                $Two_One_Product(cdxt_bdyt1, cdxt_bdyt0, adztail, u3, u[2], u[1], u[0]);
-                u[3] = u3;
+                $Two_One_Product(s1, s0, adztail, u);
                 finlength = fast_expansion_sum_zeroelim(finlength, finnow, 4, u, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }

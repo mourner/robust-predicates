@@ -53,14 +53,10 @@ const cdedet = vec(3456);
 const deter = vec(5760);
 
 function insphereexact(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez) {
-    let s1, s0, t1, t0, u3;
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0, u3;
     let temp8alen, temp8blen, temp16len;
     let temp48alen, temp48blen;
-    let xlen, ylen, zlen;
-    let xylen;
-    let i;
-
-    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
+    let xlen, ylen, zlen, xylen, i;
 
     $Cross_Product(ax, ay, bx, by, ab);
     $Cross_Product(bx, by, cx, cy, bc);
@@ -227,7 +223,6 @@ const fin1 = vec(1152);
 
 function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent) {
     let ab3, bc3, cd3, da3, ac3, bd3;
-    let s1, s0, t1, t0;
     let temp8alen, temp8blen, temp8clen, temp16len, temp24len, temp48len;
     let xlen, ylen, zlen, xylen;
 
@@ -235,7 +230,7 @@ function insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
     let aeytail, beytail, ceytail, deytail;
     let aeztail, beztail, ceztail, deztail;
 
-    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0;
 
     const aex = ax - ex;
     const bex = bx - ex;

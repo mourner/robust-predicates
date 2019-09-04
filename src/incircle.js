@@ -79,23 +79,16 @@ const bctt = vec(4);
 const catt = vec(4);
 
 function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
-    let s1, s0, t1, t0;
     let finnow, finother, finswap, finlength;
     let adxtail, bdxtail, cdxtail, adytail, bdytail, cdytail;
-    let adxadx1, adyady1, bdxbdx1, bdybdy1, cdxcdx1, cdycdy1;
-    let adxadx0, adyady0, bdxbdx0, bdybdy0, cdxcdx0, cdycdy0;
-    let aa3, bb3, cc3;
-    let ti1, tj1;
-    let ti0, tj0;
-    let u3, v3;
     let temp8len, temp16alen, temp16blen, temp16clen;
     let temp32alen, temp32blen, temp48len, temp64len;
     let axtbclen, aytbclen, bxtcalen, bytcalen, cxtablen, cytablen;
     let abtlen, bctlen, catlen;
     let abttlen, bcttlen, cattlen;
-    let negate;
+    let n1, n0;
 
-    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0;
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0, u3;
 
     const adx = ax - dx;
     const bdx = bx - dx;
@@ -160,22 +153,13 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     finother = fin2;
 
     if (bdxtail !== 0 || bdytail !== 0 || cdxtail !== 0 || cdytail !== 0) {
-        $Square(adx, adxadx1, adxadx0);
-        $Square(ady, adyady1, adyady0);
-        $Two_Two_Sum(adxadx1, adxadx0, adyady1, adyady0, aa3, aa[2], aa[1], aa[0]);
-        aa[3] = aa3;
+        $Square_Sum(adx, ady, aa);
     }
     if (cdxtail !== 0 || cdytail !== 0 || adxtail !== 0 || adytail !== 0) {
-        $Square(bdx, bdxbdx1, bdxbdx0);
-        $Square(bdy, bdybdy1, bdybdy0);
-        $Two_Two_Sum(bdxbdx1, bdxbdx0, bdybdy1, bdybdy0, bb3, bb[2], bb[1], bb[0]);
-        bb[3] = bb3;
+        $Square_Sum(bdx, bdy, bb);
     }
     if (adxtail !== 0 || adytail !== 0 || bdxtail !== 0 || bdytail !== 0) {
-        $Square(cdx, cdxcdx1, cdxcdx0);
-        $Square(cdy, cdycdy1, cdycdy0);
-        $Two_Two_Sum(cdxcdx1, cdxcdx0, cdycdy1, cdycdy0, cc3, cc[2], cc[1], cc[0]);
-        cc[3] = cc3;
+        $Square_Sum(cdx, cdy, cc);
     }
 
     if (adxtail !== 0) {
@@ -271,16 +255,10 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
     if (adxtail !== 0 || adytail !== 0) {
         if (bdxtail !== 0 || bdytail !== 0 || cdxtail !== 0 || cdytail !== 0) {
-            $Two_Product(bdxtail, cdy, ti1, ti0);
-            $Two_Product(bdx, cdytail, tj1, tj0);
-            $Two_Two_Sum(ti1, ti0, tj1, tj0, u3, u[2], u[1], u[0]);
-            u[3] = u3;
-            negate = -bdy;
-            $Two_Product(cdxtail, negate, ti1, ti0);
-            negate = -bdytail;
-            $Two_Product(cdx, negate, tj1, tj0);
-            $Two_Two_Sum(ti1, ti0, tj1, tj0, v3, v[2], v[1], v[0]);
-            v[3] = v3;
+            $Two_Product_Sum(bdxtail, cdy, bdx, cdytail, u);
+            n1 = -bdy;
+            n0 = -bdytail;
+            $Two_Product_Sum(cdxtail, n1, cdx, n0, v);
             bctlen = fast_expansion_sum_zeroelim(4, u, 4, v, bct);
 
             $Cross_Product(bdxtail, bdytail, cdxtail, cdytail, bctt);
@@ -343,16 +321,10 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     }
     if (bdxtail !== 0 || bdytail !== 0) {
         if (cdxtail !== 0 || cdytail !== 0 || adxtail !== 0 || adytail !== 0) {
-            $Two_Product(cdxtail, ady, ti1, ti0);
-            $Two_Product(cdx, adytail, tj1, tj0);
-            $Two_Two_Sum(ti1, ti0, tj1, tj0, u3, u[2], u[1], u[0]);
-            u[3] = u3;
-            negate = -cdy;
-            $Two_Product(adxtail, negate, ti1, ti0);
-            negate = -cdytail;
-            $Two_Product(adx, negate, tj1, tj0);
-            $Two_Two_Sum(ti1, ti0, tj1, tj0, v3, v[2], v[1], v[0]);
-            v[3] = v3;
+            $Two_Product_Sum(cdxtail, ady, cdx, adytail, u);
+            n1 = -cdy;
+            n0 = -cdytail;
+            $Two_Product_Sum(adxtail, n1, adx, n0, v);
             catlen = fast_expansion_sum_zeroelim(4, u, 4, v, cat);
 
             $Cross_Product(cdxtail, cdytail, adxtail, adytail, catt);
@@ -413,16 +385,10 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     }
     if (cdxtail !== 0 || cdytail !== 0) {
         if (adxtail !== 0 || adytail !== 0 || bdxtail !== 0 || bdytail !== 0) {
-            $Two_Product(adxtail, bdy, ti1, ti0);
-            $Two_Product(adx, bdytail, tj1, tj0);
-            $Two_Two_Sum(ti1, ti0, tj1, tj0, u3, u[2], u[1], u[0]);
-            u[3] = u3;
-            negate = -ady;
-            $Two_Product(bdxtail, negate, ti1, ti0);
-            negate = -adytail;
-            $Two_Product(bdx, negate, tj1, tj0);
-            $Two_Two_Sum(ti1, ti0, tj1, tj0, v3, v[2], v[1], v[0]);
-            v[3] = v3;
+            $Two_Product_Sum(adxtail, bdy, adx, bdytail, u);
+            n1 = -ady;
+            n0 = -adytail;
+            $Two_Product_Sum(bdxtail, n1, bdx, n0, v);
             abtlen = fast_expansion_sum_zeroelim(4, u, 4, v, abt);
 
             $Cross_Product(adxtail, adytail, bdxtail, bdytail, abtt);

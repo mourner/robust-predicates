@@ -56,17 +56,13 @@
       "$Fast_Two_Sum": false,
       "$Two_Sum": false,
       "$Two_Diff_Tail": false,
-      "$Two_Diff": false,
       "$Split": false,
       "$Two_Product": false,
       "$Two_Product_Presplit": false,
-      "$Square": false,
-      "$Two_One_Sum": false,
-      "$Two_One_Diff": false,
-      "$Two_Two_Sum": false,
-      "$Two_Two_Diff": false,
       "$Two_One_Product": false,
-      "$Cross_Product": false
+      "$Cross_Product": false,
+      "$Square_Sum": false,
+      "$Two_Product_Sum": false
     }
   }
 }
