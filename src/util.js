@@ -95,6 +95,10 @@ export function scale_expansion(elen, e, b, h) {
     return hindex;
 }
 
+export function scale_expansion_twice(elen, e, b, temp, c, h) {
+    return scale_expansion(scale_expansion(elen, e, b, temp), temp, c, h);
+}
+
 export function estimate(elen, e) {
     let Q = e[0];
     for (let i = 1; i < elen; i++) Q += e[i];
