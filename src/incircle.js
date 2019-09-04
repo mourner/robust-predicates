@@ -1,6 +1,6 @@
 import {
     epsilon, splitter, resulterrbound, estimate, vec,
-    expansion_sum, scale_expansion, scale_expansion_twice
+    expansion_sum, scale_expansion
 } from './util.js';
 
 const iccerrboundA = (10 + 96 * epsilon) * epsilon;
@@ -59,20 +59,20 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     const cdy = cy - dy;
 
     $Cross_Product(bdx, bdy, cdx, cdy, bc);
-    temp16alen = scale_expansion_twice(4, bc, adx, _8, adx, _16);
-    temp16blen = scale_expansion_twice(4, bc, ady, _8, ady, _16b);
+    temp16alen = scale_expansion(scale_expansion(4, bc, adx, _8), _8, adx, _16);
+    temp16blen = scale_expansion(scale_expansion(4, bc, ady, _8), _8, ady, _16b);
     temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
 
     $Cross_Product(cdx, cdy, adx, ady, ca);
-    temp16alen = scale_expansion_twice(4, ca, bdx, _8, bdx, _16);
-    temp16blen = scale_expansion_twice(4, ca, bdy, _8, bdy, _16b);
+    temp16alen = scale_expansion(scale_expansion(4, ca, bdx, _8), _8, bdx, _16);
+    temp16blen = scale_expansion(scale_expansion(4, ca, bdy, _8), _8, bdy, _16b);
     temp32blen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32b);
 
     temp64len = expansion_sum(temp32alen, _32, temp32blen, _32b, _64);
 
     $Cross_Product(adx, ady, bdx, bdy, ab);
-    temp16alen = scale_expansion_twice(4, ab, cdx, _8, cdx, _16);
-    temp16blen = scale_expansion_twice(4, ab, cdy, _8, cdy, _16b);
+    temp16alen = scale_expansion(scale_expansion(4, ab, cdx, _8), _8, cdx, _16);
+    temp16blen = scale_expansion(scale_expansion(4, ab, cdy, _8), _8, cdy, _16b);
     const clen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
 
     finlength = expansion_sum(temp64len, _64, clen, _32, fin1);
@@ -121,8 +121,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     if (adxtail !== 0) {
         axtbclen = scale_expansion(4, bc, adxtail, axtbc);
         temp16alen = scale_expansion(axtbclen, axtbc, 2 * adx, _16);
-        temp16blen = scale_expansion_twice(4, cc, adxtail, _8, bdy, _16b);
-        temp16clen = scale_expansion_twice(4, bb, adxtail, _8, -cdy, _16c);
+        temp16blen = scale_expansion(scale_expansion(4, cc, adxtail, _8), _8, bdy, _16b);
+        temp16clen = scale_expansion(scale_expansion(4, bb, adxtail, _8), _8, -cdy, _16c);
         temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
         temp48len = expansion_sum(temp16clen, _16c, temp32alen, _32, _48);
         finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
@@ -131,8 +131,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     if (adytail !== 0) {
         aytbclen = scale_expansion(4, bc, adytail, aytbc);
         temp16alen = scale_expansion(aytbclen, aytbc, 2 * ady, _16);
-        temp16blen = scale_expansion_twice(4, bb, adytail, _8, cdx, _16b);
-        temp16clen = scale_expansion_twice(4, cc, adytail, _8, -bdx, _16c);
+        temp16blen = scale_expansion(scale_expansion(4, bb, adytail, _8), _8, cdx, _16b);
+        temp16clen = scale_expansion(scale_expansion(4, cc, adytail, _8), _8, -bdx, _16c);
         temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
         temp48len = expansion_sum(temp16clen, _16c, temp32alen, _32, _48);
         finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
@@ -141,8 +141,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     if (bdxtail !== 0) {
         bxtcalen = scale_expansion(4, ca, bdxtail, bxtca);
         temp16alen = scale_expansion(bxtcalen, bxtca, 2 * bdx, _16);
-        temp16blen = scale_expansion_twice(4, aa, bdxtail, _8, cdy, _16b);
-        temp16clen = scale_expansion_twice(4, cc, bdxtail, _8, -ady, _16c);
+        temp16blen = scale_expansion(scale_expansion(4, aa, bdxtail, _8), _8, cdy, _16b);
+        temp16clen = scale_expansion(scale_expansion(4, cc, bdxtail, _8), _8, -ady, _16c);
         temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
         temp48len = expansion_sum(temp16clen, _16c, temp32alen, _32, _48);
         finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
@@ -151,8 +151,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     if (bdytail !== 0) {
         bytcalen = scale_expansion(4, ca, bdytail, bytca);
         temp16alen = scale_expansion(bytcalen, bytca, 2 * bdy, _16);
-        temp16blen = scale_expansion_twice(4, cc, bdytail, _8, adx, _16b);
-        temp16clen = scale_expansion_twice(4, aa, bdytail, _8, -cdx, _16c);
+        temp16blen = scale_expansion(scale_expansion(4, cc, bdytail, _8), _8, adx, _16b);
+        temp16clen = scale_expansion(scale_expansion(4, aa, bdytail, _8), _8, -cdx, _16c);
         temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
         temp48len = expansion_sum(temp16clen, _16c, temp32alen, _32, _48);
         finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
@@ -161,8 +161,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     if (cdxtail !== 0) {
         cxtablen = scale_expansion(4, ab, cdxtail, cxtab);
         temp16alen = scale_expansion(cxtablen, cxtab, 2 * cdx, _16);
-        temp16blen = scale_expansion_twice(4, bb, cdxtail, _8, ady, _16b);
-        temp16clen = scale_expansion_twice(4, aa, cdxtail, _8, -bdy, _16c);
+        temp16blen = scale_expansion(scale_expansion(4, bb, cdxtail, _8), _8, ady, _16b);
+        temp16clen = scale_expansion(scale_expansion(4, aa, cdxtail, _8), _8, -bdy, _16c);
         temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
         temp48len = expansion_sum(temp16clen, _16c, temp32alen, _32, _48);
         finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
@@ -171,8 +171,8 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     if (cdytail !== 0) {
         cytablen = scale_expansion(4, ab, cdytail, cytab);
         temp16alen = scale_expansion(cytablen, cytab, 2 * cdy, _16);
-        temp16blen = scale_expansion_twice(4, aa, cdytail, _8, bdx, _16b);
-        temp16clen = scale_expansion_twice(4, bb, cdytail, _8, -adx, _16c);
+        temp16blen = scale_expansion(scale_expansion(4, aa, cdytail, _8), _8, bdx, _16b);
+        temp16clen = scale_expansion(scale_expansion(4, bb, cdytail, _8), _8, -adx, _16c);
         temp32alen = expansion_sum(temp16alen, _16, temp16blen, _16b, _32);
         temp48len = expansion_sum(temp16clen, _16c, temp32alen, _32, _48);
         finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
@@ -205,12 +205,12 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             finswap = finnow; finnow = finother; finother = finswap;
 
             if (bdytail !== 0) {
-                temp16alen = scale_expansion_twice(4, cc, adxtail, _8, bdytail, _16);
+                temp16alen = scale_expansion(scale_expansion(4, cc, adxtail, _8), _8, bdytail, _16);
                 finlength = expansion_sum(finlength, finnow, temp16alen, _16, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
             if (cdytail !== 0) {
-                temp16alen = scale_expansion_twice(4, bb, -adxtail, _8, cdytail, _16);
+                temp16alen = scale_expansion(scale_expansion(4, bb, -adxtail, _8), _8, cdytail, _16);
                 finlength = expansion_sum(finlength, finnow, temp16alen, _16, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
@@ -268,12 +268,12 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (cdytail !== 0) {
-                temp16alen = scale_expansion_twice(4, aa, bdxtail, _8, cdytail, _16);
+                temp16alen = scale_expansion(scale_expansion(4, aa, bdxtail, _8), _8, cdytail, _16);
                 finlength = expansion_sum(finlength, finnow, temp16alen, _16, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
             if (adytail !== 0) {
-                temp16alen = scale_expansion_twice(4, cc, -bdxtail, _8, adytail, _16);
+                temp16alen = scale_expansion(scale_expansion(4, cc, -bdxtail, _8), _8, adytail, _16);
                 finlength = expansion_sum(finlength, finnow, temp16alen, _16, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
@@ -330,12 +330,12 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             finlength = expansion_sum(finlength, finnow, temp48len, _48, finother);
             finswap = finnow; finnow = finother; finother = finswap;
             if (adytail !== 0) {
-                temp16alen = scale_expansion_twice(4, bb, cdxtail, _8, adytail, _16);
+                temp16alen = scale_expansion(scale_expansion(4, bb, cdxtail, _8), _8, adytail, _16);
                 finlength = expansion_sum(finlength, finnow, temp16alen, _16, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
             if (bdytail !== 0) {
-                temp16alen = scale_expansion_twice(4, aa, -cdxtail, _8, bdytail, _16);
+                temp16alen = scale_expansion(scale_expansion(4, aa, -cdxtail, _8), _8, bdytail, _16);
                 finlength = expansion_sum(finlength, finnow, temp16alen, _16, finother);
                 finswap = finnow; finnow = finother; finother = finswap;
             }
