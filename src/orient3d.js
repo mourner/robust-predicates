@@ -10,10 +10,6 @@ const o3derrboundC = (26 + 288 * epsilon) * epsilon * epsilon;
 const bc = vec(4);
 const ca = vec(4);
 const ab = vec(4);
-const adet = vec(8);
-const bdet = vec(8);
-const cdet = vec(8);
-const abdet = vec(16);
 const at_b = vec(4);
 const at_c = vec(4);
 const bt_c = vec(4);
@@ -24,8 +20,11 @@ const bct = vec(8);
 const cat = vec(8);
 const abt = vec(8);
 const u = vec(4);
-const v = vec(12);
-const w = vec(16);
+
+const _8 = vec(8);
+const _8b = vec(8);
+const _16 = vec(8);
+const _12 = vec(12);
 
 let fin = vec(192);
 let fin2 = vec(192);
@@ -36,7 +35,7 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     let adytail, bdytail, cdytail;
     let adztail, bdztail, cdztail;
     let at_blen, at_clen, bt_clen, bt_alen, ct_alen, ct_blen;
-    let vlength, wlength;
+    let _8len, _12len, _16len;
     let negate;
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0, s1, s0, t1, t0, u3;
 
@@ -51,16 +50,14 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     const cdz = cz - dz;
 
     $Cross_Product(bdx, bdy, cdx, cdy, bc);
-    const alen = scale(4, bc, adz, adet);
-
     $Cross_Product(cdx, cdy, adx, ady, ca);
-    const blen = scale(4, ca, bdz, bdet);
-
     $Cross_Product(adx, ady, bdx, bdy, ab);
-    const clen = scale(4, ab, cdz, cdet);
 
-    const ablen = sum(alen, adet, blen, bdet, abdet);
-    finlen = sum(ablen, abdet, clen, cdet, fin);
+    _8len = scale(4, bc, adz, _8);
+    const _8blen = scale(4, ca, bdz, _8b);
+    _16len = sum(_8len, _8, _8blen, _8b, _16);
+    _8len = scale(4, ab, cdz, _8);
+    finlen = sum(_16len, _16, _8len, _8, fin);
 
     let det = estimate(finlen, fin);
     let errbound = o3derrboundB * permanent;
@@ -188,33 +185,33 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     }
 
     const bctlen = sum(bt_clen, bt_c, ct_blen, ct_b, bct);
-    wlength = scale(bctlen, bct, adz, w);
-    finlen = sum(finlen, fin, wlength, w, fin2);
+    _16len = scale(bctlen, bct, adz, _16);
+    finlen = sum(finlen, fin, _16len, _16, fin2);
     tmp = fin; fin = fin2; fin2 = tmp;
 
     const catlen = sum(ct_alen, ct_a, at_clen, at_c, cat);
-    wlength = scale(catlen, cat, bdz, w);
-    finlen = sum(finlen, fin, wlength, w, fin2);
+    _16len = scale(catlen, cat, bdz, _16);
+    finlen = sum(finlen, fin, _16len, _16, fin2);
     tmp = fin; fin = fin2; fin2 = tmp;
 
     const abtlen = sum(at_blen, at_b, bt_alen, bt_a, abt);
-    wlength = scale(abtlen, abt, cdz, w);
-    finlen = sum(finlen, fin, wlength, w, fin2);
+    _16len = scale(abtlen, abt, cdz, _16);
+    finlen = sum(finlen, fin, _16len, _16, fin2);
     tmp = fin; fin = fin2; fin2 = tmp;
 
     if (adztail !== 0) {
-        vlength = scale(4, bc, adztail, v);
-        finlen = sum(finlen, fin, vlength, v, fin2);
+        _12len = scale(4, bc, adztail, _12);
+        finlen = sum(finlen, fin, _12len, _12, fin2);
         tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (bdztail !== 0) {
-        vlength = scale(4, ca, bdztail, v);
-        finlen = sum(finlen, fin, vlength, v, fin2);
+        _12len = scale(4, ca, bdztail, _12);
+        finlen = sum(finlen, fin, _12len, _12, fin2);
         tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (cdztail !== 0) {
-        vlength = scale(4, ab, cdztail, v);
-        finlen = sum(finlen, fin, vlength, v, fin2);
+        _12len = scale(4, ab, cdztail, _12);
+        finlen = sum(finlen, fin, _12len, _12, fin2);
         tmp = fin; fin = fin2; fin2 = tmp;
     }
 
@@ -295,18 +292,18 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     }
 
     if (adztail !== 0) {
-        wlength = scale(bctlen, bct, adztail, w);
-        finlen = sum(finlen, fin, wlength, w, fin2);
+        _16len = scale(bctlen, bct, adztail, _16);
+        finlen = sum(finlen, fin, _16len, _16, fin2);
         tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (bdztail !== 0) {
-        wlength = scale(catlen, cat, bdztail, w);
-        finlen = sum(finlen, fin, wlength, w, fin2);
+        _16len = scale(catlen, cat, bdztail, _16);
+        finlen = sum(finlen, fin, _16len, _16, fin2);
         tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (cdztail !== 0) {
-        wlength = scale(abtlen, abt, cdztail, w);
-        finlen = sum(finlen, fin, wlength, w, fin2);
+        _16len = scale(abtlen, abt, cdztail, _16);
+        finlen = sum(finlen, fin, _16len, _16, fin2);
         tmp = fin; fin = fin2; fin2 = tmp;
     }
 
