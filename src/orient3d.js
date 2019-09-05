@@ -1,4 +1,7 @@
-import {epsilon, splitter, resulterrbound, estimate, vec, expansion_sum, scale_expansion} from './util.js';
+import {
+    epsilon, splitter, resulterrbound, estimate, vec,
+    expansion_sum as sum, scale_expansion as scale
+} from './util.js';
 
 const o3derrboundA = (7 + 56 * epsilon) * epsilon;
 const o3derrboundB = (3 + 28 * epsilon) * epsilon;
@@ -11,8 +14,6 @@ const adet = vec(8);
 const bdet = vec(8);
 const cdet = vec(8);
 const abdet = vec(16);
-const fin1 = vec(192);
-const fin2 = vec(192);
 const at_b = vec(4);
 const at_c = vec(4);
 const bt_c = vec(4);
@@ -26,8 +27,11 @@ const u = vec(4);
 const v = vec(12);
 const w = vec(16);
 
+let fin = vec(192);
+let fin2 = vec(192);
+
 function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent) {
-    let finnow, finother, finswap, finlength;
+    let finlen, tmp;
     let adxtail, bdxtail, cdxtail;
     let adytail, bdytail, cdytail;
     let adztail, bdztail, cdztail;
@@ -47,18 +51,18 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     const cdz = cz - dz;
 
     $Cross_Product(bdx, bdy, cdx, cdy, bc);
-    const alen = scale_expansion(4, bc, adz, adet);
+    const alen = scale(4, bc, adz, adet);
 
     $Cross_Product(cdx, cdy, adx, ady, ca);
-    const blen = scale_expansion(4, ca, bdz, bdet);
+    const blen = scale(4, ca, bdz, bdet);
 
     $Cross_Product(adx, ady, bdx, bdy, ab);
-    const clen = scale_expansion(4, ab, cdz, cdet);
+    const clen = scale(4, ab, cdz, cdet);
 
-    const ablen = expansion_sum(alen, adet, blen, bdet, abdet);
-    finlength = expansion_sum(ablen, abdet, clen, cdet, fin1);
+    const ablen = sum(alen, adet, blen, bdet, abdet);
+    finlen = sum(ablen, abdet, clen, cdet, fin);
 
-    let det = estimate(finlength, fin1);
+    let det = estimate(finlen, fin);
     let errbound = o3derrboundB * permanent;
     if (det >= errbound || -det >= errbound) {
         return det;
@@ -88,9 +92,6 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
     if (det >= errbound || -det >= errbound) {
         return det;
     }
-
-    finnow = fin1;
-    finother = fin2;
 
     if (adxtail === 0) {
         if (adytail === 0) {
@@ -186,59 +187,59 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         }
     }
 
-    const bctlen = expansion_sum(bt_clen, bt_c, ct_blen, ct_b, bct);
-    wlength = scale_expansion(bctlen, bct, adz, w);
-    finlength = expansion_sum(finlength, finnow, wlength, w, finother);
-    finswap = finnow; finnow = finother; finother = finswap;
+    const bctlen = sum(bt_clen, bt_c, ct_blen, ct_b, bct);
+    wlength = scale(bctlen, bct, adz, w);
+    finlen = sum(finlen, fin, wlength, w, fin2);
+    tmp = fin; fin = fin2; fin2 = tmp;
 
-    const catlen = expansion_sum(ct_alen, ct_a, at_clen, at_c, cat);
-    wlength = scale_expansion(catlen, cat, bdz, w);
-    finlength = expansion_sum(finlength, finnow, wlength, w, finother);
-    finswap = finnow; finnow = finother; finother = finswap;
+    const catlen = sum(ct_alen, ct_a, at_clen, at_c, cat);
+    wlength = scale(catlen, cat, bdz, w);
+    finlen = sum(finlen, fin, wlength, w, fin2);
+    tmp = fin; fin = fin2; fin2 = tmp;
 
-    const abtlen = expansion_sum(at_blen, at_b, bt_alen, bt_a, abt);
-    wlength = scale_expansion(abtlen, abt, cdz, w);
-    finlength = expansion_sum(finlength, finnow, wlength, w, finother);
-    finswap = finnow; finnow = finother; finother = finswap;
+    const abtlen = sum(at_blen, at_b, bt_alen, bt_a, abt);
+    wlength = scale(abtlen, abt, cdz, w);
+    finlen = sum(finlen, fin, wlength, w, fin2);
+    tmp = fin; fin = fin2; fin2 = tmp;
 
     if (adztail !== 0) {
-        vlength = scale_expansion(4, bc, adztail, v);
-        finlength = expansion_sum(finlength, finnow, vlength, v, finother);
-        finswap = finnow; finnow = finother; finother = finswap;
+        vlength = scale(4, bc, adztail, v);
+        finlen = sum(finlen, fin, vlength, v, fin2);
+        tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (bdztail !== 0) {
-        vlength = scale_expansion(4, ca, bdztail, v);
-        finlength = expansion_sum(finlength, finnow, vlength, v, finother);
-        finswap = finnow; finnow = finother; finother = finswap;
+        vlength = scale(4, ca, bdztail, v);
+        finlen = sum(finlen, fin, vlength, v, fin2);
+        tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (cdztail !== 0) {
-        vlength = scale_expansion(4, ab, cdztail, v);
-        finlength = expansion_sum(finlength, finnow, vlength, v, finother);
-        finswap = finnow; finnow = finother; finother = finswap;
+        vlength = scale(4, ab, cdztail, v);
+        finlen = sum(finlen, fin, vlength, v, fin2);
+        tmp = fin; fin = fin2; fin2 = tmp;
     }
 
     if (adxtail !== 0) {
         if (bdytail !== 0) {
             $Two_Product(adxtail, bdytail, s1, s0);
             $Two_One_Product(s1, s0, cdz, u);
-            finlength = expansion_sum(finlength, finnow, 4, u, finother);
-            finswap = finnow; finnow = finother; finother = finswap;
+            finlen = sum(finlen, fin, 4, u, fin2);
+            tmp = fin; fin = fin2; fin2 = tmp;
             if (cdztail !== 0) {
                 $Two_One_Product(s1, s0, cdztail, u);
-                finlength = expansion_sum(finlength, finnow, 4, u, finother);
-                finswap = finnow; finnow = finother; finother = finswap;
+                finlen = sum(finlen, fin, 4, u, fin2);
+                tmp = fin; fin = fin2; fin2 = tmp;
             }
         }
         if (cdytail !== 0) {
             negate = -adxtail;
             $Two_Product(negate, cdytail, s1, s0);
             $Two_One_Product(s1, s0, bdz, u);
-            finlength = expansion_sum(finlength, finnow, 4, u, finother);
-            finswap = finnow; finnow = finother; finother = finswap;
+            finlen = sum(finlen, fin, 4, u, fin2);
+            tmp = fin; fin = fin2; fin2 = tmp;
             if (bdztail !== 0) {
                 $Two_One_Product(s1, s0, bdztail, u);
-                finlength = expansion_sum(finlength, finnow, 4, u, finother);
-                finswap = finnow; finnow = finother; finother = finswap;
+                finlen = sum(finlen, fin, 4, u, fin2);
+                tmp = fin; fin = fin2; fin2 = tmp;
             }
         }
     }
@@ -246,24 +247,24 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         if (cdytail !== 0) {
             $Two_Product(bdxtail, cdytail, s1, s0);
             $Two_One_Product(s1, s0, adz, u);
-            finlength = expansion_sum(finlength, finnow, 4, u, finother);
-            finswap = finnow; finnow = finother; finother = finswap;
+            finlen = sum(finlen, fin, 4, u, fin2);
+            tmp = fin; fin = fin2; fin2 = tmp;
             if (adztail !== 0) {
                 $Two_One_Product(s1, s0, adztail, u);
-                finlength = expansion_sum(finlength, finnow, 4, u, finother);
-                finswap = finnow; finnow = finother; finother = finswap;
+                finlen = sum(finlen, fin, 4, u, fin2);
+                tmp = fin; fin = fin2; fin2 = tmp;
             }
         }
         if (adytail !== 0) {
             negate = -bdxtail;
             $Two_Product(negate, adytail, s1, s0);
             $Two_One_Product(s1, s0, cdz, u);
-            finlength = expansion_sum(finlength, finnow, 4, u, finother);
-            finswap = finnow; finnow = finother; finother = finswap;
+            finlen = sum(finlen, fin, 4, u, fin2);
+            tmp = fin; fin = fin2; fin2 = tmp;
             if (cdztail !== 0) {
                 $Two_One_Product(s1, s0, cdztail, u);
-                finlength = expansion_sum(finlength, finnow, 4, u, finother);
-                finswap = finnow; finnow = finother; finother = finswap;
+                finlen = sum(finlen, fin, 4, u, fin2);
+                tmp = fin; fin = fin2; fin2 = tmp;
             }
         }
     }
@@ -271,45 +272,45 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         if (adytail !== 0) {
             $Two_Product(cdxtail, adytail, s1, s0);
             $Two_One_Product(s1, s0, bdz, u);
-            finlength = expansion_sum(finlength, finnow, 4, u, finother);
-            finswap = finnow; finnow = finother; finother = finswap;
+            finlen = sum(finlen, fin, 4, u, fin2);
+            tmp = fin; fin = fin2; fin2 = tmp;
             if (bdztail !== 0) {
                 $Two_One_Product(s1, s0, bdztail, u);
-                finlength = expansion_sum(finlength, finnow, 4, u, finother);
-                finswap = finnow; finnow = finother; finother = finswap;
+                finlen = sum(finlen, fin, 4, u, fin2);
+                tmp = fin; fin = fin2; fin2 = tmp;
             }
         }
         if (bdytail !== 0) {
             negate = -cdxtail;
             $Two_Product(negate, bdytail, s1, s0);
             $Two_One_Product(s1, s0, adz, u);
-            finlength = expansion_sum(finlength, finnow, 4, u, finother);
-            finswap = finnow; finnow = finother; finother = finswap;
+            finlen = sum(finlen, fin, 4, u, fin2);
+            tmp = fin; fin = fin2; fin2 = tmp;
             if (adztail !== 0) {
                 $Two_One_Product(s1, s0, adztail, u);
-                finlength = expansion_sum(finlength, finnow, 4, u, finother);
-                finswap = finnow; finnow = finother; finother = finswap;
+                finlen = sum(finlen, fin, 4, u, fin2);
+                tmp = fin; fin = fin2; fin2 = tmp;
             }
         }
     }
 
     if (adztail !== 0) {
-        wlength = scale_expansion(bctlen, bct, adztail, w);
-        finlength = expansion_sum(finlength, finnow, wlength, w, finother);
-        finswap = finnow; finnow = finother; finother = finswap;
+        wlength = scale(bctlen, bct, adztail, w);
+        finlen = sum(finlen, fin, wlength, w, fin2);
+        tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (bdztail !== 0) {
-        wlength = scale_expansion(catlen, cat, bdztail, w);
-        finlength = expansion_sum(finlength, finnow, wlength, w, finother);
-        finswap = finnow; finnow = finother; finother = finswap;
+        wlength = scale(catlen, cat, bdztail, w);
+        finlen = sum(finlen, fin, wlength, w, fin2);
+        tmp = fin; fin = fin2; fin2 = tmp;
     }
     if (cdztail !== 0) {
-        wlength = scale_expansion(abtlen, abt, cdztail, w);
-        finlength = expansion_sum(finlength, finnow, wlength, w, finother);
-        finswap = finnow; finnow = finother; finother = finswap;
+        wlength = scale(abtlen, abt, cdztail, w);
+        finlen = sum(finlen, fin, wlength, w, fin2);
+        tmp = fin; fin = fin2; fin2 = tmp;
     }
 
-    return finnow[finlength - 1];
+    return fin[finlen - 1];
 }
 
 export function orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz) {
