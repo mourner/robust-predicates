@@ -35,13 +35,54 @@ function finadd(finlen, a, alen) {
     return finlen;
 }
 
+function tailinit(xtail, ytail, ax, ay, bx, by, a, b) {
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0, s1, s0, t1, t0, u3, negate;
+    if (xtail === 0) {
+        if (ytail === 0) {
+            a[0] = 0;
+            b[0] = 0;
+            return 1;
+        } else {
+            negate = -ytail;
+            $Two_Product(negate, ax, s1, a[0]);
+            a[1] = s1;
+            $Two_Product(ytail, bx, s1, b[0]);
+            b[1] = s1;
+            return 2;
+        }
+    } else {
+        if (ytail === 0) {
+            $Two_Product(xtail, ay, s1, a[0]);
+            a[1] = s1;
+            negate = -xtail;
+            $Two_Product(negate, by, s1, b[0]);
+            b[1] = s1;
+            return 2;
+        } else {
+            $Cross_Product(xtail, ax, ytail, ay, a);
+            $Cross_Product(ytail, by, xtail, bx, b);
+            return 4;
+        }
+    }
+}
+
+function tailadd(finlen, a, b, k, z) {
+    let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0, s1, s0, u3;
+    $Two_Product(a, b, s1, s0);
+    $Two_One_Product(s1, s0, k, u);
+    finlen = finadd(finlen, 4, u);
+    if (z !== 0) {
+        $Two_One_Product(s1, s0, z, u);
+        finlen = finadd(finlen, 4, u);
+    }
+    return finlen;
+}
+
 function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent) {
     let finlen;
     let adxtail, bdxtail, cdxtail;
     let adytail, bdytail, cdytail;
     let adztail, bdztail, cdztail;
-    let at_blen, at_clen, bt_clen, bt_alen, ct_alen, ct_blen;
-    let negate;
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _k, _0, s1, s0, t1, t0, u3;
 
     const adx = ax - dx;
@@ -95,107 +136,17 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         return det;
     }
 
-    if (adxtail === 0) {
-        if (adytail === 0) {
-            at_b[0] = 0;
-            at_blen = 1;
-            at_c[0] = 0;
-            at_clen = 1;
-        } else {
-            negate = -adytail;
-            $Two_Product(negate, bdx, s1, at_b[0]);
-            at_b[1] = s1;
-            at_blen = 2;
-            $Two_Product(adytail, cdx, s1, at_c[0]);
-            at_c[1] = s1;
-            at_clen = 2;
-        }
-    } else {
-        if (adytail === 0) {
-            $Two_Product(adxtail, bdy, s1, at_b[0]);
-            at_b[1] = s1;
-            at_blen = 2;
-            negate = -adxtail;
-            $Two_Product(negate, cdy, s1, at_c[0]);
-            at_c[1] = s1;
-            at_clen = 2;
-        } else {
-            $Cross_Product(adxtail, bdx, adytail, bdy, at_b);
-            at_blen = 4;
-            $Cross_Product(adytail, cdy, adxtail, cdx, at_c);
-            at_clen = 4;
-        }
-    }
-    if (bdxtail === 0) {
-        if (bdytail === 0) {
-            bt_c[0] = 0;
-            bt_clen = 1;
-            bt_a[0] = 0;
-            bt_alen = 1;
-        } else {
-            negate = -bdytail;
-            $Two_Product(negate, cdx, s1, bt_c[0]);
-            bt_c[1] = s1;
-            bt_clen = 2;
-            $Two_Product(bdytail, adx, s1, bt_a[0]);
-            bt_a[1] = s1;
-            bt_alen = 2;
-        }
-    } else {
-        if (bdytail === 0) {
-            $Two_Product(bdxtail, cdy, s1, bt_c[0]);
-            bt_c[1] = s1;
-            bt_clen = 2;
-            negate = -bdxtail;
-            $Two_Product(negate, ady, s1, bt_a[0]);
-            bt_a[1] = s1;
-            bt_alen = 2;
-        } else {
-            $Cross_Product(bdxtail, cdx, bdytail, cdy, bt_c);
-            bt_clen = 4;
-            $Cross_Product(bdytail, ady, bdxtail, adx, bt_a);
-            bt_alen = 4;
-        }
-    }
-    if (cdxtail === 0) {
-        if (cdytail === 0) {
-            ct_a[0] = 0;
-            ct_alen = 1;
-            ct_b[0] = 0;
-            ct_blen = 1;
-        } else {
-            negate = -cdytail;
-            $Two_Product(negate, adx, s1, ct_a[0]);
-            ct_a[1] = s1;
-            ct_alen = 2;
-            $Two_Product(cdytail, bdx, s1, ct_b[0]);
-            ct_b[1] = s1;
-            ct_blen = 2;
-        }
-    } else {
-        if (cdytail === 0) {
-            $Two_Product(cdxtail, ady, s1, ct_a[0]);
-            ct_a[1] = s1;
-            ct_alen = 2;
-            negate = -cdxtail;
-            $Two_Product(negate, bdy, s1, ct_b[0]);
-            ct_b[1] = s1;
-            ct_blen = 2;
-        } else {
-            $Cross_Product(cdxtail, adx, cdytail, ady, ct_a);
-            ct_alen = 4;
-            $Cross_Product(cdytail, bdy, cdxtail, bdx, ct_b);
-            ct_blen = 4;
-        }
-    }
+    const at_len = tailinit(adxtail, adytail, bdx, bdy, cdx, cdy, at_b, at_c);
+    const bt_len = tailinit(bdxtail, bdytail, cdx, cdy, adx, ady, bt_c, bt_a);
+    const ct_len = tailinit(cdxtail, cdytail, adx, ady, bdx, bdy, ct_a, ct_b);
 
-    const bctlen = sum(bt_clen, bt_c, ct_blen, ct_b, bct);
+    const bctlen = sum(bt_len, bt_c, ct_len, ct_b, bct);
     finlen = finadd(finlen, scale(bctlen, bct, adz, _16), _16);
 
-    const catlen = sum(ct_alen, ct_a, at_clen, at_c, cat);
+    const catlen = sum(ct_len, ct_a, at_len, at_c, cat);
     finlen = finadd(finlen, scale(catlen, cat, bdz, _16), _16);
 
-    const abtlen = sum(at_blen, at_b, bt_alen, bt_a, abt);
+    const abtlen = sum(at_len, at_b, bt_len, bt_a, abt);
     finlen = finadd(finlen, scale(abtlen, abt, cdz, _16), _16);
 
     if (adztail !== 0) {
@@ -210,65 +161,26 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
 
     if (adxtail !== 0) {
         if (bdytail !== 0) {
-            $Two_Product(adxtail, bdytail, s1, s0);
-            $Two_One_Product(s1, s0, cdz, u);
-            finlen = finadd(finlen, 4, u);
-            if (cdztail !== 0) {
-                $Two_One_Product(s1, s0, cdztail, u);
-                finlen = finadd(finlen, 4, u);
-            }
+            finlen = tailadd(finlen, adxtail, bdytail, cdz, cdztail);
         }
         if (cdytail !== 0) {
-            negate = -adxtail;
-            $Two_Product(negate, cdytail, s1, s0);
-            $Two_One_Product(s1, s0, bdz, u);
-            finlen = finadd(finlen, 4, u);
-            if (bdztail !== 0) {
-                $Two_One_Product(s1, s0, bdztail, u);
-                finlen = finadd(finlen, 4, u);
-            }
+            finlen = tailadd(finlen, -adxtail, cdytail, bdz, bdztail);
         }
     }
     if (bdxtail !== 0) {
         if (cdytail !== 0) {
-            $Two_Product(bdxtail, cdytail, s1, s0);
-            $Two_One_Product(s1, s0, adz, u);
-            finlen = finadd(finlen, 4, u);
-            if (adztail !== 0) {
-                $Two_One_Product(s1, s0, adztail, u);
-                finlen = finadd(finlen, 4, u);
-            }
+            finlen = tailadd(finlen, bdxtail, cdytail, adz, adztail);
         }
         if (adytail !== 0) {
-            negate = -bdxtail;
-            $Two_Product(negate, adytail, s1, s0);
-            $Two_One_Product(s1, s0, cdz, u);
-            finlen = finadd(finlen, 4, u);
-            if (cdztail !== 0) {
-                $Two_One_Product(s1, s0, cdztail, u);
-                finlen = finadd(finlen, 4, u);
-            }
+            finlen = tailadd(finlen, -bdxtail, adytail, cdz, cdztail);
         }
     }
     if (cdxtail !== 0) {
         if (adytail !== 0) {
-            $Two_Product(cdxtail, adytail, s1, s0);
-            $Two_One_Product(s1, s0, bdz, u);
-            finlen = finadd(finlen, 4, u);
-            if (bdztail !== 0) {
-                $Two_One_Product(s1, s0, bdztail, u);
-                finlen = finadd(finlen, 4, u);
-            }
+            finlen = tailadd(finlen, cdxtail, adytail, bdz, bdztail);
         }
         if (bdytail !== 0) {
-            negate = -cdxtail;
-            $Two_Product(negate, bdytail, s1, s0);
-            $Two_One_Product(s1, s0, adz, u);
-            finlen = finadd(finlen, 4, u);
-            if (adztail !== 0) {
-                $Two_One_Product(s1, s0, adztail, u);
-                finlen = finadd(finlen, 4, u);
-            }
+            finlen = tailadd(finlen, -cdxtail, bdytail, adz, adztail);
         }
     }
 
