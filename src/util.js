@@ -95,6 +95,11 @@ export function scale_expansion(elen, e, b, h) {
     return hindex;
 }
 
+export function negate_expansion(elen, e) {
+    for (let i = 0; i < elen; i++) e[i] = -e[i];
+    return elen;
+}
+
 export function estimate(elen, e) {
     let Q = e[0];
     for (let i = 1; i < elen; i++) Q += e[i];

@@ -1,6 +1,6 @@
 import {
     epsilon, splitter, resulterrbound, estimate, vec,
-    expansion_sum as sum, scale_expansion as scale
+    expansion_sum as sum, scale_expansion as scale, negate_expansion as negate
 } from './util.js';
 
 const isperrboundA = (16 + 224 * epsilon) * epsilon;
@@ -56,8 +56,6 @@ const _384z = vec(384);
 
 function insphereexact(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez) {
     let bvirt, c, ahi, alo, bhi, blo, _i, _j, _0, s1, s0, t1, t0, u3;
-    let _8len, _8blen, _16len, _48len, _48blen;
-    let xlen, ylen, zlen, xylen, i;
 
     $Cross_Product(ax, ay, bx, by, ab);
     $Cross_Product(bx, by, cx, cy, bc);
@@ -70,125 +68,102 @@ function insphereexact(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, e
     $Cross_Product(dx, dy, ax, ay, da);
     $Cross_Product(ex, ey, bx, by, eb);
 
-    _8len = scale(4, bc, az, _8);
-    _8blen = scale(4, ac, -bz, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, ab, cz, _8);
-    const abclen = sum(_8len, _8, _16len, _16, abc);
+    const abclen = sum(
+        scale(4, ab, cz, _8), _8,
+        sum(scale(4, bc, az, _8), _8,
+            scale(4, ac, -bz, _8b), _8b, _16), _16, abc);
+    const bcdlen = sum(
+        scale(4, bc, dz, _8), _8,
+        sum(scale(4, cd, bz, _8), _8,
+            scale(4, bd, -cz, _8b), _8b, _16), _16, bcd);
+    const cdelen = sum(
+        scale(4, cd, ez, _8), _8,
+        sum(scale(4, de, cz, _8), _8,
+            scale(4, ce, -dz, _8b), _8b, _16), _16, cde);
+    const dealen = sum(
+        scale(4, de, az, _8), _8,
+        sum(scale(4, ea, dz, _8), _8,
+            scale(4, da, -ez, _8b), _8b, _16), _16, dea);
+    const eablen = sum(
+        scale(4, ea, bz, _8), _8,
+        sum(scale(4, ab, ez, _8), _8,
+            scale(4, eb, -az, _8b), _8b, _16), _16, eab);
+    const abdlen = sum(
+        scale(4, ab, dz, _8), _8,
+        sum(scale(4, bd, az, _8), _8,
+            scale(4, da, bz, _8b), _8b, _16), _16, abd);
+    const bcelen = sum(
+        scale(4, bc, ez, _8), _8,
+        sum(scale(4, ce, bz, _8), _8,
+            scale(4, eb, cz, _8b), _8b, _16), _16, bce);
+    const cdalen = sum(
+        scale(4, cd, az, _8), _8,
+        sum(scale(4, da, cz, _8), _8,
+            scale(4, ac, dz, _8b), _8b, _16), _16, cda);
+    const deblen = sum(
+        scale(4, de, bz, _8), _8,
+        sum(scale(4, eb, dz, _8), _8,
+            scale(4, bd, ez, _8b), _8b, _16), _16, deb);
+    const eaclen = sum(
+        scale(4, ea, cz, _8), _8,
+        sum(scale(4, ac, ez, _8), _8,
+            scale(4, ce, az, _8b), _8b, _16), _16, eac);
 
-    _8len = scale(4, cd, bz, _8);
-    _8blen = scale(4, bd, -cz, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, bc, dz, _8);
-    const bcdlen = sum(_8len, _8, _16len, _16, bcd);
+    const bcdelen = sum(
+        sum(cdelen, cde, bcelen, bce, _48), _48,
+        negate(sum(deblen, deb, bcdlen, bcd, _48b), _48b), _48b, bcde);
+    const cdealen = sum(
+        sum(dealen, dea, cdalen, cda, _48), _48,
+        negate(sum(eaclen, eac, cdelen, cde, _48b), _48b), _48b, cdea);
+    const deablen = sum(
+        sum(eablen, eab, deblen, deb, _48), _48,
+        negate(sum(abdlen, abd, dealen, dea, _48b), _48b), _48b, deab);
+    const eabclen = sum(
+        sum(abclen, abc, eaclen, eac, _48), _48,
+        negate(sum(bcelen, bce, eablen, eab, _48b), _48b), _48b, eabc);
+    const abcdlen = sum(
+        sum(bcdlen, bcd, abdlen, abd, _48), _48,
+        negate(sum(cdalen, cda, abclen, abc, _48b), _48b), _48b, abcd);
 
-    _8len = scale(4, de, cz, _8);
-    _8blen = scale(4, ce, -dz, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, cd, ez, _8);
-    let cdelen = sum(_8len, _8, _16len, _16, cde);
+    const alen = sum(
+        sum(
+            scale(scale(bcdelen, bcde, ax, _192), _192, ax, _384x), _384x,
+            scale(scale(bcdelen, bcde, ay, _192), _192, ay, _384y), _384y, detxy), detxy,
+        scale(scale(bcdelen, bcde, az, _192), _192, az, _384z), _384z, adet);
 
-    _8len = scale(4, ea, dz, _8);
-    _8blen = scale(4, da, -ez, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, de, az, _8);
-    const dealen = sum(_8len, _8, _16len, _16, dea);
+    const blen = sum(
+        sum(
+            scale(scale(cdealen, cdea, bx, _192), _192, bx, _384x), _384x,
+            scale(scale(cdealen, cdea, by, _192), _192, by, _384y), _384y, detxy), detxy,
+        scale(scale(cdealen, cdea, bz, _192), _192, bz, _384z), _384z, bdet);
 
-    _8len = scale(4, ab, ez, _8);
-    _8blen = scale(4, eb, -az, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, ea, bz, _8);
-    const eablen = sum(_8len, _8, _16len, _16, eab);
+    const clen = sum(
+        sum(
+            scale(scale(deablen, deab, cx, _192), _192, cx, _384x), _384x,
+            scale(scale(deablen, deab, cy, _192), _192, cy, _384y), _384y, detxy), detxy,
+        scale(scale(deablen, deab, cz, _192), _192, cz, _384z), _384z, cdet);
 
-    _8len = scale(4, bd, az, _8);
-    _8blen = scale(4, da, bz, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, ab, dz, _8);
-    const abdlen = sum(_8len, _8, _16len, _16, abd);
+    const dlen = sum(
+        sum(
+            scale(scale(eabclen, eabc, dx, _192), _192, dx, _384x), _384x,
+            scale(scale(eabclen, eabc, dy, _192), _192, dy, _384y), _384y, detxy), detxy,
+        scale(scale(eabclen, eabc, dz, _192), _192, dz, _384z), _384z, ddet);
 
-    _8len = scale(4, ce, bz, _8);
-    _8blen = scale(4, eb, cz, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, bc, ez, _8);
-    const bcelen = sum(_8len, _8, _16len, _16, bce);
+    const elen = sum(
+        sum(
+            scale(scale(abcdlen, abcd, ex, _192), _192, ex, _384x), _384x,
+            scale(scale(abcdlen, abcd, ey, _192), _192, ey, _384y), _384y, detxy), detxy,
+        scale(scale(abcdlen, abcd, ez, _192), _192, ez, _384z), _384z, edet);
 
-    _8len = scale(4, da, cz, _8);
-    _8blen = scale(4, ac, dz, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, cd, az, _8);
-    const cdalen = sum(_8len, _8, _16len, _16, cda);
-
-    _8len = scale(4, eb, dz, _8);
-    _8blen = scale(4, bd, ez, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, de, bz, _8);
-    const deblen = sum(_8len, _8, _16len, _16, deb);
-
-    _8len = scale(4, ac, ez, _8);
-    _8blen = scale(4, ce, az, _8b);
-    _16len = sum(_8len, _8, _8blen, _8b, _16);
-    _8len = scale(4, ea, cz, _8);
-    const eaclen = sum(_8len, _8, _16len, _16, eac);
-
-    _48len = sum(cdelen, cde, bcelen, bce, _48);
-    _48blen = sum(deblen, deb, bcdlen, bcd, _48b);
-    for (i = 0; i < _48blen; i++) _48b[i] = -_48b[i];
-
-    const bcdelen = sum(_48len, _48, _48blen, _48b, bcde);
-    xlen = scale(scale(bcdelen, bcde, ax, _192), _192, ax, _384x);
-    ylen = scale(scale(bcdelen, bcde, ay, _192), _192, ay, _384y);
-    zlen = scale(scale(bcdelen, bcde, az, _192), _192, az, _384z);
-    xylen = sum(xlen, _384x, ylen, _384y, detxy);
-    const alen = sum(xylen, detxy, zlen, _384z, adet);
-
-    _48len = sum(dealen, dea, cdalen, cda, _48);
-    _48blen = sum(eaclen, eac, cdelen, cde, _48b);
-    for (i = 0; i < _48blen; i++) _48b[i] = -_48b[i];
-
-    const cdealen = sum(_48len, _48, _48blen, _48b, cdea);
-    xlen = scale(scale(cdealen, cdea, bx, _192), _192, bx, _384x);
-    ylen = scale(scale(cdealen, cdea, by, _192), _192, by, _384y);
-    zlen = scale(scale(cdealen, cdea, bz, _192), _192, bz, _384z);
-    xylen = sum(xlen, _384x, ylen, _384y, detxy);
-    const blen = sum(xylen, detxy, zlen, _384z, bdet);
-
-    _48len = sum(eablen, eab, deblen, deb, _48);
-    _48blen = sum(abdlen, abd, dealen, dea, _48b);
-    for (i = 0; i < _48blen; i++) _48b[i] = -_48b[i];
-
-    const deablen = sum(_48len, _48, _48blen, _48b, deab);
-    xlen = scale(scale(deablen, deab, cx, _192), _192, cx, _384x);
-    ylen = scale(scale(deablen, deab, cy, _192), _192, cy, _384y);
-    zlen = scale(scale(deablen, deab, cz, _192), _192, cz, _384z);
-    xylen = sum(xlen, _384x, ylen, _384y, detxy);
-    const clen = sum(xylen, detxy, zlen, _384z, cdet);
-
-    _48len = sum(abclen, abc, eaclen, eac, _48);
-    _48blen = sum(bcelen, bce, eablen, eab, _48b);
-    for (i = 0; i < _48blen; i++) _48b[i] = -_48b[i];
-
-    const eabclen = sum(_48len, _48, _48blen, _48b, eabc);
-    xlen = scale(scale(eabclen, eabc, dx, _192), _192, dx, _384x);
-    ylen = scale(scale(eabclen, eabc, dy, _192), _192, dy, _384y);
-    zlen = scale(scale(eabclen, eabc, dz, _192), _192, dz, _384z);
-    xylen = sum(xlen, _384x, ylen, _384y, detxy);
-    const dlen = sum(xylen, detxy, zlen, _384z, ddet);
-
-    _48len = sum(bcdlen, bcd, abdlen, abd, _48);
-    _48blen = sum(cdalen, cda, abclen, abc, _48b);
-    for (i = 0; i < _48blen; i++) _48b[i] = -_48b[i];
-
-    const abcdlen = sum(_48len, _48, _48blen, _48b, abcd);
-    xlen = scale(scale(abcdlen, abcd, ex, _192), _192, ex, _384x);
-    ylen = scale(scale(abcdlen, abcd, ey, _192), _192, ey, _384y);
-    zlen = scale(scale(abcdlen, abcd, ez, _192), _192, ez, _384z);
-    xylen = sum(xlen, _384x, ylen, _384y, detxy);
-    const elen = sum(xylen, detxy, zlen, _384z, edet);
-
-    const ablen = sum(alen, adet, blen, bdet, abdet);
-    const cdlen = sum(clen, cdet, dlen, ddet, cddet);
-    cdelen = sum(cdlen, cddet, elen, edet, cdedet);
-    const deterlen = sum(ablen, abdet, cdelen, cdedet, deter);
+    const deterlen = sum(
+        sum(
+            alen, adet,
+            blen, bdet, abdet), abdet,
+        sum(
+            sum(
+                clen, cdet,
+                dlen, ddet, cddet), cddet,
+            elen, edet, cdedet), cdedet, deter);
 
     return deter[deterlen - 1];
 }
