@@ -1,7 +1,4 @@
-import {
-    epsilon, splitter, resulterrbound, estimate, vec,
-    expansion_sum as sum, scale_expansion as scale
-} from './util.js';
+import {epsilon, splitter, resulterrbound, estimate, vec, sum, sum_three, scale} from './util.js';
 
 const iccerrboundA = (10 + 96 * epsilon) * epsilon;
 const iccerrboundB = (4 + 48 * epsilon) * epsilon;
@@ -28,9 +25,6 @@ const abtt = vec(4);
 const bctt = vec(4);
 const catt = vec(4);
 
-let fin = vec(1152);
-let fin2 = vec(1152);
-
 const _8 = vec(8);
 const _16 = vec(16);
 const _16b = vec(16);
@@ -40,11 +34,18 @@ const _32b = vec(32);
 const _48 = vec(48);
 const _64 = vec(64);
 
+let fin = vec(1152);
+let fin2 = vec(1152);
+
+function finadd(finlen, a, alen) {
+    finlen = sum(finlen, fin, a, alen, fin2);
+    const tmp = fin; fin = fin2; fin2 = tmp;
+    return finlen;
+}
+
 function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
-    let finlen, tmp;
+    let finlen;
     let adxtail, bdxtail, cdxtail, adytail, bdytail, cdytail;
-    let _8len, _16len, _16blen, _16clen;
-    let _32len, _32blen, _48len, _64len;
     let axtbclen, aytbclen, bxtcalen, bytcalen, cxtablen, cytablen;
     let abtlen, bctlen, catlen;
     let abttlen, bcttlen, cattlen;
@@ -60,23 +61,20 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
     const cdy = cy - dy;
 
     $Cross_Product(bdx, bdy, cdx, cdy, bc);
-    _16len = scale(scale(4, bc, adx, _8), _8, adx, _16);
-    _16blen = scale(scale(4, bc, ady, _8), _8, ady, _16b);
-    _32len = sum(_16len, _16, _16blen, _16b, _32);
-
     $Cross_Product(cdx, cdy, adx, ady, ca);
-    _16len = scale(scale(4, ca, bdx, _8), _8, bdx, _16);
-    _16blen = scale(scale(4, ca, bdy, _8), _8, bdy, _16b);
-    _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-
-    _64len = sum(_32len, _32, _32blen, _32b, _64);
-
     $Cross_Product(adx, ady, bdx, bdy, ab);
-    _16len = scale(scale(4, ab, cdx, _8), _8, cdx, _16);
-    _16blen = scale(scale(4, ab, cdy, _8), _8, cdy, _16b);
-    const clen = sum(_16len, _16, _16blen, _16b, _32);
 
-    finlen = sum(_64len, _64, clen, _32, fin);
+    finlen = sum(
+        sum(
+            sum(
+                scale(scale(4, bc, adx, _8), _8, adx, _16), _16,
+                scale(scale(4, bc, ady, _8), _8, ady, _16b), _16b, _32), _32,
+            sum(
+                scale(scale(4, ca, bdx, _8), _8, bdx, _16), _16,
+                scale(scale(4, ca, bdy, _8), _8, bdy, _16b), _16b, _32b), _32b, _64), _64,
+        sum(
+            scale(scale(4, ab, cdx, _8), _8, cdx, _16), _16,
+            scale(scale(4, ab, cdy, _8), _8, cdy, _16b), _16b, _32), _32, fin);
 
     let det = estimate(finlen, fin);
     let errbound = iccerrboundB * permanent;
@@ -118,63 +116,45 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
 
     if (adxtail !== 0) {
         axtbclen = scale(4, bc, adxtail, axtbc);
-        _16len = scale(axtbclen, axtbc, 2 * adx, _16);
-        _16blen = scale(scale(4, cc, adxtail, _8), _8, bdy, _16b);
-        _16clen = scale(scale(4, bb, adxtail, _8), _8, -cdy, _16c);
-        _32len = sum(_16len, _16, _16blen, _16b, _32);
-        _48len = sum(_16clen, _16c, _32len, _32, _48);
-        finlen = sum(finlen, fin, _48len, _48, fin2);
-        tmp = fin; fin = fin2; fin2 = tmp;
+        finlen = finadd(finlen, sum_three(
+            scale(axtbclen, axtbc, 2 * adx, _16), _16,
+            scale(scale(4, cc, adxtail, _8), _8, bdy, _16b), _16b,
+            scale(scale(4, bb, adxtail, _8), _8, -cdy, _16c), _16c, _32, _48), _48);
     }
     if (adytail !== 0) {
         aytbclen = scale(4, bc, adytail, aytbc);
-        _16len = scale(aytbclen, aytbc, 2 * ady, _16);
-        _16blen = scale(scale(4, bb, adytail, _8), _8, cdx, _16b);
-        _16clen = scale(scale(4, cc, adytail, _8), _8, -bdx, _16c);
-        _32len = sum(_16len, _16, _16blen, _16b, _32);
-        _48len = sum(_16clen, _16c, _32len, _32, _48);
-        finlen = sum(finlen, fin, _48len, _48, fin2);
-        tmp = fin; fin = fin2; fin2 = tmp;
+        finlen = finadd(finlen, sum_three(
+            scale(aytbclen, aytbc, 2 * ady, _16), _16,
+            scale(scale(4, bb, adytail, _8), _8, cdx, _16b), _16b,
+            scale(scale(4, cc, adytail, _8), _8, -bdx, _16c), _16c, _32, _48), _48);
     }
     if (bdxtail !== 0) {
         bxtcalen = scale(4, ca, bdxtail, bxtca);
-        _16len = scale(bxtcalen, bxtca, 2 * bdx, _16);
-        _16blen = scale(scale(4, aa, bdxtail, _8), _8, cdy, _16b);
-        _32len = sum(_16len, _16, _16blen, _16b, _32);
-        _16len = scale(scale(4, cc, bdxtail, _8), _8, -ady, _16);
-        _48len = sum(_16len, _16, _32len, _32, _48);
-        finlen = sum(finlen, fin, _48len, _48, fin2);
-        tmp = fin; fin = fin2; fin2 = tmp;
+        finlen = finadd(finlen, sum_three(
+            scale(bxtcalen, bxtca, 2 * bdx, _16), _16,
+            scale(scale(4, aa, bdxtail, _8), _8, cdy, _16b), _16b,
+            scale(scale(4, cc, bdxtail, _8), _8, -ady, _16c), _16c, _32, _48), _48);
     }
     if (bdytail !== 0) {
         bytcalen = scale(4, ca, bdytail, bytca);
-        _16len = scale(bytcalen, bytca, 2 * bdy, _16);
-        _16blen = scale(scale(4, cc, bdytail, _8), _8, adx, _16b);
-        _16clen = scale(scale(4, aa, bdytail, _8), _8, -cdx, _16c);
-        _32len = sum(_16len, _16, _16blen, _16b, _32);
-        _48len = sum(_16clen, _16c, _32len, _32, _48);
-        finlen = sum(finlen, fin, _48len, _48, fin2);
-        tmp = fin; fin = fin2; fin2 = tmp;
+        finlen = finadd(finlen, sum_three(
+            scale(bytcalen, bytca, 2 * bdy, _16), _16,
+            scale(scale(4, cc, bdytail, _8), _8, adx, _16b), _16b,
+            scale(scale(4, aa, bdytail, _8), _8, -cdx, _16c), _16c, _32, _48), _48);
     }
     if (cdxtail !== 0) {
         cxtablen = scale(4, ab, cdxtail, cxtab);
-        _16len = scale(cxtablen, cxtab, 2 * cdx, _16);
-        _16blen = scale(scale(4, bb, cdxtail, _8), _8, ady, _16b);
-        _16clen = scale(scale(4, aa, cdxtail, _8), _8, -bdy, _16c);
-        _32len = sum(_16len, _16, _16blen, _16b, _32);
-        _48len = sum(_16clen, _16c, _32len, _32, _48);
-        finlen = sum(finlen, fin, _48len, _48, fin2);
-        tmp = fin; fin = fin2; fin2 = tmp;
+        finlen = finadd(finlen, sum_three(
+            scale(cxtablen, cxtab, 2 * cdx, _16), _16,
+            scale(scale(4, bb, cdxtail, _8), _8, ady, _16b), _16b,
+            scale(scale(4, aa, cdxtail, _8), _8, -bdy, _16c), _16c, _32, _48), _48);
     }
     if (cdytail !== 0) {
         cytablen = scale(4, ab, cdytail, cytab);
-        _16len = scale(cytablen, cytab, 2 * cdy, _16);
-        _16blen = scale(scale(4, aa, cdytail, _8), _8, bdx, _16b);
-        _16clen = scale(scale(4, bb, cdytail, _8), _8, -adx, _16c);
-        _32len = sum(_16len, _16, _16blen, _16b, _32);
-        _48len = sum(_16clen, _16c, _32len, _32, _48);
-        finlen = sum(finlen, fin, _48len, _48, fin2);
-        tmp = fin; fin = fin2; fin2 = tmp;
+        finlen = finadd(finlen, sum_three(
+            scale(cytablen, cytab, 2 * cdy, _16), _16,
+            scale(scale(4, aa, cdytail, _8), _8, bdx, _16b), _16b,
+            scale(scale(4, bb, cdytail, _8), _8, -adx, _16c), _16c, _32, _48), _48);
     }
 
     if (adxtail !== 0 || adytail !== 0) {
@@ -182,7 +162,6 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             $Two_Product_Sum(bdxtail, cdy, bdx, cdytail, u);
             $Two_Product_Sum(cdxtail, -bdy, cdx, -bdytail, v);
             bctlen = sum(4, u, 4, v, bct);
-
             $Cross_Product(bdxtail, bdytail, cdxtail, cdytail, bctt);
             bcttlen = 4;
         } else {
@@ -191,52 +170,36 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             bctt[0] = 0;
             bcttlen = 1;
         }
-
         if (adxtail !== 0) {
-            _16len = scale(axtbclen, axtbc, adxtail, _16);
-            _16blen = scale(bctlen, bct, adxtail, _16b);
-            _32len = scale(_16blen, _16b, 2 * adx, _32);
-            _48len = sum(_16len, _16, _32len, _32, _48);
-            finlen = sum(finlen, fin, _48len, _48, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len = scale(bctlen, bct, adxtail, _16c);
+            finlen = finadd(finlen, sum(
+                scale(axtbclen, axtbc, adxtail, _16), _16,
+                scale(len, _16c, 2 * adx, _32), _32, _48), _48);
+
+            const len2 = scale(bcttlen, bctt, adxtail, _8);
+            finlen = finadd(finlen, sum_three(
+                scale(len2, _8, 2 * adx, _16), _16,
+                scale(len2, _8, adxtail, _16b), _16b,
+                scale(len, _16c, adxtail, _32), _32, _32b, _64), _64);
 
             if (bdytail !== 0) {
-                _16len = scale(scale(4, cc, adxtail, _8), _8, bdytail, _16);
-                finlen = sum(finlen, fin, _16len, _16, fin2);
-                tmp = fin; fin = fin2; fin2 = tmp;
+                finlen = finadd(finlen, scale(scale(4, cc, adxtail, _8), _8, bdytail, _16), _16);
             }
             if (cdytail !== 0) {
-                _16len = scale(scale(4, bb, -adxtail, _8), _8, cdytail, _16);
-                finlen = sum(finlen, fin, _16len, _16, fin2);
-                tmp = fin; fin = fin2; fin2 = tmp;
+                finlen = finadd(finlen, scale(scale(4, bb, -adxtail, _8), _8, cdytail, _16), _16);
             }
-
-            _32len = scale(_16blen, _16b, adxtail, _32);
-            _8len = scale(bcttlen, bctt, adxtail, _8);
-            _16len = scale(_8len, _8, 2 * adx, _16);
-            _16blen = scale(_8len, _8, adxtail, _16b);
-            _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-            _64len = sum(_32len, _32, _32blen, _32b, _64);
-            finlen = sum(finlen, fin, _64len, _64, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
         }
-
         if (adytail !== 0) {
-            _16len = scale(aytbclen, aytbc, adytail, _16);
-            _16blen = scale(bctlen, bct, adytail, _16b);
-            _32len = scale(_16blen, _16b, 2 * ady, _32);
-            _48len = sum(_16len, _16, _32len, _32, _48);
-            finlen = sum(finlen, fin, _48len, _48, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len = scale(bctlen, bct, adytail, _16c);
+            finlen = finadd(finlen, sum(
+                scale(aytbclen, aytbc, adytail, _16), _16,
+                scale(len, _16c, 2 * ady, _32), _32, _48), _48);
 
-            _32len = scale(_16blen, _16b, adytail, _32);
-            _8len = scale(bcttlen, bctt, adytail, _8);
-            _16len = scale(_8len, _8, 2 * ady, _16);
-            _16blen = scale(_8len, _8, adytail, _16b);
-            _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-            _64len = sum(_32len, _32, _32blen, _32b, _64);
-            finlen = sum(finlen, fin, _64len, _64, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len2 = scale(bcttlen, bctt, adytail, _8);
+            finlen = finadd(finlen, sum_three(
+                scale(len2, _8, 2 * ady, _16), _16,
+                scale(len2, _8, adytail, _16b), _16b,
+                scale(len, _16c, adytail, _32), _32, _32b, _64), _64);
         }
     }
     if (bdxtail !== 0 || bdytail !== 0) {
@@ -246,7 +209,6 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             n0 = -cdytail;
             $Two_Product_Sum(adxtail, n1, adx, n0, v);
             catlen = sum(4, u, 4, v, cat);
-
             $Cross_Product(cdxtail, cdytail, adxtail, adytail, catt);
             cattlen = 4;
         } else {
@@ -255,50 +217,36 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             catt[0] = 0;
             cattlen = 1;
         }
-
         if (bdxtail !== 0) {
-            _16len = scale(bxtcalen, bxtca, bdxtail, _16);
-            _16blen = scale(catlen, cat, bdxtail, _16b);
-            _32len = scale(_16blen, _16b, 2 * bdx, _32);
-            _48len = sum(_16len, _16, _32len, _32, _48);
-            finlen = sum(finlen, fin, _48len, _48, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len = scale(catlen, cat, bdxtail, _16c);
+            finlen = finadd(finlen, sum(
+                scale(bxtcalen, bxtca, bdxtail, _16), _16,
+                scale(len, _16c, 2 * bdx, _32), _32, _48), _48);
+
+            const len2 = scale(cattlen, catt, bdxtail, _8);
+            finlen = finadd(finlen, sum_three(
+                scale(len2, _8, 2 * bdx, _16), _16,
+                scale(len2, _8, bdxtail, _16b), _16b,
+                scale(len, _16c, bdxtail, _32), _32, _32b, _64), _64);
+
             if (cdytail !== 0) {
-                _16len = scale(scale(4, aa, bdxtail, _8), _8, cdytail, _16);
-                finlen = sum(finlen, fin, _16len, _16, fin2);
-                tmp = fin; fin = fin2; fin2 = tmp;
+                finlen = finadd(finlen, scale(scale(4, aa, bdxtail, _8), _8, cdytail, _16), _16);
             }
             if (adytail !== 0) {
-                _16len = scale(scale(4, cc, -bdxtail, _8), _8, adytail, _16);
-                finlen = sum(finlen, fin, _16len, _16, fin2);
-                tmp = fin; fin = fin2; fin2 = tmp;
+                finlen = finadd(finlen, scale(scale(4, cc, -bdxtail, _8), _8, adytail, _16), _16);
             }
-
-            _32len = scale(_16blen, _16b, bdxtail, _32);
-            _8len = scale(cattlen, catt, bdxtail, _8);
-            _16len = scale(_8len, _8, 2 * bdx, _16);
-            _16blen = scale(_8len, _8, bdxtail, _16b);
-            _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-            _64len = sum(_32len, _32, _32blen, _32b, _64);
-            finlen = sum(finlen, fin, _64len, _64, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
         }
         if (bdytail !== 0) {
-            _16len = scale(bytcalen, bytca, bdytail, _16);
-            _16blen = scale(catlen, cat, bdytail, _16b);
-            _32len = scale(_16blen, _16b, 2 * bdy, _32);
-            _48len = sum(_16len, _16, _32len, _32, _48);
-            finlen = sum(finlen, fin, _48len, _48, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len = scale(catlen, cat, bdytail, _16c);
+            finlen = finadd(finlen, sum(
+                scale(bytcalen, bytca, bdytail, _16), _16,
+                scale(len, _16c, 2 * bdy, _32), _32, _48), _48);
 
-            _32len = scale(_16blen, _16b, bdytail, _32);
-            _8len = scale(cattlen, catt, bdytail, _8);
-            _16len = scale(_8len, _8, 2 * bdy, _16);
-            _16blen = scale(_8len, _8, bdytail, _16b);
-            _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-            _64len = sum(_32len, _32, _32blen, _32b, _64);
-            finlen = sum(finlen, fin, _64len, _64, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len2 = scale(cattlen, catt, bdytail, _8);
+            finlen = finadd(finlen, sum_three(
+                scale(len2, _8, 2 * bdy, _16), _16,
+                scale(len2, _8, bdytail, _16b), _16b,
+                scale(len, _16c, bdytail, _32), _32,  _32b, _64), _64);
         }
     }
     if (cdxtail !== 0 || cdytail !== 0) {
@@ -308,7 +256,6 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             n0 = -adytail;
             $Two_Product_Sum(bdxtail, n1, bdx, n0, v);
             abtlen = sum(4, u, 4, v, abt);
-
             $Cross_Product(adxtail, adytail, bdxtail, bdytail, abtt);
             abttlen = 4;
         } else {
@@ -317,50 +264,36 @@ function incircleadapt(ax, ay, bx, by, cx, cy, dx, dy, permanent) {
             abtt[0] = 0;
             abttlen = 1;
         }
-
         if (cdxtail !== 0) {
-            _16len = scale(cxtablen, cxtab, cdxtail, _16);
-            _16blen = scale(abtlen, abt, cdxtail, _16b);
-            _32len = scale(_16blen, _16b, 2 * cdx, _32);
-            _48len = sum(_16len, _16, _32len, _32, _48);
-            finlen = sum(finlen, fin, _48len, _48, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len = scale(abtlen, abt, cdxtail, _16c);
+            finlen = finadd(finlen, sum(
+                scale(cxtablen, cxtab, cdxtail, _16), _16,
+                scale(len, _16c, 2 * cdx, _32), _32, _48), _48);
+
+            const len2 = scale(abttlen, abtt, cdxtail, _8);
+            finlen = finadd(finlen, sum_three(
+                scale(len2, _8, 2 * cdx, _16), _16,
+                scale(len2, _8, cdxtail, _16b), _16b,
+                scale(len, _16c, cdxtail, _32), _32, _32b, _64), _64);
+
             if (adytail !== 0) {
-                _16len = scale(scale(4, bb, cdxtail, _8), _8, adytail, _16);
-                finlen = sum(finlen, fin, _16len, _16, fin2);
-                tmp = fin; fin = fin2; fin2 = tmp;
+                finlen = finadd(finlen, scale(scale(4, bb, cdxtail, _8), _8, adytail, _16), _16);
             }
             if (bdytail !== 0) {
-                _16len = scale(scale(4, aa, -cdxtail, _8), _8, bdytail, _16);
-                finlen = sum(finlen, fin, _16len, _16, fin2);
-                tmp = fin; fin = fin2; fin2 = tmp;
+                finlen = finadd(finlen, scale(scale(4, aa, -cdxtail, _8), _8, bdytail, _16), _16);
             }
-
-            _32len = scale(_16blen, _16b, cdxtail, _32);
-            _8len = scale(abttlen, abtt, cdxtail, _8);
-            _16len = scale(_8len, _8, 2 * cdx, _16);
-            _16blen = scale(_8len, _8, cdxtail, _16b);
-            _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-            _64len = sum(_32len, _32, _32blen, _32b, _64);
-            finlen = sum(finlen, fin, _64len, _64, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
         }
         if (cdytail !== 0) {
-            _16len = scale(cytablen, cytab, cdytail, _16);
-            _16blen = scale(abtlen, abt, cdytail, _16b);
-            _32len = scale(_16blen, _16b, 2 * cdy, _32);
-            _48len = sum(_16len, _16, _32len, _32, _48);
-            finlen = sum(finlen, fin, _48len, _48, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len = scale(abtlen, abt, cdytail, _16c);
+            finlen = finadd(finlen, sum(
+                scale(cytablen, cytab, cdytail, _16), _16,
+                scale(len, _16c, 2 * cdy, _32), _32, _48), _48);
 
-            _32len = scale(_16blen, _16b, cdytail, _32);
-            _8len = scale(abttlen, abtt, cdytail, _8);
-            _16len = scale(_8len, _8, 2 * cdy, _16);
-            _16blen = scale(_8len, _8, cdytail, _16b);
-            _32blen = sum(_16len, _16, _16blen, _16b, _32b);
-            _64len = sum(_32len, _32, _32blen, _32b, _64);
-            finlen = sum(finlen, fin, _64len, _64, fin2);
-            tmp = fin; fin = fin2; fin2 = tmp;
+            const len2 = scale(abttlen, abtt, cdytail, _8);
+            finlen = finadd(finlen, sum_three(
+                scale(len2, _8, 2 * cdy, _16), _16,
+                scale(len2, _8, cdytail, _16b), _16b,
+                scale(len, _16c, cdytail, _32), _32, _32b, _64), _64);
         }
     }
 

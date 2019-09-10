@@ -1,4 +1,4 @@
-import {epsilon, splitter, resulterrbound, estimate, vec, expansion_sum} from './util.js';
+import {epsilon, splitter, resulterrbound, estimate, vec, sum} from './util.js';
 
 const ccwerrboundA = (3 + 16 * epsilon) * epsilon;
 const ccwerrboundB = (2 + 12 * epsilon) * epsilon;
@@ -41,13 +41,13 @@ function orient2dadapt(ax, ay, bx, by, cx, cy, detsum) {
     if (det >= errbound || -det >= errbound) return det;
 
     $Cross_Product(acxtail, bcx, acytail, bcy, u);
-    const C1len = expansion_sum(4, B, 4, u, C1);
+    const C1len = sum(4, B, 4, u, C1);
 
     $Cross_Product(acx, bcxtail, acy, bcytail, u);
-    const C2len = expansion_sum(C1len, C1, 4, u, C2);
+    const C2len = sum(C1len, C1, 4, u, C2);
 
     $Cross_Product(acxtail, bcxtail, acytail, bcytail, u);
-    const Dlen = expansion_sum(C2len, C2, 4, u, D);
+    const Dlen = sum(C2len, C2, 4, u, D);
 
     return D[Dlen - 1];
 }

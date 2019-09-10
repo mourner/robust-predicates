@@ -1,7 +1,4 @@
-import {
-    epsilon, splitter, resulterrbound, estimate, vec,
-    expansion_sum as sum, scale_expansion as scale
-} from './util.js';
+import {epsilon, splitter, resulterrbound, estimate, vec, sum, scale} from './util.js';
 
 const o3derrboundA = (7 + 56 * epsilon) * epsilon;
 const o3derrboundB = (3 + 28 * epsilon) * epsilon;
@@ -29,8 +26,8 @@ const _12 = vec(12);
 let fin = vec(192);
 let fin2 = vec(192);
 
-function finadd(finlen, a, alen) {
-    finlen = sum(finlen, fin, a, alen, fin2);
+function finadd(finlen, alen, a) {
+    finlen = sum(finlen, fin, alen, a, fin2);
     const tmp = fin; fin = fin2; fin2 = tmp;
     return finlen;
 }
@@ -151,12 +148,15 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
 
     if (adztail !== 0) {
         finlen = finadd(finlen, scale(4, bc, adztail, _12), _12);
+        finlen = finadd(finlen, scale(bctlen, bct, adztail, _16), _16);
     }
     if (bdztail !== 0) {
         finlen = finadd(finlen, scale(4, ca, bdztail, _12), _12);
+        finlen = finadd(finlen, scale(catlen, cat, bdztail, _16), _16);
     }
     if (cdztail !== 0) {
         finlen = finadd(finlen, scale(4, ab, cdztail, _12), _12);
+        finlen = finadd(finlen, scale(abtlen, abt, cdztail, _16), _16);
     }
 
     if (adxtail !== 0) {
@@ -182,16 +182,6 @@ function orient3dadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, permanent
         if (bdytail !== 0) {
             finlen = tailadd(finlen, -cdxtail, bdytail, adz, adztail);
         }
-    }
-
-    if (adztail !== 0) {
-        finlen = finadd(finlen, scale(bctlen, bct, adztail, _16), _16);
-    }
-    if (bdztail !== 0) {
-        finlen = finadd(finlen, scale(catlen, cat, bdztail, _16), _16);
-    }
-    if (cdztail !== 0) {
-        finlen = finadd(finlen, scale(abtlen, abt, cdztail, _16), _16);
     }
 
     return fin[finlen - 1];

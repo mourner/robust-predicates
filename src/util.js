@@ -3,7 +3,7 @@ export const splitter = 134217729;
 export const resulterrbound = (3 + 8 * epsilon) * epsilon;
 
 // fast_expansion_sum_zeroelim routine from oritinal code
-export function expansion_sum(elen, e, flen, f, h) {
+export function sum(elen, e, flen, f, h) {
     let Q, Qnew, hh, bvirt;
     let enow = e[0];
     let fnow = f[0];
@@ -65,8 +65,12 @@ export function expansion_sum(elen, e, flen, f, h) {
     return hindex;
 }
 
+export function sum_three(alen, a, blen, b, clen, c, tmp, out) {
+    return sum(sum(alen, a, blen, b, tmp), tmp, clen, c, out);
+}
+
 // scale_expansion_zeroelim routine from oritinal code
-export function scale_expansion(elen, e, b, h) {
+export function scale(elen, e, b, h) {
     let Q, sum, hh, product1, product0;
     let bvirt, c, ahi, alo, bhi, blo;
 
@@ -95,7 +99,7 @@ export function scale_expansion(elen, e, b, h) {
     return hindex;
 }
 
-export function negate_expansion(elen, e) {
+export function negate(elen, e) {
     for (let i = 0; i < elen; i++) e[i] = -e[i];
     return elen;
 }

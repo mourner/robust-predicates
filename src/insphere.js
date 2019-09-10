@@ -1,7 +1,4 @@
-import {
-    epsilon, splitter, resulterrbound, estimate, vec,
-    expansion_sum as sum, scale_expansion as scale, negate_expansion as negate
-} from './util.js';
+import {epsilon, splitter, resulterrbound, estimate, vec, sum, sum_three, scale, negate} from './util.js';
 
 const isperrboundA = (16 + 224 * epsilon) * epsilon;
 const isperrboundB = (5 + 72 * epsilon) * epsilon;
@@ -52,10 +49,6 @@ const _384x = vec(384);
 const _384y = vec(384);
 const _384z = vec(384);
 const _768 = vec(768);
-
-function sum_three(alen, a, blen, b, clen, c, tmp, out) {
-    return sum(alen, a, sum(blen, b, clen, c, tmp), tmp, out);
-}
 
 function sum_three_scale(a, b, c, az, bz, cz, out) {
     return sum_three(
