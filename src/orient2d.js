@@ -56,28 +56,11 @@ export function orient2d(ax, ay, bx, by, cx, cy) {
     const detleft = (ay - cy) * (bx - cx);
     const detright = (ax - cx) * (by - cy);
     const det = detleft - detright;
-    let detsum;
 
-    if (detleft > 0) {
-        if (detright <= 0) {
-            return det;
-        }
-        detsum = detleft + detright;
+    if (detleft === 0 || detright === 0 || (detleft > 0) !== (detright > 0)) return det;
 
-    } else if (detleft < 0) {
-        if (detright >= 0) {
-            return det;
-        }
-        detsum = -detleft - detright;
-
-    } else {
-        return det;
-    }
-
-    const errbound = ccwerrboundA * detsum;
-    if (det >= errbound || -det >= errbound) {
-        return det;
-    }
+    const detsum = Math.abs(detleft + detright);
+    if (Math.abs(det) >= ccwerrboundA * detsum) return det;
 
     return -orient2dadapt(ax, ay, bx, by, cx, cy, detsum);
 }
