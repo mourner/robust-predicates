@@ -1,10 +1,9 @@
 
-const fs = require('fs');
-const path = require('path');
-const robustOrientation = require('robust-orientation');
-const robustInSphere = require('robust-in-sphere');
+import fs from 'fs';
+import robustOrientation from 'robust-orientation';
+import robustInSphere from 'robust-in-sphere';
 
-const {orient2d, orient3d, incircle, insphere} = require('./umd/predicates.js');
+import {orient2d, orient3d, incircle, insphere} from './index.js';
 
 {
     const r = 0.95;
@@ -40,7 +39,7 @@ const {orient2d, orient3d, incircle, insphere} = require('./umd/predicates.js');
 }
 
 {
-    const lines = fs.readFileSync(path.join(__dirname, 'test/fixtures/orient3d.txt'), 'utf8').trim().split(/\r?\n/);
+    const lines = fs.readFileSync(new URL('./test/fixtures/orient3d.txt', import.meta.url), 'utf8').trim().split(/\r?\n/);
     const coords = new Float64Array(lines.length * 12);
     const points = [];
     let i = 0;
@@ -87,7 +86,7 @@ const {orient2d, orient3d, incircle, insphere} = require('./umd/predicates.js');
 }
 
 {
-    const lines = fs.readFileSync(path.join(__dirname, 'test/fixtures/incircle.txt'), 'utf8').trim().split(/\r?\n/);
+    const lines = fs.readFileSync(new URL('./test/fixtures/incircle.txt', import.meta.url), 'utf8').trim().split(/\r?\n/);
     const coords = new Float64Array(lines.length * 8);
     const points = [];
     let i = 0;
@@ -130,7 +129,7 @@ const {orient2d, orient3d, incircle, insphere} = require('./umd/predicates.js');
 }
 
 {
-    const lines = fs.readFileSync(path.join(__dirname, 'test/fixtures/insphere.txt'), 'utf8').trim().split(/\r?\n/);
+    const lines = fs.readFileSync(new URL('./test/fixtures/insphere.txt', import.meta.url), 'utf8').trim().split(/\r?\n/);
     const coords = new Float64Array(lines.length * 15);
     const points = [];
     let i = 0;
@@ -167,7 +166,7 @@ const {orient2d, orient3d, incircle, insphere} = require('./umd/predicates.js');
     }
     console.timeEnd(id);
 
-    const id2 = `${N * lines.length} x insphere (robust-predicates)`;
+    const id2 = `${N * lines.length} x insphere (robust-in-sphere)`;
     console.time(id2);
     for (let k = 0; k < N; k++) {
         for (let i = 0; i < points.length; i += 5) robustInSphere[5](
