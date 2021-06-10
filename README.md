@@ -6,7 +6,6 @@ Fast robust predicates for computational geometry in JavaScript. Provides reliab
 
 _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<sup>-42</sup>)._
 
-[![Build Status](https://travis-ci.com/mourner/robust-predicates.svg?branch=master)](https://travis-ci.com/mourner/robust-predicates)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
 [![Browser Build](https://badgen.net/bundlephobia/minzip/robust-predicates)](https://unpkg.com/robust-predicates)
 
