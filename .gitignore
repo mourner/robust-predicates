@@ -1,7 +1,4 @@
 node_modules
-.nyc_output
 coverage
-yarn.lock
-pnpm-lock.yaml
 esm/
 umd/

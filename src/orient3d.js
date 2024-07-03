@@ -39,28 +39,25 @@ function tailinit(xtail, ytail, ax, ay, bx, by, a, b) {
             a[0] = 0;
             b[0] = 0;
             return 1;
-        } else {
-            negate = -ytail;
-            $Two_Product(negate, ax, s1, a[0]);
-            a[1] = s1;
-            $Two_Product(ytail, bx, s1, b[0]);
-            b[1] = s1;
-            return 2;
         }
-    } else {
-        if (ytail === 0) {
-            $Two_Product(xtail, ay, s1, a[0]);
-            a[1] = s1;
-            negate = -xtail;
-            $Two_Product(negate, by, s1, b[0]);
-            b[1] = s1;
-            return 2;
-        } else {
-            $Cross_Product(xtail, ax, ytail, ay, a);
-            $Cross_Product(ytail, by, xtail, bx, b);
-            return 4;
-        }
+        negate = -ytail;
+        $Two_Product(negate, ax, s1, a[0]);
+        a[1] = s1;
+        $Two_Product(ytail, bx, s1, b[0]);
+        b[1] = s1;
+        return 2;
     }
+    if (ytail === 0) {
+        $Two_Product(xtail, ay, s1, a[0]);
+        a[1] = s1;
+        negate = -xtail;
+        $Two_Product(negate, by, s1, b[0]);
+        b[1] = s1;
+        return 2;
+    }
+    $Cross_Product(xtail, ax, ytail, ay, a);
+    $Cross_Product(ytail, by, xtail, bx, b);
+    return 4;
 }
 
 function tailadd(finlen, a, b, k, z) {

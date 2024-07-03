@@ -8,7 +8,7 @@ _Figure: non-robust vs robust `orient2d` test for points within a tiny range (2<
 
 [![Build Status](https://github.com/mourner/robust-predicates/workflows/Node/badge.svg?branch=main)](https://github.com/mourner/robust-predicates/actions)
 [![Simply Awesome](https://img.shields.io/badge/simply-awesome-brightgreen.svg)](https://github.com/mourner/projects)
-[![Browser Build](https://badgen.net/bundlephobia/minzip/robust-predicates)](https://unpkg.com/robust-predicates)
+[![Browser Build](https://img.shields.io/bundlephobia/minzip/robust-predicates)](https://unpkg.com/robust-predicates)
 
 ## [Demo](https://observablehq.com/@mourner/non-robust-arithmetic-as-art)
 
