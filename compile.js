@@ -1,6 +1,5 @@
 
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
 
 const macros = {};
 
@@ -94,6 +93,6 @@ const compile = src => src.replace(/^( *)\$(\w+)\((.+)\);/mg, replaceMacros);
 
 const files = fs.readdirSync('./src');
 for (const file of files) {
-    const src = fs.readFileSync(path.join('./src', file), 'utf8');
-    fs.writeFileSync(path.join('./esm', file), compile(src));
+    const src = fs.readFileSync(new URL(`src/${file}`, import.meta.url), 'utf8');
+    fs.writeFileSync(new URL(`esm/${file}`, import.meta.url), compile(src));
 }

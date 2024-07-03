@@ -30,9 +30,7 @@ test('orient2d', () => {
             const o = orient2d(x, y, q, q, p, p);
             const o2 = robustOrientation[3]([x, y], [q, q], [p, p]);
 
-            if (Math.sign(o) !== Math.sign(o2)) {
-                assert.fail(`${x},${y}, ${q},${q}, ${p},${p}: ${o} vs ${o2}`);
-            }
+            assert.ok(Math.sign(o) === Math.sign(o2), `${x},${y}, ${q},${q}, ${p},${p}: ${o} vs ${o2}`);
         }
     }
     // 512x512 near-collinear
@@ -41,9 +39,7 @@ test('orient2d', () => {
     for (const line of lines) {
         const [, ax, ay, bx, by, cx, cy, sign] = line.split(' ').map(Number);
         const result = orient2d(ax, ay, bx, by, cx, cy);
-        if (Math.sign(result) !== -sign) {
-            assert.fail(`${line}: ${result} vs ${-sign}`);
-        }
+        assert.ok(Math.sign(result) === -sign, `${line}: ${result} vs ${-sign}`);
     }
     // 1000 hard fixtures
 });
@@ -67,9 +63,9 @@ test('incircle', () => {
 
     let x = 1e-64;
     for (let i = 0; i < 128; i++) {
-        if (incircle(0, x, -x, -x, x, -x, 0, 0) <= 0) assert.fail(`incircle test ${x}, outside`);
-        if (incircle(0, x, -x, -x, x, -x, 0, 2 * x) >= 0) assert.fail(`incircle test ${x}, inside`);
-        if (incircle(0, x, -x, -x, x, -x, 0, x) !== 0) assert.fail(`incircle test ${x}, cocircular`);
+        assert.ok(incircle(0, x, -x, -x, x, -x, 0, 0) > 0, `incircle test ${x}, outside`);
+        assert.ok(incircle(0, x, -x, -x, x, -x, 0, 2 * x) < 0, `incircle test ${x}, inside`);
+        assert.ok(incircle(0, x, -x, -x, x, -x, 0, x) === 0, `incircle test ${x}, cocircular`);
         x *= 10;
     }
     // 384 incircle tests
@@ -78,9 +74,7 @@ test('incircle', () => {
     for (const line of lines) {
         const [, ax, ay, bx, by, cx, cy, dx, dy, sign] = line.split(' ').map(Number);
         const result = incircle(ax, ay, bx, by, cx, cy, dx, dy);
-        if (Math.sign(result) !== sign) {
-            assert.fail(`${line}: ${result} vs ${sign}`);
-        }
+        assert.ok(Math.sign(result) === sign, `${line}: ${result} vs ${sign}`);
     }
     // 1000 hard fixtures
 });
@@ -134,8 +128,8 @@ test('orient3d', () => {
     for (const line of lines) {
         const [, ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, sign] = line.split(' ').map(Number);
         const result = orient3d(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz);
-        if (Math.sign(result) !== sign) assert.fail(`${line}: ${result} vs ${sign}`);
-        if (Math.sign(result) !== Math.sign(orient3d(dx, dy, dz, bx, by, bz, ax, ay, az, cx, cy, cz))) assert.fail('symmetry');
+        assert.ok(Math.sign(result) === sign, `${line}: ${result} vs ${sign}`);
+        assert.ok(Math.sign(result) === Math.sign(orient3d(dx, dy, dz, bx, by, bz, ax, ay, az, cx, cy, cz)), 'symmetry');
     }
     // 1000 hard fixtures
 
@@ -146,8 +140,8 @@ test('orient3d', () => {
         const ay = 0.5 + tol * Math.random();
         const az = 0.5 + tol * Math.random();
         const b = 12, c = 24, d = 48;
-        if (orient3d(b, b, b, c, c, c, d, d, d, ax, ay, az) !== 0) assert.fail('degenerate');
-        if (orient3d(c, c, c, d, d, d, ax, ay, az, b, b, b) !== 0) assert.fail('degenerate');
+        assert.ok(orient3d(b, b, b, c, c, c, d, d, d, ax, ay, az) === 0, 'degenerate');
+        assert.ok(orient3d(c, c, c, d, d, d, ax, ay, az, b, b, b) === 0, 'degenerate');
     }
     // 1000 degenerate cases
 });
@@ -223,9 +217,7 @@ test('insphere', () => {
     for (const line of lines) {
         const [, ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, sign] = line.split(' ').map(Number);
         const result = insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez);
-        if (Math.sign(result) !== -sign) {
-            assert.fail(`${line}: ${result} vs ${-sign}`);
-        }
+        assert.ok(Math.sign(result) === -sign, `${line}: ${result} vs ${-sign}`);
     }
     // 1000 hard fixtures
 });
