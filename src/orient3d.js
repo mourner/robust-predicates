@@ -20,7 +20,7 @@ const u = vec(4);
 
 const _8 = vec(8);
 const _8b = vec(8);
-const _16 = vec(8);
+const _16 = vec(16);
 const _12 = vec(12);
 
 let fin = vec(192);

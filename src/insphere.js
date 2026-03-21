@@ -271,19 +271,19 @@ export function insphere(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey,
     return -insphereadapt(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez, permanent);
 }
 
-export function inspherefast(pax, pay, paz, pbx, pby, pbz, pcx, pcy, pcz, pdx, pdy, pdz, pex, pey, pez) {
-    const aex = pax - pex;
-    const bex = pbx - pex;
-    const cex = pcx - pex;
-    const dex = pdx - pex;
-    const aey = pay - pey;
-    const bey = pby - pey;
-    const cey = pcy - pey;
-    const dey = pdy - pey;
-    const aez = paz - pez;
-    const bez = pbz - pez;
-    const cez = pcz - pez;
-    const dez = pdz - pez;
+export function inspherefast(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez) {
+    const aex = ax - ex;
+    const bex = bx - ex;
+    const cex = cx - ex;
+    const dex = dx - ex;
+    const aey = ay - ey;
+    const bey = by - ey;
+    const cey = cy - ey;
+    const dey = dy - ey;
+    const aez = az - ez;
+    const bez = bz - ez;
+    const cez = cz - ez;
+    const dez = dz - ez;
 
     const ab = aex * bey - bex * aey;
     const bc = bex * cey - cex * bey;

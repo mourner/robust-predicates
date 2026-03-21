@@ -2,7 +2,7 @@ export const epsilon = 1.1102230246251565e-16;
 export const splitter = 134217729;
 export const resulterrbound = (3 + 8 * epsilon) * epsilon;
 
-// fast_expansion_sum_zeroelim routine from oritinal code
+// fast_expansion_sum_zeroelim routine from original code
 export function sum(elen, e, flen, f, h) {
     let Q, Qnew, hh, bvirt;
     let enow = e[0];
