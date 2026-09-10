@@ -7,7 +7,8 @@ export default [
             'camelcase': 0,
             'new-cap': 0,
             'no-unused-vars': [2, {varsIgnorePattern: 'splitter|bvirt|c|[ab]hi|[ab]lo|_[ijk0]|u3|[st][01]'}],
-            'no-lonely-if': 0
+            'no-lonely-if': 0,
+            'no-unassigned-vars': 0
         },
         languageOptions: {
             globals: {
